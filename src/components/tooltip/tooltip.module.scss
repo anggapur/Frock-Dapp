@@ -18,3 +18,10 @@
     color: color.$redDark;
   }
 }
+
+@media (max-width: 768px) {
+  .svg {
+    width: 20px;
+    height: 20px;
+  }
+}
