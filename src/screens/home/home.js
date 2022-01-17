@@ -3,6 +3,7 @@ import Layout from '../../components/layout/layout'
 import CardBalance from './sections/card-balance/card-balance'
 import CardFrockPrice from './sections/card-frock-price/card-frock-price'
 import CardInfo from './sections/card-info/card-info'
+import FaqSection from './sections/faq-section/faq-section'
 import './home.scss'
 
 export default function Home() {
@@ -18,6 +19,11 @@ export default function Home() {
           </Col>
           <Col lg={3} className="px-mobile-0">
             <CardInfo />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} className="px-mobile-0">
+            <FaqSection />
           </Col>
         </Row>
       </Container>

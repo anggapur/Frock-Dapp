@@ -1,0 +1,67 @@
+@use '../../../../styles/color';
+
+.wrapper {
+  margin-top: 30px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: color.$grayDark;
+    margin-bottom: 11px;
+    padding: 0 30px;
+  }
+
+  .accordion-header {
+    margin-bottom: 0;
+    padding: 0;
+
+    button {
+      padding: 10px 0;
+      font-weight: 500;
+      font-size: 14px;
+      color: color.$grayDark;
+
+      &:not(.collapsed) {
+        background: none;
+        border: none;
+      }
+
+      &:focus {
+        border: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  .accordion-item {
+    border: none;
+  }
+
+  .accordion-body {
+    padding: 5px 0;
+    color: color.$grayDark;
+    font-size: 12px;
+  }
+}
+
+.card {
+  padding: 20px 26px;
+  border: 1px solid #0000001a;
+  border-radius: 17px;
+}
+
+@media (min-width: 769px) {
+  .wrapper {
+    .accordion-header button {
+      padding: 10px 12px 10px 0;
+    }
+
+    .accordion-body {
+      padding: 5px 12px 5px 0;
+    }
+  }
+
+  .border-right {
+    border-right: 5px solid #e3d6d67a;
+  }
+}
