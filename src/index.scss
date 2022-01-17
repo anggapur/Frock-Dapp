@@ -1,3 +1,5 @@
+@use './styles/color';
+
 @import '~bootstrap/scss/bootstrap';
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -15,6 +17,29 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.text-red-dark {
+  color: color.$redDark !important;
+}
+
+.text-red-light {
+  color: color.$redLight !important;
+}
+
+.text-gray-dark {
+  color: color.$grayDark !important;
+}
+
+.text-gray-light {
+  color: color.$grayLight !important;
+}
+
+@media (max-width: 425px) {
+  .px-mobile-0 {
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
 
 @media (min-width: 1281px) {

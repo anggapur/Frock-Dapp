@@ -1,0 +1,54 @@
+@use '../../../../styles/color';
+
+.h3 {
+  color: color.$grayLight;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.h1 {
+  color: color.$redDark;
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.h1,
+.h5 {
+  font-weight: 600;
+}
+
+.h5,
+.h5 + p,
+h5 + p + small {
+  font-size: 16px;
+}
+
+.h5 {
+  color: color.$grayDark;
+  margin-bottom: 7px;
+  line-height: 20px;
+}
+
+.h5 + p {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+}
+
+.h5 + p + small {
+  font-weight: 500;
+  color: #a92534;
+}
+
+@media (max-width: 768px) {
+  .buyFrock {
+    font-size: 14px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .h1 {
+    font-size: 40px;
+  }
+}

@@ -6,6 +6,7 @@ export default function RoundButton({
   children,
   isRounded,
   type = 'button',
+  className = '',
   ...rest
 }) {
   return (
@@ -14,7 +15,8 @@ export default function RoundButton({
       className={clsx(
         styles.button,
         styles[variant],
-        isRounded ? styles.round : ''
+        isRounded ? styles.round : '',
+        className
       )}
       {...rest}
     >
