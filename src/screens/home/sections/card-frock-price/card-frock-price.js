@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
