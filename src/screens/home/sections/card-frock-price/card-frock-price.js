@@ -16,6 +16,7 @@ export default function CardFrockPrice() {
               variant="primary"
               className={styles.buyFrock}
               isRounded
+              isOutline
             >
               Buy $FRock
             </RoundButton>

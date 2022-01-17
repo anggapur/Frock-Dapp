@@ -5,6 +5,7 @@ export default function RoundButton({
   variant,
   children,
   isRounded,
+  isOutline,
   type = 'button',
   className = '',
   ...rest
@@ -16,6 +17,7 @@ export default function RoundButton({
         styles.button,
         styles[variant],
         isRounded ? styles.round : '',
+        isOutline ? styles.outline : '',
         className
       )}
       {...rest}
