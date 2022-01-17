@@ -1,0 +1,20 @@
+@use '../../styles/color';
+
+.p,
+.a {
+  font-size: 14px;
+}
+
+.p {
+  margin-bottom: 14px;
+}
+
+.a {
+  font-weight: 500;
+  color: color.$redDark;
+  text-decoration: none;
+
+  &:hover {
+    color: color.$redDark;
+  }
+}

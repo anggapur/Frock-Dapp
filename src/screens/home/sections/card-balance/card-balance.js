@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
+import Tooltip from '../../../../components/tooltip/tooltip'
 import styles from './card-balance.module.scss'
 
 export default function CardBalance() {
@@ -58,15 +59,15 @@ export default function CardBalance() {
           </Row>
         </Card.Footer>
       </Card>
-      <Card
-        lineBottom="light"
-        isLineBottomToLeftInMobile={true}
-        className={clsx(styles.cardApr, 'my-4')}
-      >
+      <Card lineBottom="light" className={clsx(styles.cardApr, 'my-4')}>
         <Row>
           <Col xs={6} lg={12}>
             <h5 className={styles.h5}>
-              <strong>Your APR</strong>
+              <strong>Your APR</strong>{' '}
+              <Tooltip anchorLink="/" anchorText="Read more">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+                malesuada posuere dolor in tempus.
+              </Tooltip>
             </h5>
           </Col>
           <Col xs={6} lg={12}>
