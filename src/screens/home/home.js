@@ -9,7 +9,7 @@ import './home.scss'
 export default function Home() {
   return (
     <Layout>
-      <Container className="home">
+      <Container className="home overflow-hidden">
         <Row>
           <Col lg={4} className="px-mobile-0">
             <CardBalance />
