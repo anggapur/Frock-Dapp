@@ -7,7 +7,11 @@ import styles from './card-frock-price.module.scss'
 export default function CardFrockPrice() {
   return (
     <>
-      <Card ellipse="top-left" lineBottom="primary">
+      <Card
+        ellipse="top-left"
+        lineBottom="primary"
+        className="global-card-frock-price-1"
+      >
         <Row>
           <Col xs={6} className="pb-3">
             <h3 className={styles.h3}>$FROCK Price</h3>
@@ -29,8 +33,8 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$ 3,947,383</p>
-            <br />
+            <p className={styles.mb20}>$ 3,947,383</p>
+
             <h5 className={styles.h5}>
               $FROCK circulating supply{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
@@ -44,7 +48,11 @@ export default function CardFrockPrice() {
       </Card>
       <Row>
         <Col xs={6}>
-          <Card ellipse="top-right" lineBottom="light" className="mt-4">
+          <Card
+            ellipse="top-right"
+            lineBottom="light"
+            className="global-card-frock-price-2 mt-4"
+          >
             <h5 className={styles.h5}>
               Total pending reflections{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
@@ -55,7 +63,11 @@ export default function CardFrockPrice() {
             <p>$ 3,947,383</p>
             <small>$ 1,000.00</small>
           </Card>
-          <Card ellipse="top-right" lineBottom="light" className="mt-4">
+          <Card
+            ellipse="top-right"
+            lineBottom="light"
+            className="global-card-frock-price-3 mt-4"
+          >
             <h5 className={styles.h5}>
               Last 24 Hour Volume{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
@@ -67,7 +79,11 @@ export default function CardFrockPrice() {
           </Card>
         </Col>
         <Col xs={6}>
-          <Card ellipse="top-right" lineBottom="light" className="mt-4">
+          <Card
+            ellipse="top-right"
+            lineBottom="light"
+            className="global-card-frock-price-2 mt-4"
+          >
             <h5 className={styles.h5}>
               Total paid reflections{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
@@ -78,7 +94,11 @@ export default function CardFrockPrice() {
             <p>$FTM 80,050.00</p>
             <small>$ 23,000.00</small>
           </Card>
-          <Card ellipse="top-right" lineBottom="light" className="my-4">
+          <Card
+            ellipse="top-right"
+            lineBottom="light"
+            className="global-card-frock-price-3 mt-4"
+          >
             <h5 className={styles.h5}>
               Last 24 Hour reflections{' '}
               <Tooltip anchorLink="/" anchorText="Read more">

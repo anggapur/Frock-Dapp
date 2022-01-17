@@ -8,7 +8,7 @@ import styles from './card-balance.module.scss'
 export default function CardBalance() {
   return (
     <>
-      <Card ellipse="top-left">
+      <Card ellipse="top-left" className="global-card-balance-1">
         <h2 className={styles.h2}>Balance</h2>
         <Row>
           <Col xs={6}>
@@ -59,10 +59,13 @@ export default function CardBalance() {
           </Row>
         </Card.Footer>
       </Card>
-      <Card lineBottom="light" className={clsx(styles.cardApr, 'my-4')}>
+      <Card
+        lineBottom="light"
+        className={clsx(styles.cardApr, 'global-card-balance-2 my-4')}
+      >
         <Row>
           <Col xs={6} lg={12}>
-            <h5 className={styles.h5}>
+            <h5 className={clsx(styles.h5, styles.mb7)}>
               <strong>Your APR</strong>{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras

@@ -16,7 +16,7 @@ $paddingXMobile: 24px;
 
 .line-bottom-primary,
 .line-bottom-light {
-  margin: calc($paddingYMobile - 22px) (-$paddingXMobile) (-$paddingYMobile);
+  // margin: calc($paddingYMobile - 22px) (-$paddingXMobile) (-$paddingYMobile);
   background: linear-gradient(268.67deg, #e9433b 2.91%, #cb2d3e 95.24%);
   height: 22px;
   width: inherit;
@@ -31,10 +31,15 @@ $paddingXMobile: 24px;
 .footer {
   border-bottom-left-radius: $borderRadiusSize;
   border-bottom-right-radius: $borderRadiusSize;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 
 .footer {
-  margin: $paddingYMobile (-$paddingXMobile) (-$paddingYMobile);
+  // margin: $paddingYMobile (-$paddingXMobile) (-$paddingYMobile);
   padding: 19px $paddingXMobile;
   background: #f9f4f4;
   border-top: 5px solid #f1ebeb;
@@ -48,11 +53,11 @@ $paddingXMobile: 24px;
 
   .line-bottom-primary,
   .line-bottom-light {
-    margin: calc($paddingY - 22px) (-$paddingX) (-$paddingY);
+    // margin: calc($paddingY - 22px) (-$paddingX) (-$paddingY);
   }
 
   .footer {
-    margin: $paddingY (-$paddingX) (-$paddingY);
+    // margin: $paddingY (-$paddingX) (-$paddingY);
     padding: 19px $paddingX;
   }
 }

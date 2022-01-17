@@ -7,7 +7,11 @@ import styles from './card-info.module.scss'
 export default function CardInfo() {
   return (
     <>
-      <Card ellipse="top-right" lineBottom="light">
+      <Card
+        ellipse="top-right"
+        lineBottom="light"
+        className="global-card-info-1 mt-4 mt-lg-0"
+      >
         <h5 className={styles.h5}>
           Treasury value{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
@@ -15,8 +19,8 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h5>
-        <p>$ 45,000.00</p>
-        <br />
+        <p className={styles.mb14}>$ 45,000.00</p>
+
         <h5 className={styles.h5}>
           Last 24 hour treasury <br />
           net returns{' '}
@@ -25,8 +29,8 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h5>
-        <p>$ 3,685.50</p>
-        <br />
+        <p className={styles.mb14}>$ 3,685.50</p>
+
         <h6 className={styles.h6}>
           of which will be compounded{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
@@ -34,8 +38,8 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p>$ 3,685.50</p>
-        <br />
+        <p className={styles.mb14}>$ 3,685.50</p>
+
         <h6 className={styles.h6}>
           of which will be returned to $FROCK holders{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
@@ -45,7 +49,11 @@ export default function CardInfo() {
         </h6>
         <p>$ 3,685.50</p>
       </Card>
-      <Card lineBottom="light" className={clsx(styles.cardApr, 'mt-4')}>
+
+      <Card
+        lineBottom="light"
+        className={clsx(styles.cardApr, 'global-card-info-2 mt-4')}
+      >
         <Row>
           <Col xs={6} lg={12}>
             <h5 className={styles.h5}>
