@@ -37,7 +37,7 @@ export default function Tooltip({
         xmlns="http://www.w3.org/2000/svg"
         className={styles.svg}
       >
-        <g clip-path="url(#clip0_549_2711)">
+        <g clipPath="url(#clip0_549_2711)">
           <path
             d="M7.3513 14C11.106 14 14.1499 10.866 14.1499 7C14.1499 3.13401 11.106 0 7.3513 0C3.59655 0 0.552734 3.13401 0.552734 7C0.552734 10.866 3.59655 14 7.3513 14Z"
             fill="#D1C7C7"

@@ -31,14 +31,14 @@ export default function Header() {
                 <path
                   d="M10.9004 4.94995L5.95064 9.8997"
                   stroke="#CB2D3E"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
                 <path
                   d="M1 4.94995L5.94975 9.8997"
                   stroke="#CB2D3E"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
               </svg>
             </Dropdown.Toggle>
