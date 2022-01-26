@@ -14,12 +14,16 @@ export default function Calculator() {
   const fetchStrongPriceInUsd = useCallback(async () => {
     const strongInUsd = await GetStrongPrice()
     setStrongPrice(strongInUsd)
-    calculatorStore.setStrongPrice(strongInUsd)
   }, [])
 
   useEffect(() => {
     fetchStrongPriceInUsd()
   }, [fetchStrongPriceInUsd])
+
+  useEffect(() => {
+    calculatorStore.setStrongPrice(strongPrice)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strongPrice])
 
   const handleResetClicked = () => {
     calculatorStore.setFtmPrice(2)

@@ -36,19 +36,20 @@ export default function CardInfo() {
       store.precentReturn,
       store.precentMarketingWallet
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const unsub = useCalculatorStore.subscribe(
+  useCalculatorStore.subscribe(
     state => [
       state.nodesCount,
       state.days,
-      store.precentStrongReturn,
-      store.precentCompound,
-      store.dailyVolume,
-      store.precentTreasury,
-      store.strongPrice,
-      store.precentReturn,
-      store.precentMarketingWallet,
+      state.precentStrongReturn,
+      state.precentCompound,
+      state.dailyVolume,
+      state.precentTreasury,
+      state.strongPrice,
+      state.precentReturn,
+      state.precentMarketingWallet,
     ],
     ([
       nodesCount,

@@ -23,6 +23,7 @@ export default function CardBalance() {
       _store.days,
       _store.ftmPrice,
     ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const calculateBalance = ([
@@ -47,7 +48,7 @@ export default function CardBalance() {
     setClaimable(_claimable)
   }
 
-  const unsub = useCalculatorStore.subscribe(
+  useCalculatorStore.subscribe(
     state => [
       state.precentClaimPeriod,
       state.precentYourPortfolio,
