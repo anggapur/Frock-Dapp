@@ -25,8 +25,16 @@ export const useCalculatorStore = create(
     setFrocPrice: value => set({ frocPrice: Number(value) }),
     setPrecentYourPortfolio: value =>
       set({ precentYourPortfolio: Number(value) }),
-    setPrecentCompound: value => set({ precentCompound: Number(value) }),
-    setPrecentReturn: value => set({ precentReturn: Number(value) }),
+    setPrecentCompound: value =>
+      set({
+        precentCompound: Number(value),
+        precentReturn: Number(100 - value),
+      }),
+    setPrecentReturn: value =>
+      set({
+        precentReturn: Number(value),
+        precentCompound: Number(100 - value),
+      }),
     setPrecentMarketingWallet: value =>
       set({ precentMarketingWallet: Number(value) }),
     setDays: value => set({ days: Number(value) }),
