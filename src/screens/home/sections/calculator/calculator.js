@@ -7,21 +7,7 @@ import FormRangeInput from './form-range-input'
 import { useCalculatorStore } from '../../../../store'
 
 export default function Calculator() {
-  // const [ftmPrice, setFtmPrice] = useState(2)
-  // const [dailyVolume, setDailyVolume] = useState(10000)
-  // const [precentClaimPeriod, setPrecentClaimPeriod] = useState(100)
-  // const [precentReflection, setPrecentReflection] = useState(7)
-  // const [precentTreasury, setPrecentTreasury] = useState(14)
-  // const [frocPrice, setFrocPrice] = useState(0.00394)
-  // const [precentYourPortfolio, setPrecentYourPortfolio] = useState(1)
-  // const [precentCompound, setPrecentCompound] = useState(67)
-  // const [precentReturn, setPrecentReturn] = useState(33)
-  // const [precentMarketingWallet, setPrecentMarketingWallet] = useState(10)
-  // const [days, setDays] = useState(150)
   const [strongPrice, setStrongPrice] = useState(500)
-  // const [precentStrongReturn, setPrecentStrongReturn] = useState(9)
-  // const [nodesCount, setNodesCount] = useState(20)
-  // const [strongFromFetch, setStrongFromFetch] = useState(0)
 
   const calculatorStore = useCalculatorStore()
 
@@ -35,49 +21,22 @@ export default function Calculator() {
     fetchStrongPriceInUsd()
   }, [fetchStrongPriceInUsd])
 
-  // useEffect(() => {
-  //   // const getBalance = () => {
-  //   //   const reflections =
-  //   //     (precentClaimPeriod / 100) *
-  //   //     (precentYourPortfolio / 100) *
-  //   //     dailyVolume *
-  //   //     (precentReflection / 100) *
-  //   //     days
-  //   //   const pending = reflections / ftmPrice
-  //   //   const claimable = pending.valueOf()
-  //   //   return {
-  //   //     pending,
-  //   //     claimable,
-  //   //     reflections,
-  //   //   }
-  //   // }
-  //   // handleSetBalance(getBalance())
-  // }, [
-  //   precentClaimPeriod,
-  //   precentYourPortfolio,
-  //   dailyVolume,
-  //   precentReflection,
-  //   days,
-  //   ftmPrice,
-  //   balance,
-  // ])
-
-  // const handleResetClicked = () => {
-  //   setFtmPrice(2)
-  //   setDailyVolume(10000)
-  //   setPrecentClaimPeriod(100)
-  //   setPrecentReflection(7)
-  //   setPrecentTreasury(14)
-  //   setFrocPrice(0.00394)
-  //   setPrecentYourPortfolio(1)
-  //   setPrecentCompound(67)
-  //   setPrecentReturn(33)
-  //   setPrecentMarketingWallet(10)
-  //   setDays(150)
-  //   setStrongPrice(strongFromFetch)
-  //   setPrecentStrongReturn(9)
-  //   setNodesCount(20)
-  // }
+  const handleResetClicked = () => {
+    calculatorStore.setFtmPrice(2)
+    calculatorStore.setDailyVolume(10000)
+    calculatorStore.setPrecentClaimPeriod(100)
+    calculatorStore.setPrecentReflection(7)
+    calculatorStore.setPrecentTreasury(14)
+    calculatorStore.setFrocPrice(0.00394)
+    calculatorStore.setPrecentYourPortfolio(1)
+    calculatorStore.setPrecentCompound(67)
+    calculatorStore.setPrecentReturn(33)
+    calculatorStore.setPrecentMarketingWallet(10)
+    calculatorStore.setDays(150)
+    calculatorStore.setStrongPrice(strongPrice)
+    calculatorStore.setPrecentStrongReturn(9)
+    calculatorStore.setNodesCount(20)
+  }
 
   return (
     <Card ellipse="top-left">
@@ -86,7 +45,7 @@ export default function Calculator() {
         variant="light"
         size="small"
         isRounded
-        // onClick={handleResetClicked}
+        onClick={handleResetClicked}
       >
         Reset
       </RoundButton>
