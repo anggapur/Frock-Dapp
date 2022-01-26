@@ -1,11 +1,64 @@
 import clsx from 'clsx'
+import { useState, useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
+import { useCalculatorStore } from '../../../../store'
 import styles from './card-balance.module.scss'
 
 export default function CardBalance() {
+  const [pending, setPending] = useState(0)
+  const [reflections, setReflections] = useState(0)
+  const [claimable, setClaimable] = useState(0)
+
+  const store = useCalculatorStore()
+
+  useEffect((_store = store) => {
+    calculateBalance([
+      _store.precentClaimPeriod,
+      _store.precentYourPortfolio,
+      _store.dailyVolume,
+      _store.precentReflection,
+      _store.days,
+      _store.ftmPrice,
+    ])
+  }, [])
+
+  const calculateBalance = ([
+    precentClaimPeriod,
+    precentYourPortfolio,
+    dailyVolume,
+    precentReflection,
+    days,
+    ftmPrice,
+  ]) => {
+    const _reflections =
+      (precentClaimPeriod / 100) *
+      (precentYourPortfolio / 100) *
+      dailyVolume *
+      (precentReflection / 100) *
+      days
+    const _pending = _reflections / ftmPrice
+    const _claimable = _pending.valueOf()
+
+    setReflections(_reflections)
+    setPending(_pending)
+    setClaimable(_claimable)
+  }
+
+  const unsub = useCalculatorStore.subscribe(
+    state => [
+      state.precentClaimPeriod,
+      state.precentYourPortfolio,
+      state.dailyVolume,
+      state.precentReflection,
+      state.days,
+      state.ftmPrice,
+    ],
+    calculateBalance
+  )
+
   return (
     <>
       <Card ellipse="top-left" className="global-card-balance-1">
@@ -16,7 +69,7 @@ export default function CardBalance() {
           </Col>
           <Col xs={6}>
             <p className={styles.p}>
-              <strong>$FTM 3.50</strong>
+              <strong>$FTM {Number(pending).toLocaleString()}</strong>
             </p>
           </Col>
         </Row>
@@ -25,7 +78,7 @@ export default function CardBalance() {
             <h5 className={styles.h5}>reflections</h5>
           </Col>
           <Col xs={6}>
-            <p className={styles.p}>$ 10.20</p>
+            <p className={styles.p}>$ {Number(reflections).toLocaleString()}</p>
           </Col>
         </Row>
         <hr className={styles.hr} />
@@ -35,7 +88,7 @@ export default function CardBalance() {
           </Col>
           <Col xs={6}>
             <p className={styles.p}>
-              <strong>$FTM 13.50</strong>
+              <strong>$FTM {Number(claimable).toLocaleString()}</strong>
             </p>
           </Col>
         </Row>
@@ -44,7 +97,7 @@ export default function CardBalance() {
             <h5 className={styles.h5}>reflections</h5>
           </Col>
           <Col xs={6}>
-            <p className={styles.p}>$ 30.12</p>
+            <p className={styles.p}>$ {Number(reflections).toLocaleString()}</p>
           </Col>
         </Row>
         <RoundButton variant="primary" className="mt-4 w-100" isRounded>

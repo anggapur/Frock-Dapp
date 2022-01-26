@@ -2,9 +2,47 @@ import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
+import { useCalculatorStore } from '../../../../store'
 import styles from './card-frock-price.module.scss'
 
+const FROCK_SUPPLY = 1000000000
+
 export default function CardFrockPrice() {
+  const store = useCalculatorStore()
+
+  const getFrockMarketCap = () => {
+    return (FROCK_SUPPLY * store.frocPrice).toLocaleString()
+  }
+
+  const totalPendingReflections = () => {
+    const reflections =
+      (store.precentClaimPeriod / 100) *
+      store.dailyVolume *
+      (store.precentReflection / 100)
+    const total = reflections / store.ftmPrice
+    return {
+      reflections: reflections.toLocaleString(),
+      total: total.toLocaleString(),
+    }
+  }
+
+  const totalPaidReflections = () => {
+    return {
+      total: Number(80050).toLocaleString(),
+      reflections: Number(23000).toLocaleString(),
+    }
+  }
+
+  const totalLast24Hour = () => {
+    const dailyVolume = store.dailyVolume
+    const reflections =
+      (dailyVolume * (store.precentReflection / 100)) / store.ftmPrice
+    return {
+      volume: dailyVolume.toLocaleString(),
+      reflections: reflections.toLocaleString(),
+    }
+  }
+
   return (
     <>
       <Card
@@ -15,7 +53,7 @@ export default function CardFrockPrice() {
         <Row>
           <Col xs={6} className="pb-3">
             <h3 className={styles.h3}>$FROCK Price</h3>
-            <h1 className={styles.h1}>$0,00394</h1>
+            <h1 className={styles.h1}>${store.frocPrice}</h1>
             <RoundButton
               variant="primary"
               className={styles.buyFrock}
@@ -33,7 +71,7 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p className={styles.mb20}>$ 3,947,383</p>
+            <p className={styles.mb20}>$ {getFrockMarketCap()}</p>
 
             <h5 className={styles.h5}>
               $FROCK circulating supply{' '}
@@ -42,7 +80,7 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>1,000,000,000 $FROCK</p>
+            <p>{FROCK_SUPPLY.toLocaleString()} $FROCK</p>
           </Col>
         </Row>
       </Card>
@@ -60,8 +98,8 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$ 3,947,383</p>
-            <small>$ 1,000.00</small>
+            <p>$ {totalPendingReflections().total}</p>
+            <small>$ {totalPendingReflections().reflections}</small>
           </Card>
           <Card
             ellipse="top-right"
@@ -75,7 +113,7 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$ 200,000.00</p>
+            <p>$ {totalLast24Hour().volume}</p>
           </Card>
         </Col>
         <Col xs={6}>
@@ -91,8 +129,8 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$FTM 80,050.00</p>
-            <small>$ 23,000.00</small>
+            <p>$FTM {totalPaidReflections().total}</p>
+            <small>$ {totalPaidReflections().reflections}</small>
           </Card>
           <Card
             ellipse="top-right"
@@ -106,7 +144,7 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$FTM 1,230.00</p>
+            <p>$FTM {totalLast24Hour().reflections}</p>
           </Card>
         </Col>
       </Row>

@@ -1,10 +1,211 @@
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
+import { useCalculatorStore } from '../../../../store'
 import styles from './card-info.module.scss'
 
+const GAS_FEE_FOR_CLAIM = 15
+const GAS_FEE_FOR_CREATE = 100
+
 export default function CardInfo() {
+  const [treasury, setTreasury] = useState(0)
+  const [treasuryReturnLastDay, setTreasuryReturnLastDay] = useState(0)
+  const [compoundedValue, setCompoundedValue] = useState(0)
+  const [returnedValue, setReturnedValue] = useState(0)
+  const [marketingDev, setMarketingDev] = useState(0)
+
+  const store = useCalculatorStore()
+
+  useEffect(() => {
+    const { nodes, cumulativeStrongTotal } = calculateCompoundingTable(
+      store.nodesCount,
+      store.days,
+      store.precentStrongReturn,
+      store.precentCompound,
+      store.dailyVolume,
+      store.precentTreasury,
+      store.strongPrice
+    )
+    getTreasury(nodes, store.strongPrice)
+    getTreasuryReturnLastDay(
+      cumulativeStrongTotal,
+      store.strongPrice,
+      store.precentCompound,
+      store.precentReturn,
+      store.precentMarketingWallet
+    )
+  }, [])
+
+  const unsub = useCalculatorStore.subscribe(
+    state => [
+      state.nodesCount,
+      state.days,
+      store.precentStrongReturn,
+      store.precentCompound,
+      store.dailyVolume,
+      store.precentTreasury,
+      store.strongPrice,
+      store.precentReturn,
+      store.precentMarketingWallet,
+    ],
+    ([
+      nodesCount,
+      days,
+      precentStrongReturn,
+      precentCompound,
+      dailyVolume,
+      precentTreasury,
+      strongPrice,
+      precentReturn,
+      precentMarketingWallet,
+    ]) => {
+      const { nodes, cumulativeStrongTotal } = calculateCompoundingTable(
+        nodesCount,
+        days,
+        precentStrongReturn,
+        precentCompound,
+        dailyVolume,
+        precentTreasury,
+        strongPrice
+      )
+      getTreasury(nodes, strongPrice)
+      getTreasuryReturnLastDay(
+        cumulativeStrongTotal,
+        strongPrice,
+        precentCompound,
+        precentReturn,
+        precentMarketingWallet
+      )
+    }
+  )
+
+  const getTreasury = (nodes, strongPrice) => {
+    const _treasury = Number((nodes * 10 * strongPrice).toFixed(2))
+    setTreasury(_treasury)
+  }
+
+  const getTreasuryReturnLastDay = (
+    cumulativeStrongTotal,
+    strongPrice,
+    precentCompound,
+    precentReturn,
+    precentMarketingWallet
+  ) => {
+    const _treasuryReturnLastDay = Number(
+      (cumulativeStrongTotal * strongPrice).toFixed(2)
+    )
+    setTreasuryReturnLastDay(_treasuryReturnLastDay)
+    getCompounded(_treasuryReturnLastDay, precentCompound)
+    getReturned(_treasuryReturnLastDay, precentReturn, precentMarketingWallet)
+    getMarketingDev(
+      _treasuryReturnLastDay,
+      precentReturn,
+      precentMarketingWallet
+    )
+  }
+
+  const getCompounded = (returnLastDay, precentCompound) => {
+    const _compounded = Number(
+      (returnLastDay * (precentCompound / 100)).toFixed(2)
+    )
+    setCompoundedValue(_compounded)
+  }
+
+  const getReturned = (
+    returnLastDay,
+    precentReturn,
+    precentMarketingWallet
+  ) => {
+    const _returned = Number(
+      (
+        returnLastDay *
+        (precentReturn / 100) *
+        (1 - precentMarketingWallet / 100)
+      ).toFixed(2)
+    )
+    setReturnedValue(_returned)
+  }
+
+  const getMarketingDev = (
+    returnLastDay,
+    precentReturn,
+    precentMarketingWallet
+  ) => {
+    const _marketingDev = Number(
+      (
+        returnLastDay *
+        (precentReturn / 100) *
+        (precentMarketingWallet / 100)
+      ).toFixed(2)
+    )
+    setMarketingDev(_marketingDev)
+  }
+
+  const calculateCompoundingTable = (
+    _startNodes,
+    _days,
+    _precentStrongReturn,
+    _precentCompound,
+    _dailyVolume,
+    _precentTreasury,
+    _strongPrice
+  ) => {
+    const getCostToClaimValue = (_balance, _nodes) => {
+      if (_balance < 10) {
+        return Number(0)
+      }
+
+      return Number(_nodes * GAS_FEE_FOR_CLAIM + GAS_FEE_FOR_CREATE)
+    }
+
+    const getPayoutValue = _nodes => {
+      return Number((_nodes * (_precentStrongReturn / 100)).toFixed(2))
+    }
+
+    let nodes = _startNodes
+    let balance = 0
+    let cumulativeStrongTotal = 0
+    let costToClaim = 0
+    let payout = getPayoutValue(nodes)
+    for (let day = 1; day <= _days; day++) {
+      if (day === 1) {
+        balance = Number((nodes * (_precentStrongReturn / 100)).toFixed(2))
+        costToClaim = getCostToClaimValue(balance, nodes)
+        cumulativeStrongTotal = payout
+      } else {
+        if (balance > 10) {
+          balance = Number(
+            (
+              balance -
+              10 +
+              nodes * (_precentStrongReturn / 100) * (_precentCompound / 100) +
+              (_dailyVolume * (_precentTreasury / 100)) / _strongPrice -
+              costToClaim / _strongPrice
+            ).toFixed(2)
+          )
+        } else {
+          balance = Number(
+            (
+              balance +
+              nodes * (_precentStrongReturn / 100) * (_precentCompound / 100) +
+              (_dailyVolume * (_precentTreasury / 100)) / _strongPrice
+            ).toFixed(2)
+          )
+        }
+        nodes += Number(balance >= 10)
+        payout = getPayoutValue(nodes)
+        costToClaim = getCostToClaimValue(balance, nodes)
+        cumulativeStrongTotal = Number(
+          (cumulativeStrongTotal + payout).toFixed(2)
+        )
+      }
+    }
+
+    return { nodes, cumulativeStrongTotal }
+  }
+
   return (
     <>
       <Card
@@ -19,17 +220,20 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h5>
-        <p className={styles.mb14}>$ 45,000.00</p>
+        <p className={styles.mb14}>$ {treasury.toLocaleString('en-US')}</p>
 
         <h5 className={styles.h5}>
-          Last 24 hour treasury <br />
+          Last {store.days > 1 ? `${store.days} days` : `${store.days} day`}{' '}
+          treasury <br />
           net returns{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h5>
-        <p className={styles.mb14}>$ 3,685.50</p>
+        <p className={styles.mb14}>
+          $ {treasuryReturnLastDay.toLocaleString('en-US')}
+        </p>
 
         <h6 className={styles.h6}>
           of which will be compounded{' '}
@@ -38,7 +242,9 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p className={styles.mb14}>$ 3,685.50</p>
+        <p className={styles.mb14}>
+          $ {compoundedValue.toLocaleString('en-US')}
+        </p>
 
         <h6 className={styles.h6}>
           of which will be returned to $FROCK holders{' '}
@@ -47,7 +253,16 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p>$ 3,685.50</p>
+        <p className={styles.mb14}>$ {returnedValue.toLocaleString('en-US')}</p>
+
+        <h6 className={styles.h6}>
+          marketing / dev{' '}
+          <Tooltip anchorLink="/" anchorText="Read more">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+            malesuada posuere dolor in tempus.
+          </Tooltip>
+        </h6>
+        <p>$ {marketingDev.toLocaleString('en-US')}</p>
       </Card>
 
       <Card
