@@ -101,15 +101,15 @@ code {
 @include media-breakpoint-up(lg) {
   .global-card-balance-1,
   .global-card-info-1 {
-    min-height: calc(313px + 196px + 24px) !important;
+    min-height: calc(366px + 206px + 24px) !important;
   }
 
   .global-card-frock-price-1 {
-    min-height: 313px !important;
+    min-height: 366px !important;
   }
 
   .global-card-frock-price-2 {
-    min-height: 196px !important;
+    min-height: 206px !important;
   }
 
   .global-card-balance-2,
@@ -123,15 +123,15 @@ code {
 @include media-breakpoint-up(xl) {
   .global-card-balance-1,
   .global-card-info-1 {
-    min-height: calc(290px + 172px + 24px) !important;
+    min-height: calc(341px + 192px + 24px) !important;
   }
 
   .global-card-frock-price-1 {
-    min-height: 290px !important;
+    min-height: 341px !important;
   }
 
   .global-card-frock-price-2 {
-    min-height: 172px !important;
+    min-height: 192px !important;
   }
 
   .global-card-balance-2,
