@@ -14,6 +14,7 @@ export default function CardInfo() {
   const [treasuryReturnLastDay, setTreasuryReturnLastDay] = useState(0)
   const [compoundedValue, setCompoundedValue] = useState(0)
   const [returnedValue, setReturnedValue] = useState(0)
+  const [yourReturns, setYourReturns] = useState(0)
   const [marketingDev, setMarketingDev] = useState(0)
 
   const store = useCalculatorStore()
@@ -22,7 +23,7 @@ export default function CardInfo() {
     const { nodes, cumulativeStrongTotal } = calculateCompoundingTable(
       store.nodesCount,
       store.days,
-      store.precentStrongReturn,
+      store.strongReturn,
       store.precentCompound,
       store.dailyVolume,
       store.precentTreasury,
@@ -34,7 +35,8 @@ export default function CardInfo() {
       store.strongPrice,
       store.precentCompound,
       store.precentReturn,
-      store.precentMarketingWallet
+      store.precentMarketingWallet,
+      store.precentYourPortfolio
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -43,29 +45,31 @@ export default function CardInfo() {
     state => [
       state.nodesCount,
       state.days,
-      state.precentStrongReturn,
+      state.strongReturn,
       state.precentCompound,
       state.dailyVolume,
       state.precentTreasury,
       state.strongPrice,
       state.precentReturn,
       state.precentMarketingWallet,
+      state.precentYourPortfolio,
     ],
     ([
       nodesCount,
       days,
-      precentStrongReturn,
+      strongReturn,
       precentCompound,
       dailyVolume,
       precentTreasury,
       strongPrice,
       precentReturn,
       precentMarketingWallet,
+      precentYourPortfolio,
     ]) => {
       const { nodes, cumulativeStrongTotal } = calculateCompoundingTable(
         nodesCount,
         days,
-        precentStrongReturn,
+        strongReturn,
         precentCompound,
         dailyVolume,
         precentTreasury,
@@ -77,7 +81,8 @@ export default function CardInfo() {
         strongPrice,
         precentCompound,
         precentReturn,
-        precentMarketingWallet
+        precentMarketingWallet,
+        precentYourPortfolio
       )
     }
   )
@@ -92,14 +97,20 @@ export default function CardInfo() {
     strongPrice,
     precentCompound,
     precentReturn,
-    precentMarketingWallet
+    precentMarketingWallet,
+    precentYourPortfolio
   ) => {
     const _treasuryReturnLastDay = Number(
       (cumulativeStrongTotal * strongPrice).toFixed(2)
     )
     setTreasuryReturnLastDay(_treasuryReturnLastDay)
     getCompounded(_treasuryReturnLastDay, precentCompound)
-    getReturned(_treasuryReturnLastDay, precentReturn, precentMarketingWallet)
+    getReturned(
+      _treasuryReturnLastDay,
+      precentReturn,
+      precentMarketingWallet,
+      precentYourPortfolio
+    )
     getMarketingDev(
       _treasuryReturnLastDay,
       precentReturn,
@@ -117,7 +128,8 @@ export default function CardInfo() {
   const getReturned = (
     returnLastDay,
     precentReturn,
-    precentMarketingWallet
+    precentMarketingWallet,
+    precentYourPortfolio
   ) => {
     const _returned = Number(
       (
@@ -127,6 +139,14 @@ export default function CardInfo() {
       ).toFixed(2)
     )
     setReturnedValue(_returned)
+    getYourReturn(_returned, precentYourPortfolio)
+  }
+
+  const getYourReturn = (_returned, precentYourPortfolio) => {
+    const _yourReturn = Number(
+      (_returned * (precentYourPortfolio / 100)).toFixed(2)
+    )
+    setYourReturns(_yourReturn)
   }
 
   const getMarketingDev = (
@@ -147,7 +167,7 @@ export default function CardInfo() {
   const calculateCompoundingTable = (
     _startNodes,
     _days,
-    _precentStrongReturn,
+    _strongReturn,
     _precentCompound,
     _dailyVolume,
     _precentTreasury,
@@ -162,7 +182,7 @@ export default function CardInfo() {
     }
 
     const getPayoutValue = _nodes => {
-      return Number((_nodes * (_precentStrongReturn / 100)).toFixed(2))
+      return Number((_nodes * _strongReturn).toFixed(2))
     }
 
     let nodes = _startNodes
@@ -172,7 +192,7 @@ export default function CardInfo() {
     let payout = getPayoutValue(nodes)
     for (let day = 1; day <= _days; day++) {
       if (day === 1) {
-        balance = Number((nodes * (_precentStrongReturn / 100)).toFixed(2))
+        balance = Number((nodes * _strongReturn).toFixed(2))
         costToClaim = getCostToClaimValue(balance, nodes)
         cumulativeStrongTotal = payout
       } else {
@@ -181,7 +201,7 @@ export default function CardInfo() {
             (
               balance -
               10 +
-              nodes * (_precentStrongReturn / 100) * (_precentCompound / 100) +
+              nodes * _strongReturn * (_precentCompound / 100) +
               (_dailyVolume * (_precentTreasury / 100)) / _strongPrice -
               costToClaim / _strongPrice
             ).toFixed(2)
@@ -190,7 +210,7 @@ export default function CardInfo() {
           balance = Number(
             (
               balance +
-              nodes * (_precentStrongReturn / 100) * (_precentCompound / 100) +
+              nodes * _strongReturn * (_precentCompound / 100) +
               (_dailyVolume * (_precentTreasury / 100)) / _strongPrice
             ).toFixed(2)
           )
@@ -255,6 +275,15 @@ export default function CardInfo() {
           </Tooltip>
         </h6>
         <p className={styles.mb14}>$ {returnedValue.toLocaleString('en-US')}</p>
+
+        <h6 className={styles.h6}>
+          Your returns{' '}
+          <Tooltip anchorLink="/" anchorText="Read more">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+            malesuada posuere dolor in tempus.
+          </Tooltip>
+        </h6>
+        <p className={styles.mb14}>$ {yourReturns.toLocaleString('en-US')}</p>
 
         <h6 className={styles.h6}>
           marketing / dev{' '}

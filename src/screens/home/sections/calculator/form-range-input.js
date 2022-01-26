@@ -15,7 +15,7 @@ export default function FormRangeInput({
   const labelId = label.replace(' ', '-')
 
   return (
-    <Row>
+    <Row className="gx-4 gx-md-3 gx-lg-2">
       <Form.Label column="sm" xs={12} sm={3} lg={12} xl={4}>
         {label}
       </Form.Label>

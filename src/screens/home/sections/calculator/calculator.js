@@ -31,14 +31,14 @@ export default function Calculator() {
     calculatorStore.setPrecentClaimPeriod(100)
     calculatorStore.setPrecentReflection(7)
     calculatorStore.setPrecentTreasury(14)
-    calculatorStore.setFrocPrice(0.00394)
+    calculatorStore.setFrocPrice(0.094)
     calculatorStore.setPrecentYourPortfolio(1)
     calculatorStore.setPrecentCompound(67)
     calculatorStore.setPrecentReturn(33)
     calculatorStore.setPrecentMarketingWallet(10)
     calculatorStore.setDays(150)
     calculatorStore.setStrongPrice(strongPrice)
-    calculatorStore.setPrecentStrongReturn(9)
+    calculatorStore.setStrongReturn(0.09)
     calculatorStore.setNodesCount(20)
   }
 
@@ -88,7 +88,7 @@ export default function Calculator() {
             type="number"
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
-            maxValue={100}
+            maxValue={21}
             value={calculatorStore.precentReflection}
             setValue={calculatorStore.setPrecentReflection}
           />
@@ -97,7 +97,7 @@ export default function Calculator() {
             type="number"
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
-            maxValue={100}
+            maxValue={21}
             value={calculatorStore.precentTreasury}
             setValue={calculatorStore.setPrecentTreasury}
           />
@@ -119,6 +119,7 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={100}
+            step={2}
             value={calculatorStore.precentYourPortfolio}
             setValue={calculatorStore.setPrecentYourPortfolio}
           />
@@ -171,11 +172,11 @@ export default function Calculator() {
           <FormRangeInput
             label="Strong returns"
             type="number"
-            symbol={{ label: '%', position: 'end' }}
-            minValue={1}
-            maxValue={100}
-            value={calculatorStore.precentStrongReturn}
-            setValue={calculatorStore.setPrecentStrongReturn}
+            minValue={0.01}
+            maxValue={0.09}
+            step={0.005}
+            value={calculatorStore.strongReturn}
+            setValue={calculatorStore.setStrongReturn}
           />
           <FormRangeInput
             label="Nodes bought starting point"

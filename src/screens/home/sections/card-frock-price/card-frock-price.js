@@ -5,7 +5,7 @@ import Tooltip from '../../../../components/tooltip/tooltip'
 import { useCalculatorStore } from '../../../../store'
 import styles from './card-frock-price.module.scss'
 
-const FROCK_SUPPLY = 1000000000
+const FROCK_SUPPLY = 1000000
 
 export default function CardFrockPrice() {
   const store = useCalculatorStore()

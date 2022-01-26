@@ -8,20 +8,28 @@ export const useCalculatorStore = create(
     precentClaimPeriod: 100,
     precentReflection: 7,
     precentTreasury: 14,
-    frocPrice: 0.00394,
+    frocPrice: 0.094,
     precentYourPortfolio: 1,
     precentCompound: 67,
     precentReturn: 33,
     precentMarketingWallet: 10,
     days: 150,
     strongPrice: 500,
-    precentStrongReturn: 9,
+    strongReturn: 0.09,
     nodesCount: 20,
     setFtmPrice: value => set({ ftmPrice: Number(value) }),
     setDailyVolume: value => set({ dailyVolume: Number(value) }),
     setPrecentClaimPeriod: value => set({ precentClaimPeriod: Number(value) }),
-    setPrecentReflection: value => set({ precentReflection: Number(value) }),
-    setPrecentTreasury: value => set({ precentTreasury: Number(value) }),
+    setPrecentReflection: value =>
+      set({
+        precentReflection: Number(value),
+        precentTreasury: Number(21 - value),
+      }),
+    setPrecentTreasury: value =>
+      set({
+        precentTreasury: Number(value),
+        precentReflection: Number(21 - value),
+      }),
     setFrocPrice: value => set({ frocPrice: Number(value) }),
     setPrecentYourPortfolio: value =>
       set({ precentYourPortfolio: Number(value) }),
@@ -39,8 +47,7 @@ export const useCalculatorStore = create(
       set({ precentMarketingWallet: Number(value) }),
     setDays: value => set({ days: Number(value) }),
     setStrongPrice: value => set({ strongPrice: Number(value) }),
-    setPrecentStrongReturn: value =>
-      set({ precentStrongReturn: Number(value) }),
+    setStrongReturn: value => set({ strongReturn: Number(value) }),
     setNodesCount: value => set({ nodesCount: Number(value) }),
   }))
 )
