@@ -3,6 +3,7 @@ import styles from './button.module.scss'
 
 export default function RoundButton({
   variant,
+  size = 'medium',
   children,
   isRounded,
   isOutline,
@@ -16,6 +17,7 @@ export default function RoundButton({
       className={clsx(
         styles.button,
         styles[variant],
+        styles[size],
         isRounded ? styles.round : '',
         isOutline ? styles.outline : '',
         className
