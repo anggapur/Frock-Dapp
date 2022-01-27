@@ -7,10 +7,14 @@ import Tooltip from '../../../../components/tooltip/tooltip'
 import { useCalculatorStore } from '../../../../store'
 import styles from './card-balance.module.scss'
 
-export default function CardBalance() {
+const DAYS_IN_YEAR = 365
+const FROCK_SUPPLY = 1000000
+
+export default function CardBalance({ frockYourReturn }) {
   const [pending, setPending] = useState(0)
   const [reflections, setReflections] = useState(0)
   const [claimable, setClaimable] = useState(0)
+  const [yourApr, setYourApr] = useState(0)
 
   const store = useCalculatorStore()
 
@@ -25,6 +29,14 @@ export default function CardBalance() {
     ])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(
+    (_store = store) => {
+      getApr(_store.days, _store.precentYourPortfolio, _store.yourEntryPrice)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [frockYourReturn]
+  )
 
   const calculateBalance = ([
     precentClaimPeriod,
@@ -59,6 +71,21 @@ export default function CardBalance() {
     ],
     calculateBalance
   )
+
+  useCalculatorStore.subscribe(
+    state => [state.days, state.precentYourPortfolio, state.yourEntryPrice],
+    ([days, precentYourPortfolio, yourEntryPrice]) =>
+      getApr(days, precentYourPortfolio, yourEntryPrice)
+  )
+
+  const getApr = (days, precentYourPortfolio, yourEntryPrice) => {
+    const returns =
+      (reflections + frockYourReturn) * (1 / (days / DAYS_IN_YEAR))
+    const invested =
+      (precentYourPortfolio / 100) * FROCK_SUPPLY * yourEntryPrice
+
+    setYourApr(Number((returns / invested).toFixed(2)))
+  }
 
   return (
     <>
@@ -164,7 +191,7 @@ export default function CardBalance() {
             </h5>
           </Col>
           <Col xs={6} lg={12}>
-            <h1 className={styles.h1}>300%</h1>
+            <h1 className={styles.h1}>{yourApr * 100}%</h1>
           </Col>
         </Row>
       </Card>

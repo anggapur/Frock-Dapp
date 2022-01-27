@@ -5,8 +5,11 @@ import CardFrockPrice from './sections/card-frock-price/card-frock-price'
 import CardInfo from './sections/card-info/card-info'
 import FaqSection from './sections/faq-section/faq-section'
 import './home.scss'
+import { useState } from 'react'
 
 export default function Home() {
+  const [frockYourReturn, setFrockYourReturn] = useState(0)
+
   return (
     <Container className="home overflow-hidden">
       <Row>
@@ -16,13 +19,15 @@ export default function Home() {
       </Row>
       <Row>
         <Col lg={4} className="px-mobile-0">
-          <CardBalance />
+          <CardBalance frockYourReturn={frockYourReturn} />
         </Col>
         <Col lg={5} className="px-mobile-0">
           <CardFrockPrice />
         </Col>
         <Col lg={3} className="px-mobile-0">
-          <CardInfo />
+          <CardInfo
+            handleSetFrockYourReturn={value => setFrockYourReturn(value)}
+          />
         </Col>
       </Row>
       <Row>

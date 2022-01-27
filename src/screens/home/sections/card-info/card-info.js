@@ -9,7 +9,7 @@ import styles from './card-info.module.scss'
 const GAS_FEE_FOR_CLAIM = 15
 const GAS_FEE_FOR_CREATE = 100
 
-export default function CardInfo() {
+export default function CardInfo({ handleSetFrockYourReturn }) {
   const [treasury, setTreasury] = useState(0)
   const [treasuryReturnLastDay, setTreasuryReturnLastDay] = useState(0)
   const [compoundedValue, setCompoundedValue] = useState(0)
@@ -147,6 +147,7 @@ export default function CardInfo() {
       (_returned * (precentYourPortfolio / 100)).toFixed(2)
     )
     setYourReturns(_yourReturn)
+    handleSetFrockYourReturn(_yourReturn)
   }
 
   const getMarketingDev = (
