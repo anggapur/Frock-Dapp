@@ -4,7 +4,7 @@ import { subscribeWithSelector } from 'zustand/middleware'
 export const useCalculatorStore = create(
   subscribeWithSelector(set => ({
     ftmPrice: 2,
-    dailyVolume: 10000,
+    dailyVolume: 50000,
     precentClaimPeriod: 100,
     precentReflection: 7,
     precentTreasury: 14,
