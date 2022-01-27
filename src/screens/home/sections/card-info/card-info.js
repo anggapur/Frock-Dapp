@@ -247,11 +247,13 @@ export default function CardInfo({
   )
 
   const getAprNewInvestors = (days, precentYourPortfolio, frocPrice) => {
-    const returns =
-      (balanceReflections + yourReturns) * (1 / (days / DAYS_IN_YEAR))
+    const returnsFromReflections =
+      (1 / (days / DAYS_IN_YEAR)) * balanceReflections
+    const returnsFromTreasury = yourReturns
+    const returns = returnsFromReflections + returnsFromTreasury
     const invested = (precentYourPortfolio / 100) * FROCK_SUPPLY * frocPrice
 
-    setAprNewInvestors(parseInt(returns / invested))
+    setAprNewInvestors(returns / invested)
   }
 
   return (
@@ -354,7 +356,7 @@ export default function CardInfo({
             </h5>
           </Col>
           <Col xs={6} lg={12}>
-            <h1 className={styles.h1}>{aprNewInvestors * 100}%</h1>
+            <h1 className={styles.h1}>{parseInt(aprNewInvestors * 100)}%</h1>
           </Col>
         </Row>
       </Card>

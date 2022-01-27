@@ -83,12 +83,13 @@ export default function CardBalance({
   )
 
   const getApr = (days, precentYourPortfolio, yourEntryPrice) => {
-    const returns =
-      (reflections + frockYourReturn) * (1 / (days / DAYS_IN_YEAR))
+    const returnsFromReflections = (1 / (days / DAYS_IN_YEAR)) * reflections
+    const returnsFromTreasury = frockYourReturn
+    const returns = returnsFromReflections + returnsFromTreasury
     const invested =
       (precentYourPortfolio / 100) * FROCK_SUPPLY * yourEntryPrice
 
-    setYourApr(parseInt(returns / invested))
+    setYourApr(returns / invested)
   }
 
   return (
@@ -195,7 +196,7 @@ export default function CardBalance({
             </h5>
           </Col>
           <Col xs={6} lg={12}>
-            <h1 className={styles.h1}>{yourApr * 100}%</h1>
+            <h1 className={styles.h1}>{parseInt(yourApr * 100)}%</h1>
           </Col>
         </Row>
       </Card>
