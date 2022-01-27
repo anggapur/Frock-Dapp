@@ -64,7 +64,7 @@ export default function Calculator() {
             type="number"
             symbol={{ label: '$', position: 'start' }}
             minValue={1}
-            maxValue={100}
+            maxValue={20}
             value={calculatorStore.ftmPrice}
             setValue={calculatorStore.setFtmPrice}
           />
