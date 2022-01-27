@@ -9,6 +9,7 @@ export const useCalculatorStore = create(
     precentReflection: 7,
     precentTreasury: 14,
     frocPrice: 0.094,
+    yourEntryPrice: 0.1,
     precentYourPortfolio: 1,
     precentCompound: 67,
     precentReturn: 33,
@@ -31,6 +32,7 @@ export const useCalculatorStore = create(
         precentReflection: Number(21 - value),
       }),
     setFrocPrice: value => set({ frocPrice: Number(value) }),
+    setYourEntryPrice: value => set({ yourEntryPrice: Number(value) }),
     setPrecentYourPortfolio: value =>
       set({ precentYourPortfolio: Number(value) }),
     setPrecentCompound: value =>

@@ -129,6 +129,16 @@ export default function Calculator() {
             setValue={calculatorStore.setPrecentYourPortfolio}
           />
           <FormRangeInput
+            label="Your entry price"
+            type="number"
+            symbol={{ label: '$', position: 'start' }}
+            minValue={0}
+            maxValue={10}
+            step={0.0001}
+            value={calculatorStore.yourEntryPrice}
+            setValue={calculatorStore.setYourEntryPrice}
+          />
+          <FormRangeInput
             label="Compound"
             type="number"
             symbol={{ label: '%', position: 'end' }}
