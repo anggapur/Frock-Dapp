@@ -10,7 +10,10 @@ import styles from './card-balance.module.scss'
 const DAYS_IN_YEAR = 365
 const FROCK_SUPPLY = 1000000
 
-export default function CardBalance({ frockYourReturn }) {
+export default function CardBalance({
+  frockYourReturn,
+  handleSetBalanceReflections,
+}) {
   const [pending, setPending] = useState(0)
   const [reflections, setReflections] = useState(0)
   const [claimable, setClaimable] = useState(0)
@@ -56,6 +59,7 @@ export default function CardBalance({ frockYourReturn }) {
     const _claimable = _pending.valueOf()
 
     setReflections(_reflections)
+    handleSetBalanceReflections(_reflections)
     setPending(_pending)
     setClaimable(_claimable)
   }
@@ -84,7 +88,7 @@ export default function CardBalance({ frockYourReturn }) {
     const invested =
       (precentYourPortfolio / 100) * FROCK_SUPPLY * yourEntryPrice
 
-    setYourApr(Number((returns / invested).toFixed(2)))
+    setYourApr(parseInt(returns / invested))
   }
 
   return (

@@ -9,6 +9,7 @@ import { useState } from 'react'
 
 export default function Home() {
   const [frockYourReturn, setFrockYourReturn] = useState(0)
+  const [balanceReflections, setBalanceReflections] = useState(0)
 
   return (
     <Container className="home overflow-hidden">
@@ -19,7 +20,10 @@ export default function Home() {
       </Row>
       <Row>
         <Col lg={4} className="px-mobile-0">
-          <CardBalance frockYourReturn={frockYourReturn} />
+          <CardBalance
+            frockYourReturn={frockYourReturn}
+            handleSetBalanceReflections={value => setBalanceReflections(value)}
+          />
         </Col>
         <Col lg={5} className="px-mobile-0">
           <CardFrockPrice />
@@ -27,6 +31,7 @@ export default function Home() {
         <Col lg={3} className="px-mobile-0">
           <CardInfo
             handleSetFrockYourReturn={value => setFrockYourReturn(value)}
+            balanceReflections={balanceReflections}
           />
         </Col>
       </Row>

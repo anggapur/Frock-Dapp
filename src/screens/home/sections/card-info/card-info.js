@@ -8,14 +8,20 @@ import styles from './card-info.module.scss'
 
 const GAS_FEE_FOR_CLAIM = 15
 const GAS_FEE_FOR_CREATE = 100
+const DAYS_IN_YEAR = 365
+const FROCK_SUPPLY = 1000000
 
-export default function CardInfo({ handleSetFrockYourReturn }) {
+export default function CardInfo({
+  handleSetFrockYourReturn,
+  balanceReflections,
+}) {
   const [treasury, setTreasury] = useState(0)
   const [treasuryReturnLastDay, setTreasuryReturnLastDay] = useState(0)
   const [compoundedValue, setCompoundedValue] = useState(0)
   const [returnedValue, setReturnedValue] = useState(0)
   const [yourReturns, setYourReturns] = useState(0)
   const [marketingDev, setMarketingDev] = useState(0)
+  const [aprNewInvestors, setAprNewInvestors] = useState(0)
 
   const store = useCalculatorStore()
 
@@ -40,6 +46,11 @@ export default function CardInfo({ handleSetFrockYourReturn }) {
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    getAprNewInvestors(store.days, store.precentYourPortfolio, store.frocPrice)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [balanceReflections])
 
   useCalculatorStore.subscribe(
     state => [
@@ -228,6 +239,21 @@ export default function CardInfo({ handleSetFrockYourReturn }) {
     return { nodes, cumulativeStrongTotal }
   }
 
+  useCalculatorStore.subscribe(
+    state => [state.days, state.precentYourPortfolio, state.frocPrice],
+    ([days, precentYourPortfolio, frocPrice]) => {
+      getAprNewInvestors(days, precentYourPortfolio, frocPrice)
+    }
+  )
+
+  const getAprNewInvestors = (days, precentYourPortfolio, frocPrice) => {
+    const returns =
+      (balanceReflections + yourReturns) * (1 / (days / DAYS_IN_YEAR))
+    const invested = (precentYourPortfolio / 100) * FROCK_SUPPLY * frocPrice
+
+    setAprNewInvestors(parseInt(returns / invested))
+  }
+
   return (
     <>
       <Card
@@ -328,7 +354,7 @@ export default function CardInfo({ handleSetFrockYourReturn }) {
             </h5>
           </Col>
           <Col xs={6} lg={12}>
-            <h1 className={styles.h1}>200%</h1>
+            <h1 className={styles.h1}>{aprNewInvestors * 100}%</h1>
           </Col>
         </Row>
       </Card>
