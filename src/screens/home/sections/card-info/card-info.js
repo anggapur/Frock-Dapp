@@ -22,6 +22,8 @@ export default function CardInfo({
   const [yourReturns, setYourReturns] = useState(0)
   const [marketingDev, setMarketingDev] = useState(0)
   const [aprNewInvestors, setAprNewInvestors] = useState(0)
+  const [cumulativeStrongTotalInYear, setCumulativeStrongTotalInYear] =
+    useState(0)
 
   const store = useCalculatorStore()
 
@@ -48,7 +50,13 @@ export default function CardInfo({
   }, [])
 
   useEffect(() => {
-    getAprNewInvestors(store.days, store.precentYourPortfolio, store.frocPrice)
+    getAprNewInvestors(
+      store.days,
+      store.precentYourPortfolio,
+      store.frocPrice,
+      store.precentReturn,
+      store.precentMarketingWallet
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [balanceReflections])
 
@@ -158,7 +166,6 @@ export default function CardInfo({
       (_returned * (precentYourPortfolio / 100)).toFixed(2)
     )
     setYourReturns(_yourReturn)
-    handleSetFrockYourReturn(_yourReturn)
   }
 
   const getMarketingDev = (
@@ -202,7 +209,9 @@ export default function CardInfo({
     let cumulativeStrongTotal = 0
     let costToClaim = 0
     let payout = getPayoutValue(nodes)
-    for (let day = 1; day <= _days; day++) {
+    let cumulativeStrongTotalByDays = 0
+    let nodesByDay = 0
+    for (let day = 1; day <= DAYS_IN_YEAR; day++) {
       if (day === 1) {
         balance = Number((nodes * _strongReturn).toFixed(2))
         costToClaim = getCostToClaimValue(balance, nodes)
@@ -234,25 +243,64 @@ export default function CardInfo({
           (cumulativeStrongTotal + payout).toFixed(2)
         )
       }
+
+      if (day <= _days) {
+        cumulativeStrongTotalByDays = cumulativeStrongTotal
+        nodesByDay = nodes
+      }
     }
 
-    return { nodes, cumulativeStrongTotal }
+    setCumulativeStrongTotalInYear(cumulativeStrongTotal)
+
+    return {
+      cumulativeStrongTotal: cumulativeStrongTotalByDays,
+      nodes: nodesByDay,
+    }
   }
 
   useCalculatorStore.subscribe(
-    state => [state.days, state.precentYourPortfolio, state.frocPrice],
-    ([days, precentYourPortfolio, frocPrice]) => {
-      getAprNewInvestors(days, precentYourPortfolio, frocPrice)
+    state => [
+      state.days,
+      state.precentYourPortfolio,
+      state.frocPrice,
+      state.precentReturn,
+      state.precentMarketingWallet,
+    ],
+    ([
+      days,
+      precentYourPortfolio,
+      frocPrice,
+      precentReturn,
+      precentMarketingWallet,
+    ]) => {
+      getAprNewInvestors(
+        days,
+        precentYourPortfolio,
+        frocPrice,
+        precentReturn,
+        precentMarketingWallet
+      )
     }
   )
 
-  const getAprNewInvestors = (days, precentYourPortfolio, frocPrice) => {
-    const returnsFromReflections =
-      (1 / (days / DAYS_IN_YEAR)) * balanceReflections
-    const returnsFromTreasury = yourReturns
+  const getAprNewInvestors = (
+    days,
+    precentYourPortfolio,
+    frocPrice,
+    precentReturn,
+    precentMarketingWallet
+  ) => {
+    const whichWillBeReturnd =
+      cumulativeStrongTotalInYear *
+      (precentReturn / 100) *
+      (1 - precentMarketingWallet / 100)
+    const returnsFromTreasury =
+      whichWillBeReturnd * (precentYourPortfolio / 100)
+    const returnsFromReflections = balanceReflections
     const returns = returnsFromReflections + returnsFromTreasury
     const invested = (precentYourPortfolio / 100) * FROCK_SUPPLY * frocPrice
 
+    handleSetFrockYourReturn(returnsFromTreasury)
     setAprNewInvestors(returns / invested)
   }
 

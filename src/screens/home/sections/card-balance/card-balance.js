@@ -35,7 +35,12 @@ export default function CardBalance({
 
   useEffect(
     (_store = store) => {
-      getApr(_store.days, _store.precentYourPortfolio, _store.yourEntryPrice)
+      getApr(
+        _store.precentYourPortfolio,
+        _store.yourEntryPrice,
+        _store.dailyVolume,
+        _store.precentReflection
+      )
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [frockYourReturn]
@@ -59,7 +64,6 @@ export default function CardBalance({
     const _claimable = _pending.valueOf()
 
     setReflections(_reflections)
-    handleSetBalanceReflections(_reflections)
     setPending(_pending)
     setClaimable(_claimable)
   }
@@ -77,18 +81,38 @@ export default function CardBalance({
   )
 
   useCalculatorStore.subscribe(
-    state => [state.days, state.precentYourPortfolio, state.yourEntryPrice],
-    ([days, precentYourPortfolio, yourEntryPrice]) =>
-      getApr(days, precentYourPortfolio, yourEntryPrice)
+    state => [
+      state.precentYourPortfolio,
+      state.yourEntryPrice,
+      state.dailyVolume,
+      state.precentReflection,
+    ],
+    ([precentYourPortfolio, yourEntryPrice, dailyVolume, precentReflection]) =>
+      getApr(
+        precentYourPortfolio,
+        yourEntryPrice,
+        dailyVolume,
+        precentReflection
+      )
   )
 
-  const getApr = (days, precentYourPortfolio, yourEntryPrice) => {
-    const returnsFromReflections = (1 / (days / DAYS_IN_YEAR)) * reflections
+  const getApr = (
+    precentYourPortfolio,
+    yourEntryPrice,
+    dailyVolume,
+    precentReflection
+  ) => {
+    const returnsFromReflections =
+      dailyVolume *
+      DAYS_IN_YEAR *
+      (precentYourPortfolio / 100) *
+      (precentReflection / 100)
     const returnsFromTreasury = frockYourReturn
     const returns = returnsFromReflections + returnsFromTreasury
     const invested =
       (precentYourPortfolio / 100) * FROCK_SUPPLY * yourEntryPrice
 
+    handleSetBalanceReflections(returnsFromReflections)
     setYourApr(returns / invested)
   }
 
