@@ -110,13 +110,14 @@ export default function Calculator() {
         <Col lg={4}>
           <FormRangeInput
             label="Froc price"
-            type="number"
+            type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={0}
             maxValue={10}
             step={0.0001}
             value={calculatorStore.frocPrice}
             setValue={calculatorStore.setFrocPrice}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="Your portfolio"
@@ -130,13 +131,14 @@ export default function Calculator() {
           />
           <FormRangeInput
             label="Your entry price"
-            type="number"
+            type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={0}
             maxValue={10}
             step={0.0001}
             value={calculatorStore.yourEntryPrice}
             setValue={calculatorStore.setYourEntryPrice}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="Compound"
@@ -177,12 +179,13 @@ export default function Calculator() {
           />
           <FormRangeInput
             label="Strong price"
-            type="number"
+            type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={1}
             maxValue={1000}
             value={calculatorStore.strongPrice}
             setValue={calculatorStore.setStrongPrice}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="Strong returns"
