@@ -1,32 +1,35 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import { GetStrongPrice } from '../../../../api/get-strong-price'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import FormRangeInput from './form-range-input'
 import { useCalculatorStore } from '../../../../store'
+import { GetFantomPrice, GetStrongPrice } from '../../../../api'
 
 export default function Calculator() {
-  const [strongPrice, setStrongPrice] = useState(500)
+  const [strongPrice, setStrongPrice] = useState(0)
+  const [fantomPrice, setFantomPrice] = useState(0)
 
   const calculatorStore = useCalculatorStore()
 
-  const fetchStrongPriceInUsd = useCallback(async () => {
-    const strongInUsd = await GetStrongPrice()
-    setStrongPrice(strongInUsd)
+  const fetchStrongPriceInUsd = useCallback(() => {
+    Promise.all([GetStrongPrice(), GetFantomPrice()]).then(
+      ([strongInUsd, fantomInUsd]) => {
+        setStrongPrice(strongInUsd)
+        setFantomPrice(fantomInUsd)
+        calculatorStore.setStrongPrice(strongInUsd)
+        calculatorStore.setFtmPrice(fantomInUsd)
+      }
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     fetchStrongPriceInUsd()
   }, [fetchStrongPriceInUsd])
 
-  useEffect(() => {
-    calculatorStore.setStrongPrice(strongPrice)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strongPrice])
-
   const handleResetClicked = () => {
-    calculatorStore.setFtmPrice(2)
+    calculatorStore.setFtmPrice(fantomPrice)
     calculatorStore.setDailyVolume(10000)
     calculatorStore.setPrecentClaimPeriod(100)
     calculatorStore.setPrecentReflection(7)
