@@ -11,8 +11,17 @@ export default function FormRangeInput({
   minValue,
   maxValue,
   step = '',
+  currencyFormat = false,
 }) {
   const labelId = label.replace(' ', '-')
+
+  const handleInputNumberChange = value => {
+    if (currencyFormat) {
+      value = Number(String(value).replaceAll(',', ''))
+    }
+
+    setValue(value)
+  }
 
   return (
     <Row className="gx-4 gx-md-3 gx-lg-2">
@@ -37,8 +46,14 @@ export default function FormRangeInput({
             type={type}
             min={minValue}
             max={maxValue}
-            value={value}
-            onChange={e => setValue(e.target.value)}
+            value={
+              currencyFormat
+                ? Number(value).toLocaleString('en-US', {
+                    maximumFractionDigits: 2,
+                  })
+                : value
+            }
+            onChange={e => handleInputNumberChange(e.target.value)}
             aria-label={label}
             aria-describedby={labelId}
             className={clsx(styles.inputNumber, 'text-end')}

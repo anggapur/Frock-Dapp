@@ -61,21 +61,23 @@ export default function Calculator() {
         <Col lg={4}>
           <FormRangeInput
             label="FTM price"
-            type="number"
+            type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={1}
             maxValue={20}
             value={calculatorStore.ftmPrice}
             setValue={calculatorStore.setFtmPrice}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="Daily Volume"
-            type="number"
+            type="text"
             symbol={{ label: '$', position: 'start' }}
-            minValue={100}
-            maxValue={10000}
+            minValue={0}
+            maxValue={250000}
             value={calculatorStore.dailyVolume}
             setValue={calculatorStore.setDailyVolume}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="% of claim period"
