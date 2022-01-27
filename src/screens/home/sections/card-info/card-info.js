@@ -241,7 +241,9 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h5>
-        <p className={styles.mb14}>$ {treasury.toLocaleString('en-US')}</p>
+        <p className={styles.mb14}>
+          $ {treasury.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+        </p>
 
         <h5 className={styles.h5}>
           Last {store.days > 1 ? `${store.days} days` : `${store.days} day`}{' '}
@@ -253,7 +255,10 @@ export default function CardInfo() {
           </Tooltip>
         </h5>
         <p className={styles.mb14}>
-          $ {treasuryReturnLastDay.toLocaleString('en-US')}
+          ${' '}
+          {treasuryReturnLastDay.toLocaleString('en-US', {
+            maximumFractionDigits: 0,
+          })}
         </p>
 
         <h6 className={styles.h6}>
@@ -264,7 +269,10 @@ export default function CardInfo() {
           </Tooltip>
         </h6>
         <p className={styles.mb14}>
-          $ {compoundedValue.toLocaleString('en-US')}
+          ${' '}
+          {compoundedValue.toLocaleString('en-US', {
+            maximumFractionDigits: 0,
+          })}
         </p>
 
         <h6 className={styles.h6}>
@@ -274,7 +282,10 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p className={styles.mb14}>$ {returnedValue.toLocaleString('en-US')}</p>
+        <p className={styles.mb14}>
+          ${' '}
+          {returnedValue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+        </p>
 
         <h6 className={styles.h6}>
           Your returns{' '}
@@ -283,7 +294,9 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p className={styles.mb14}>$ {yourReturns.toLocaleString('en-US')}</p>
+        <p className={styles.mb14}>
+          $ {yourReturns.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+        </p>
 
         <h6 className={styles.h6}>
           marketing / dev{' '}
@@ -292,7 +305,9 @@ export default function CardInfo() {
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p>$ {marketingDev.toLocaleString('en-US')}</p>
+        <p>
+          $ {marketingDev.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+        </p>
       </Card>
 
       <Card

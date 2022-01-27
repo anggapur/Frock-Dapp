@@ -70,7 +70,13 @@ export default function CardBalance() {
           </Col>
           <Col xs={6}>
             <p className={styles.p}>
-              <strong>$FTM {Number(pending).toLocaleString()}</strong>
+              <strong>
+                $FTM{' '}
+                {Number(pending).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </strong>
             </p>
           </Col>
         </Row>
@@ -79,7 +85,13 @@ export default function CardBalance() {
             <h5 className={styles.h5}>reflections</h5>
           </Col>
           <Col xs={6}>
-            <p className={styles.p}>$ {Number(reflections).toLocaleString()}</p>
+            <p className={styles.p}>
+              ${' '}
+              {Number(reflections).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </Col>
         </Row>
         <hr className={styles.hr} />
@@ -89,7 +101,13 @@ export default function CardBalance() {
           </Col>
           <Col xs={6}>
             <p className={styles.p}>
-              <strong>$FTM {Number(claimable).toLocaleString()}</strong>
+              <strong>
+                $FTM{' '}
+                {Number(claimable).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </strong>
             </p>
           </Col>
         </Row>
@@ -98,7 +116,13 @@ export default function CardBalance() {
             <h5 className={styles.h5}>reflections</h5>
           </Col>
           <Col xs={6}>
-            <p className={styles.p}>$ {Number(reflections).toLocaleString()}</p>
+            <p className={styles.p}>
+              ${' '}
+              {Number(reflections).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </Col>
         </Row>
         <RoundButton variant="primary" className="mt-4 w-100" isRounded>

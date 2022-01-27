@@ -22,7 +22,10 @@ export default function CardFrockPrice() {
     const total = reflections / store.ftmPrice
     return {
       reflections: reflections.toLocaleString(),
-      total: total.toLocaleString(),
+      total: total.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
     }
   }
 
