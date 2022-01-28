@@ -112,7 +112,7 @@ export default function Calculator() {
         </Col>
         <Col lg={4}>
           <FormRangeInput
-            label="Froc price"
+            label="$FROCK price"
             type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={0}
@@ -201,6 +201,11 @@ export default function Calculator() {
           />
           <FormRangeInput
             label="Nodes bought starting point"
+            tooltip={{
+              anchorText: 'Read more',
+              anchorLink: '/',
+              text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+            }}
             type="number"
             minValue={1}
             maxValue={100}

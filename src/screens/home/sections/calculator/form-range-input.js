@@ -1,9 +1,11 @@
 import clsx from 'clsx'
 import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap'
+import Tooltip from '../../../../components/tooltip/tooltip'
 import styles from './calculator.module.scss'
 
 export default function FormRangeInput({
   label,
+  tooltip = null,
   symbol,
   type = 'number',
   value,
@@ -33,7 +35,15 @@ export default function FormRangeInput({
         lg={!hideBar ? 12 : 8}
         xl={4}
       >
-        {label}
+        {label}{' '}
+        {tooltip !== null && (
+          <Tooltip
+            anchorLink={tooltip?.anchorLink}
+            anchorText={tooltip?.anchorText}
+          >
+            {tooltip?.text}
+          </Tooltip>
+        )}
       </Form.Label>
       {!hideBar && (
         <Col xs={8} sm={6} lg={8} xl={5} className="pt-1">
