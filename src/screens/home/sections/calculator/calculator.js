@@ -30,11 +30,12 @@ export default function Calculator() {
 
   const handleResetClicked = () => {
     calculatorStore.setFtmPrice(fantomPrice)
-    calculatorStore.setDailyVolume(10000)
+    calculatorStore.setDailyVolume(50000)
     calculatorStore.setPrecentClaimPeriod(100)
     calculatorStore.setPrecentReflection(7)
     calculatorStore.setPrecentTreasury(14)
-    calculatorStore.setFrocPrice(0.094)
+    calculatorStore.setFrocPrice(0.1)
+    calculatorStore.setYourEntryPrice(0.094)
     calculatorStore.setPrecentYourPortfolio(1)
     calculatorStore.setPrecentCompound(67)
     calculatorStore.setPrecentReturn(33)
@@ -113,8 +114,8 @@ export default function Calculator() {
             type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={0}
-            maxValue={10}
-            step={0.0001}
+            maxValue={2.5}
+            step={0.01}
             value={calculatorStore.frocPrice}
             setValue={calculatorStore.setFrocPrice}
             currencyFormat={true}
@@ -134,8 +135,8 @@ export default function Calculator() {
             type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={0}
-            maxValue={10}
-            step={0.0001}
+            maxValue={2.5}
+            step={0.01}
             value={calculatorStore.yourEntryPrice}
             setValue={calculatorStore.setYourEntryPrice}
             currencyFormat={true}
