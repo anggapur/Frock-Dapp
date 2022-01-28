@@ -82,7 +82,7 @@ export default function Calculator() {
             setValue={calculatorStore.setDailyVolume}
             currencyFormat={true}
           />
-          <FormRangeInput
+          {/* <FormRangeInput
             label="% of claim period"
             type="number"
             symbol={{ label: '%', position: 'end' }}
@@ -90,7 +90,7 @@ export default function Calculator() {
             maxValue={100}
             value={calculatorStore.precentClaimPeriod}
             setValue={calculatorStore.setPrecentClaimPeriod}
-          />
+          /> */}
           <FormRangeInput
             label="Reflection %"
             type="number"
