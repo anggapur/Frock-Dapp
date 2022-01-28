@@ -163,7 +163,7 @@ export default function Calculator() {
           />
         </Col>
         <Col lg={4}>
-          <FormRangeInput
+          {/* <FormRangeInput
             label="Marketing/dev wallet"
             type="number"
             symbol={{ label: '%', position: 'end' }}
@@ -171,7 +171,7 @@ export default function Calculator() {
             maxValue={100}
             value={calculatorStore.precentMarketingWallet}
             setValue={calculatorStore.setPrecentMarketingWallet}
-          />
+          /> */}
           <FormRangeInput
             label="Days"
             type="number"

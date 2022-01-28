@@ -20,6 +20,7 @@ export default function CardInfo({
   const [compoundedValue, setCompoundedValue] = useState(0)
   const [returnedValue, setReturnedValue] = useState(0)
   const [yourReturns, setYourReturns] = useState(0)
+  // eslint-disable-next-line no-unused-vars
   const [marketingDev, setMarketingDev] = useState(0)
   const [aprNewInvestors, setAprNewInvestors] = useState(0)
   const [cumulativeStrongTotalInYear, setCumulativeStrongTotalInYear] =
@@ -373,11 +374,11 @@ export default function CardInfo({
             malesuada posuere dolor in tempus.
           </Tooltip>
         </h6>
-        <p className={styles.mb14}>
+        <p>
           $ {yourReturns.toLocaleString('en-US', { maximumFractionDigits: 0 })}
         </p>
 
-        <h6 className={styles.h6}>
+        {/* <h6 className={styles.h6}>
           marketing / dev{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
@@ -386,7 +387,7 @@ export default function CardInfo({
         </h6>
         <p>
           $ {marketingDev.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-        </p>
+        </p> */}
       </Card>
 
       <Card

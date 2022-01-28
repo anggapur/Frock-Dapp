@@ -13,7 +13,7 @@ export const useCalculatorStore = create(
     precentYourPortfolio: 1,
     precentCompound: 67,
     precentReturn: 33,
-    precentMarketingWallet: 10,
+    precentMarketingWallet: 0,
     days: 150,
     strongPrice: 500,
     strongReturn: 0.09,
