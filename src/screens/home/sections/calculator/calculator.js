@@ -76,7 +76,8 @@ export default function Calculator() {
             type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={0}
-            maxValue={250000}
+            maxValue={100000}
+            step={5000}
             value={calculatorStore.dailyVolume}
             setValue={calculatorStore.setDailyVolume}
             currencyFormat={true}
