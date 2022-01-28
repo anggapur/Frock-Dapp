@@ -11,7 +11,9 @@ export default function CardFrockPrice({
 }) {
   const [frockMarketCap, setFrockMarketCap] = useState(0)
   const [totalReflections, setTotalReflections] = useState(0)
+  // eslint-disable-next-line no-unused-vars
   const [totalPaidReflections] = useState(23000)
+  // eslint-disable-next-line no-unused-vars
   const [totalPaid] = useState(80050)
   const [last24HourVolume, setLast24HourVolume] = useState(volumeUsed)
   const [last24HourVolumeReflections, setLast24HourVolumeReflections] =
@@ -135,7 +137,7 @@ export default function CardFrockPrice({
             lineBottom="light"
             className="global-card-frock-price-2 mt-4"
           >
-            <h5 className={styles.h5}>
+            {/* <h5 className={styles.h5}>
               Total paid reflections{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
@@ -153,7 +155,7 @@ export default function CardFrockPrice({
               {totalPaidReflections.toLocaleString('en-US', {
                 maximumFractionDigits: 2,
               })}
-            </small>
+            </small> */}
           </Card>
           <Card
             ellipse="top-right"
