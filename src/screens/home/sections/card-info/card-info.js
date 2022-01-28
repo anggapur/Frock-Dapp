@@ -236,7 +236,9 @@ export default function CardInfo({
             ).toFixed(2)
           )
         }
-        nodes += Number(balance >= 10)
+        if (day >= 4) {
+          nodes += parseInt(balance / 10)
+        }
         payout = getPayoutValue(nodes)
         costToClaim = getCostToClaimValue(balance, nodes)
         cumulativeStrongTotal = Number(
@@ -244,7 +246,7 @@ export default function CardInfo({
         )
       }
 
-      if (day <= _days) {
+      if (day === _days) {
         cumulativeStrongTotalByDays = cumulativeStrongTotal
         nodesByDay = nodes
       }
