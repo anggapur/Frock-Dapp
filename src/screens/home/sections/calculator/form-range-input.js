@@ -12,6 +12,7 @@ export default function FormRangeInput({
   maxValue,
   step = '',
   currencyFormat = false,
+  hideBar = false,
 }) {
   const labelId = label.replace(' ', '-')
 
@@ -25,19 +26,27 @@ export default function FormRangeInput({
 
   return (
     <Row className="gx-4 gx-md-3 gx-lg-2">
-      <Form.Label column="sm" xs={12} sm={3} lg={12} xl={4}>
+      <Form.Label
+        column="sm"
+        xs={!hideBar ? 12 : 8}
+        sm={3}
+        lg={!hideBar ? 12 : 8}
+        xl={4}
+      >
         {label}
       </Form.Label>
-      <Col xs={8} sm={6} lg={8} xl={5} className="pt-1">
-        <Form.Range
-          min={minValue}
-          max={maxValue}
-          step={step}
-          value={value}
-          onChange={e => setValue(e.target.value)}
-        />
-      </Col>
-      <Col xs={4} sm={3} lg={4} xl={3}>
+      {!hideBar && (
+        <Col xs={8} sm={6} lg={8} xl={5} className="pt-1">
+          <Form.Range
+            min={minValue}
+            max={maxValue}
+            step={step}
+            value={value}
+            onChange={e => setValue(e.target.value)}
+          />
+        </Col>
+      )}
+      <Col>
         <InputGroup size="sm" className="mb-3">
           {symbol?.position === 'start' && (
             <InputGroup.Text id={labelId}>{symbol?.label}</InputGroup.Text>

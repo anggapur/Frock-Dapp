@@ -69,6 +69,7 @@ export default function Calculator() {
             value={calculatorStore.ftmPrice}
             setValue={calculatorStore.setFtmPrice}
             currencyFormat={true}
+            hideBar={true}
           />
           <FormRangeInput
             label="Daily Volume"
