@@ -1,50 +1,57 @@
+import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
-import { useCalculatorStore } from '../../../../store'
+import { FROCK_SUPPLY } from '../../../../constant'
 import styles from './card-frock-price.module.scss'
 
-const FROCK_SUPPLY = 1000000
+export default function CardFrockPrice({
+  calc: { frocPrice, precentClaimPeriod, precentReflection, ftmPrice },
+  volumeUsed,
+}) {
+  const [frockMarketCap, setFrockMarketCap] = useState(0)
+  const [totalPendingReflections, setTotalPendingReflections] = useState(0)
+  const [totalPending, setTotalPending] = useState(0)
+  const [totalPaidReflections] = useState(23000)
+  const [totalPaid] = useState(80050)
+  const [last24HourVolume, setLast24HourVolume] = useState(volumeUsed)
+  const [last24HourVolumeReflections, setLast24HourVolumeReflections] =
+    useState(0)
 
-export default function CardFrockPrice() {
-  const store = useCalculatorStore()
+  // get frock market cap value
+  useEffect(() => {
+    setFrockMarketCap(Number(FROCK_SUPPLY * frocPrice))
+  }, [frocPrice])
 
-  const getFrockMarketCap = () => {
-    return (FROCK_SUPPLY * store.frocPrice).toLocaleString()
-  }
+  // get total pending reflections value
+  useEffect(() => {
+    const _precentClaimPeriod = precentClaimPeriod / 100
+    const _precentReflection = precentReflection / 100
+    const _totalPendingReflections = Number(
+      _precentClaimPeriod * volumeUsed * _precentReflection
+    )
+    setTotalPendingReflections(_totalPendingReflections)
+  }, [precentClaimPeriod, precentReflection, volumeUsed])
 
-  const totalPendingReflections = () => {
-    const reflections =
-      (store.precentClaimPeriod / 100) *
-      store.dailyVolume *
-      (store.precentReflection / 100)
-    const total = reflections / store.ftmPrice
-    return {
-      reflections: reflections.toLocaleString(),
-      total: total.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-    }
-  }
+  // get total pending value
+  useEffect(() => {
+    setTotalPending(Number(totalPendingReflections / ftmPrice))
+  }, [totalPendingReflections, ftmPrice])
 
-  const totalPaidReflections = () => {
-    return {
-      total: Number(80050).toLocaleString(),
-      reflections: Number(23000).toLocaleString(),
-    }
-  }
+  // get last 24 hour volume value
+  useEffect(() => {
+    setLast24HourVolume(volumeUsed)
+  }, [volumeUsed])
 
-  const totalLast24Hour = () => {
-    const dailyVolume = store.dailyVolume
-    const reflections =
-      (dailyVolume * (store.precentReflection / 100)) / store.ftmPrice
-    return {
-      volume: dailyVolume.toLocaleString(),
-      reflections: reflections.toLocaleString(),
-    }
-  }
+  // get last 24 hour volume reflections value
+  useEffect(() => {
+    const _precentReflection = precentReflection / 100
+    const _last24HourVolumeReflections = Number(
+      (last24HourVolume * _precentReflection) / ftmPrice
+    )
+    setLast24HourVolumeReflections(_last24HourVolumeReflections)
+  }, [last24HourVolume, precentReflection, ftmPrice])
 
   return (
     <>
@@ -56,7 +63,7 @@ export default function CardFrockPrice() {
         <Row>
           <Col xs={6} className="pb-3">
             <h3 className={styles.h3}>$FROCK Price</h3>
-            <h1 className={styles.h1}>${store.frocPrice}</h1>
+            <h1 className={styles.h1}>${frocPrice}</h1>
             <RoundButton
               variant="primary"
               className={styles.buyFrock}
@@ -74,7 +81,12 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p className={styles.mb20}>$ {getFrockMarketCap()}</p>
+            <p className={styles.mb20}>
+              ${' '}
+              {frockMarketCap.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
 
             <h5 className={styles.h5}>
               $FROCK circulating supply{' '}
@@ -83,7 +95,7 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>{FROCK_SUPPLY.toLocaleString()} $FROCK</p>
+            <p>{FROCK_SUPPLY.toLocaleString('en-US')} $FROCK</p>
           </Col>
         </Row>
       </Card>
@@ -101,8 +113,18 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$ {totalPendingReflections().total}</p>
-            <small>$ {totalPendingReflections().reflections}</small>
+            <p>
+              ${' '}
+              {totalPending.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
+            <small>
+              ${' '}
+              {totalPendingReflections.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </small>
           </Card>
           <Card
             ellipse="top-right"
@@ -116,7 +138,12 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$ {totalLast24Hour().volume}</p>
+            <p>
+              ${' '}
+              {last24HourVolume.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </Card>
         </Col>
         <Col xs={6}>
@@ -132,8 +159,18 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$FTM {totalPaidReflections().total}</p>
-            <small>$ {totalPaidReflections().reflections}</small>
+            <p>
+              $FTM{' '}
+              {totalPaid.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
+            <small>
+              ${' '}
+              {totalPaidReflections.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </small>
           </Card>
           <Card
             ellipse="top-right"
@@ -147,7 +184,12 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$FTM {totalLast24Hour().reflections}</p>
+            <p>
+              $FTM{' '}
+              {last24HourVolumeReflections.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </Card>
         </Col>
       </Row>

@@ -1,49 +1,39 @@
-import { useState, useEffect, useCallback } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import FormRangeInput from './form-range-input'
-import { useCalculatorStore } from '../../../../store'
-import { GetFantomPrice, GetStrongPrice } from '../../../../api'
 
-export default function Calculator() {
-  const [strongPrice, setStrongPrice] = useState(0)
-  const [fantomPrice, setFantomPrice] = useState(0)
-
-  const calculatorStore = useCalculatorStore()
-
-  const fetchStrongPriceInUsd = useCallback(() => {
-    Promise.all([GetStrongPrice(), GetFantomPrice()]).then(
-      ([strongInUsd, fantomInUsd]) => {
-        setStrongPrice(strongInUsd)
-        setFantomPrice(fantomInUsd)
-        calculatorStore.setStrongPrice(strongInUsd)
-        calculatorStore.setFtmPrice(fantomInUsd)
-      }
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    fetchStrongPriceInUsd()
-  }, [fetchStrongPriceInUsd])
-
+export default function Calculator({
+  calc,
+  setCalc,
+  strongPriceFromApi,
+  ftmPriceFromApi,
+}) {
   const handleResetClicked = () => {
-    calculatorStore.setFtmPrice(fantomPrice)
-    calculatorStore.setDailyVolume(50000)
-    calculatorStore.setPrecentClaimPeriod(100)
-    calculatorStore.setPrecentReflection(7)
-    calculatorStore.setPrecentTreasury(14)
-    calculatorStore.setFrocPrice(0.1)
-    calculatorStore.setYourEntryPrice(0.094)
-    calculatorStore.setPrecentYourPortfolio(1)
-    calculatorStore.setPrecentCompound(67)
-    calculatorStore.setPrecentReturn(33)
-    calculatorStore.setPrecentMarketingWallet(10)
-    calculatorStore.setDays(150)
-    calculatorStore.setStrongPrice(strongPrice)
-    calculatorStore.setStrongReturn(0.09)
-    calculatorStore.setNodesCount(20)
+    setCalc({
+      ftmPrice: ftmPriceFromApi,
+      dailyVolume: 50000,
+      precentClaimPeriod: 100,
+      precentReflection: 7,
+      precentTreasury: 14,
+      frocPrice: 0.1,
+      yourEntryPrice: 0.094,
+      precentYourPortfolio: 1,
+      precentCompound: 67,
+      precentReturn: 33,
+      precentMarketingWallet: 0,
+      days: 150,
+      strongPrice: strongPriceFromApi,
+      strongReturn: 0.09,
+      nodesCount: 20,
+    })
+  }
+
+  const handleOnChange = (state, value) => {
+    setCalc({
+      ...calc,
+      [state]: value,
+    })
   }
 
   return (
@@ -60,17 +50,17 @@ export default function Calculator() {
       <Card.Header>Calculator</Card.Header>
       <Row>
         <Col lg={4}>
-          <FormRangeInput
+          {/* <FormRangeInput
             label="FTM price"
             type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={1}
             maxValue={20}
-            value={calculatorStore.ftmPrice}
-            setValue={calculatorStore.setFtmPrice}
+            value={calc.ftmPrice}
+            setValue={value => handleOnChange('ftmPrice', value)}
             currencyFormat={true}
             hideBar={true}
-          />
+          /> */}
           <FormRangeInput
             label="Daily Volume"
             type="text"
@@ -78,8 +68,8 @@ export default function Calculator() {
             minValue={0}
             maxValue={100000}
             step={5000}
-            value={calculatorStore.dailyVolume}
-            setValue={calculatorStore.setDailyVolume}
+            value={calc.dailyVolume}
+            setValue={value => handleOnChange('dailyVolume', value)}
             currencyFormat={true}
           />
           {/* <FormRangeInput
@@ -88,8 +78,8 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={100}
-            value={calculatorStore.precentClaimPeriod}
-            setValue={calculatorStore.setPrecentClaimPeriod}
+            value={calc.precentClaimPeriod}
+            setValue={value => handleOnChange('precentClaimPeriod', value)}
           /> */}
           <FormRangeInput
             label="Reflection %"
@@ -97,8 +87,8 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={21}
-            value={calculatorStore.precentReflection}
-            setValue={calculatorStore.setPrecentReflection}
+            value={calc.precentReflection}
+            setValue={value => handleOnChange('precentReflection', value)}
           />
           <FormRangeInput
             label="Treasury %"
@@ -106,8 +96,8 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={21}
-            value={calculatorStore.precentTreasury}
-            setValue={calculatorStore.setPrecentTreasury}
+            value={calc.precentTreasury}
+            setValue={value => handleOnChange('precentTreasury', value)}
           />
         </Col>
         <Col lg={4}>
@@ -118,8 +108,8 @@ export default function Calculator() {
             minValue={0}
             maxValue={2.5}
             step={0.01}
-            value={calculatorStore.frocPrice}
-            setValue={calculatorStore.setFrocPrice}
+            value={calc.frocPrice}
+            setValue={value => handleOnChange('frocPrice', value)}
             currencyFormat={true}
           />
           <FormRangeInput
@@ -129,8 +119,8 @@ export default function Calculator() {
             minValue={0}
             maxValue={100}
             step={2}
-            value={calculatorStore.precentYourPortfolio}
-            setValue={calculatorStore.setPrecentYourPortfolio}
+            value={calc.precentYourPortfolio}
+            setValue={value => handleOnChange('precentYourPortfolio', value)}
           />
           <FormRangeInput
             label="Your entry price"
@@ -139,8 +129,8 @@ export default function Calculator() {
             minValue={0}
             maxValue={2.5}
             step={0.01}
-            value={calculatorStore.yourEntryPrice}
-            setValue={calculatorStore.setYourEntryPrice}
+            value={calc.yourEntryPrice}
+            setValue={value => handleOnChange('yourEntryPrice', value)}
             currencyFormat={true}
           />
           <FormRangeInput
@@ -149,8 +139,8 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={100}
-            value={calculatorStore.precentCompound}
-            setValue={calculatorStore.setPrecentCompound}
+            value={calc.precentCompound}
+            setValue={value => handleOnChange('precentCompound', value)}
           />
           <FormRangeInput
             label="Return"
@@ -158,8 +148,8 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={100}
-            value={calculatorStore.precentReturn}
-            setValue={calculatorStore.setPrecentReturn}
+            value={calc.precentReturn}
+            setValue={value => handleOnChange('precentReturn', value)}
           />
         </Col>
         <Col lg={4}>
@@ -169,16 +159,16 @@ export default function Calculator() {
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={100}
-            value={calculatorStore.precentMarketingWallet}
-            setValue={calculatorStore.setPrecentMarketingWallet}
+            value={calc.precentMarketingWallet}
+            setValue={value => handleOnChange('precentMarketingWallet', value)}
           /> */}
           <FormRangeInput
             label="Days"
             type="number"
             minValue={1}
             maxValue={365}
-            value={calculatorStore.days}
-            setValue={calculatorStore.setDays}
+            value={calc.days}
+            setValue={value => handleOnChange('days', value)}
           />
           <FormRangeInput
             label="Strong price"
@@ -186,8 +176,8 @@ export default function Calculator() {
             symbol={{ label: '$', position: 'start' }}
             minValue={1}
             maxValue={1000}
-            value={calculatorStore.strongPrice}
-            setValue={calculatorStore.setStrongPrice}
+            value={calc.strongPrice}
+            setValue={value => handleOnChange('strongPrice', value)}
             currencyFormat={true}
           />
           <FormRangeInput
@@ -196,8 +186,8 @@ export default function Calculator() {
             minValue={0.01}
             maxValue={0.09}
             step={0.005}
-            value={calculatorStore.strongReturn}
-            setValue={calculatorStore.setStrongReturn}
+            value={calc.strongReturn}
+            setValue={value => handleOnChange('strongReturn', value)}
           />
           <FormRangeInput
             label="Nodes bought starting point"
@@ -209,8 +199,8 @@ export default function Calculator() {
             type="number"
             minValue={1}
             maxValue={100}
-            value={calculatorStore.nodesCount}
-            setValue={calculatorStore.setNodesCount}
+            value={calc.nodesCount}
+            setValue={value => handleOnChange('nodesCount', value)}
           />
         </Col>
       </Row>

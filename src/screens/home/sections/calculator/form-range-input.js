@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap'
 import Tooltip from '../../../../components/tooltip/tooltip'
 import styles from './calculator.module.scss'
@@ -16,14 +17,21 @@ export default function FormRangeInput({
   currencyFormat = false,
   hideBar = false,
 }) {
+  const [inputValue, setInputValue] = useState(value)
+
+  useEffect(() => {
+    setValue(Number(inputValue))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValue])
+
   const labelId = label.replace(' ', '-')
 
-  const handleInputNumberChange = value => {
+  const handleInputNumberChange = _value => {
     if (currencyFormat) {
-      value = Number(String(value).replaceAll(',', ''))
+      _value = Number(String(_value).replaceAll(',', ''))
     }
 
-    setValue(value)
+    setInputValue(_value)
   }
 
   return (
@@ -52,7 +60,7 @@ export default function FormRangeInput({
             max={maxValue}
             step={step}
             value={value}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setInputValue(e.target.value)}
           />
         </Col>
       )}

@@ -4,117 +4,66 @@ import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
-import { useCalculatorStore } from '../../../../store'
+import { FROCK_SUPPLY } from '../../../../constant'
 import styles from './card-balance.module.scss'
 
-const DAYS_IN_YEAR = 365
-const FROCK_SUPPLY = 1000000
-
 export default function CardBalance({
-  frockYourReturn,
-  handleSetBalanceReflections,
+  calc: {
+    precentClaimPeriod,
+    precentYourPortfolio,
+    precentReflection,
+    days,
+    ftmPrice,
+    yourEntryPrice,
+  },
+  volumeUsed,
+  yearReturn,
+  returnFromTreasury,
 }) {
   const [pending, setPending] = useState(0)
   const [reflections, setReflections] = useState(0)
   const [claimable, setClaimable] = useState(0)
   const [yourApr, setYourApr] = useState(0)
 
-  const store = useCalculatorStore()
+  // calculate reflections value
+  useEffect(() => {
+    const _precentClaimPeriod = precentClaimPeriod / 100
+    const _precentYourPortfolio = precentYourPortfolio / 100
+    const _precentReflection = precentReflection / 100
 
-  useEffect((_store = store) => {
-    calculateBalance([
-      _store.precentClaimPeriod,
-      _store.precentYourPortfolio,
-      _store.dailyVolume,
-      _store.precentReflection,
-      _store.days,
-      _store.ftmPrice,
-    ])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(
-    (_store = store) => {
-      getApr(
-        _store.precentYourPortfolio,
-        _store.yourEntryPrice,
-        _store.dailyVolume,
-        _store.precentReflection
-      )
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [frockYourReturn]
-  )
-
-  const calculateBalance = ([
-    precentClaimPeriod,
-    precentYourPortfolio,
-    dailyVolume,
-    precentReflection,
-    days,
-    ftmPrice,
-  ]) => {
     const _reflections =
-      (precentClaimPeriod / 100) *
-      (precentYourPortfolio / 100) *
-      dailyVolume *
-      (precentReflection / 100) *
+      _precentClaimPeriod *
+      _precentYourPortfolio *
+      volumeUsed *
+      _precentReflection *
       days
-    const _pending = _reflections / ftmPrice
-    const _claimable = _pending.valueOf()
 
     setReflections(_reflections)
-    setPending(_pending)
-    setClaimable(_claimable)
-  }
-
-  useCalculatorStore.subscribe(
-    state => [
-      state.precentClaimPeriod,
-      state.precentYourPortfolio,
-      state.dailyVolume,
-      state.precentReflection,
-      state.days,
-      state.ftmPrice,
-    ],
-    calculateBalance
-  )
-
-  useCalculatorStore.subscribe(
-    state => [
-      state.precentYourPortfolio,
-      state.yourEntryPrice,
-      state.dailyVolume,
-      state.precentReflection,
-    ],
-    ([precentYourPortfolio, yourEntryPrice, dailyVolume, precentReflection]) =>
-      getApr(
-        precentYourPortfolio,
-        yourEntryPrice,
-        dailyVolume,
-        precentReflection
-      )
-  )
-
-  const getApr = (
+  }, [
+    precentClaimPeriod,
     precentYourPortfolio,
-    yourEntryPrice,
-    dailyVolume,
-    precentReflection
-  ) => {
-    const returnsFromReflections =
-      dailyVolume *
-      DAYS_IN_YEAR *
-      (precentYourPortfolio / 100) *
-      (precentReflection / 100)
-    const returnsFromTreasury = frockYourReturn
-    const returns = returnsFromReflections + returnsFromTreasury
-    const invested =
-      (precentYourPortfolio / 100) * FROCK_SUPPLY * yourEntryPrice
+    precentReflection,
+    days,
+    volumeUsed,
+  ])
 
-    handleSetBalanceReflections(returnsFromReflections)
-    setYourApr(returns / invested)
-  }
+  // get your pending and your claimable value
+  useEffect(() => {
+    const yourPendingValue = reflections / ftmPrice
+    setPending(yourPendingValue)
+    setClaimable(yourPendingValue)
+  }, [reflections, ftmPrice])
+
+  // get your APR
+  useEffect(() => {
+    const _precentYourPortfolio = precentYourPortfolio / 100
+    const invested = _precentYourPortfolio * FROCK_SUPPLY * yourEntryPrice
+
+    const returnsFromReflections = yearReturn
+    const totalReturns = returnsFromReflections + returnFromTreasury
+
+    setYourApr(totalReturns / invested)
+  }, [precentYourPortfolio, yourEntryPrice, yearReturn, returnFromTreasury])
 
   return (
     <>
