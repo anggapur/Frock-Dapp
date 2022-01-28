@@ -21,6 +21,7 @@ export default function CardBalance({
 }) {
   const [pending, setPending] = useState(0)
   const [reflections, setReflections] = useState(0)
+  // eslint-disable-next-line no-unused-vars
   const [claimable, setClaimable] = useState(0)
   const [yourApr, setYourApr] = useState(0)
 
@@ -70,7 +71,9 @@ export default function CardBalance({
         <h2 className={styles.h2}>Balance</h2>
         <Row>
           <Col xs={6}>
-            <h5 className={styles.h5}>Your pending</h5>
+            <h5 className={styles.h5}>
+              Your {days > 1 ? `${days} days` : `${days} day`}
+            </h5>
           </Col>
           <Col xs={6}>
             <p className={styles.p}>
@@ -98,8 +101,8 @@ export default function CardBalance({
             </p>
           </Col>
         </Row>
-        <hr className={styles.hr} />
-        <Row>
+        {/* <hr className={styles.hr} /> */}
+        {/* <Row>
           <Col xs={6}>
             <h5 className={styles.h5}>Your claimable</h5>
           </Col>
@@ -128,7 +131,7 @@ export default function CardBalance({
               })}
             </p>
           </Col>
-        </Row>
+        </Row> */}
         {/* <RoundButton variant="primary" className="mt-4 w-100" isRounded>
           Claim
         </RoundButton> */}
