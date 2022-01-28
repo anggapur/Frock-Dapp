@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
 import { FROCK_SUPPLY } from '../../../../constant'
@@ -64,14 +63,14 @@ export default function CardFrockPrice({
           <Col xs={6} className="pb-3">
             <h3 className={styles.h3}>$FROCK Price</h3>
             <h1 className={styles.h1}>${frocPrice}</h1>
-            <RoundButton
+            {/* <RoundButton
               variant="primary"
               className={styles.buyFrock}
               isRounded
               isOutline
             >
               Buy $FRock
-            </RoundButton>
+            </RoundButton> */}
           </Col>
           <Col xs={6}>
             <h5 className={styles.h5}>

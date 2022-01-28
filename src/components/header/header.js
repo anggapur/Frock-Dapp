@@ -1,5 +1,4 @@
-import { Container, Dropdown } from 'react-bootstrap'
-import Button from '../button/button'
+import { Container } from 'react-bootstrap'
 import CompanyLogo from '../logo/company-logo'
 import './header.scss'
 
@@ -17,7 +16,7 @@ export default function Header() {
       <NotificationBar text="Some notice can go here to alert users on anything newsworthy" />
       <Container>
         <CompanyLogo />
-        <nav>
+        {/* <nav>
           <Dropdown align="end">
             <Dropdown.Toggle variant="link">
               $FROCK{' '}
@@ -73,7 +72,7 @@ export default function Header() {
             </svg>
             Connect
           </Button>
-        </nav>
+        </nav> */}
       </Container>
     </header>
   )

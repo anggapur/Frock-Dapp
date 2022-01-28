@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import { useState, useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
 import { FROCK_SUPPLY } from '../../../../constant'
@@ -130,9 +129,9 @@ export default function CardBalance({
             </p>
           </Col>
         </Row>
-        <RoundButton variant="primary" className="mt-4 w-100" isRounded>
+        {/* <RoundButton variant="primary" className="mt-4 w-100" isRounded>
           Claim
-        </RoundButton>
+        </RoundButton> */}
         <Card.Footer>
           <Row>
             <Col xs={6}>
