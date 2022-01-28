@@ -6,12 +6,11 @@ import { FROCK_SUPPLY } from '../../../../constant'
 import styles from './card-frock-price.module.scss'
 
 export default function CardFrockPrice({
-  calc: { frocPrice, precentClaimPeriod, precentReflection, ftmPrice },
+  calc: { frocPrice, precentReflection, ftmPrice, dailyVolume, days },
   volumeUsed,
 }) {
   const [frockMarketCap, setFrockMarketCap] = useState(0)
-  const [totalPendingReflections, setTotalPendingReflections] = useState(0)
-  const [totalPending, setTotalPending] = useState(0)
+  const [totalReflections, setTotalReflections] = useState(0)
   const [totalPaidReflections] = useState(23000)
   const [totalPaid] = useState(80050)
   const [last24HourVolume, setLast24HourVolume] = useState(volumeUsed)
@@ -23,20 +22,11 @@ export default function CardFrockPrice({
     setFrockMarketCap(Number(FROCK_SUPPLY * frocPrice))
   }, [frocPrice])
 
-  // get total pending reflections value
+  // get total reflections
   useEffect(() => {
-    const _precentClaimPeriod = precentClaimPeriod / 100
     const _precentReflection = precentReflection / 100
-    const _totalPendingReflections = Number(
-      _precentClaimPeriod * volumeUsed * _precentReflection
-    )
-    setTotalPendingReflections(_totalPendingReflections)
-  }, [precentClaimPeriod, precentReflection, volumeUsed])
-
-  // get total pending value
-  useEffect(() => {
-    setTotalPending(Number(totalPendingReflections / ftmPrice))
-  }, [totalPendingReflections, ftmPrice])
+    setTotalReflections(dailyVolume * _precentReflection * days)
+  }, [dailyVolume, precentReflection, days])
 
   // get last 24 hour volume value
   useEffect(() => {
@@ -106,7 +96,7 @@ export default function CardFrockPrice({
             className="global-card-frock-price-2 mt-4"
           >
             <h5 className={styles.h5}>
-              Total pending reflections{' '}
+              Total reflections{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
                 malesuada posuere dolor in tempus.
@@ -114,16 +104,10 @@ export default function CardFrockPrice({
             </h5>
             <p>
               ${' '}
-              {totalPending.toLocaleString('en-US', {
+              {totalReflections.toLocaleString('en-US', {
                 maximumFractionDigits: 2,
               })}
             </p>
-            <small>
-              ${' '}
-              {totalPendingReflections.toLocaleString('en-US', {
-                maximumFractionDigits: 2,
-              })}
-            </small>
           </Card>
           <Card
             ellipse="top-right"
