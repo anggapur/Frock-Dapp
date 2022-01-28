@@ -136,7 +136,7 @@ export default function CardBalance({
           Claim
         </RoundButton> */}
         <Card.Footer>
-          <Row>
+          {/* <Row>
             <Col xs={6}>
               <h5 className={clsx(styles.h5, styles.textGray)}>Your claimed</h5>
             </Col>
@@ -153,7 +153,7 @@ export default function CardBalance({
             <Col xs={6}>
               <p className={clsx(styles.p, styles.textGray)}>$ 60.21</p>
             </Col>
-          </Row>
+          </Row> */}
         </Card.Footer>
       </Card>
       <Card
