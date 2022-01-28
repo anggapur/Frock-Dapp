@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
@@ -9,6 +10,38 @@ export default function Calculator({
   strongPriceFromApi,
   ftmPriceFromApi,
 }) {
+  useEffect(() => {
+    setCalc({
+      ...calc,
+      precentReflection: 21 - calc.precentTreasury,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calc.precentTreasury])
+
+  useEffect(() => {
+    setCalc({
+      ...calc,
+      precentTreasury: 21 - calc.precentReflection,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calc.precentReflection])
+
+  useEffect(() => {
+    setCalc({
+      ...calc,
+      precentReturn: 100 - calc.precentCompound,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calc.precentCompound])
+
+  useEffect(() => {
+    setCalc({
+      ...calc,
+      precentCompound: 100 - calc.precentReturn,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calc.precentReturn])
+
   const handleResetClicked = () => {
     setCalc({
       ftmPrice: ftmPriceFromApi,
