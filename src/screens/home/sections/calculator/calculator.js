@@ -106,13 +106,13 @@ export default function Calculator({
             currencyFormat={true}
           />
           <FormRangeInput
-              label="Period"
-              symbol={{ label: 'Days', position: 'end' }}
-              type="number"
-              minValue={1}
-              maxValue={365}
-              value={calc.days}
-              setValue={value => handleOnChange('days', value)}
+            label="Period"
+            symbol={{ label: 'Days', position: 'end' }}
+            type="number"
+            minValue={1}
+            maxValue={365}
+            value={calc.days}
+            setValue={value => handleOnChange('days', value)}
           />
           {/* <FormRangeInput
             label="% of claim period"
@@ -156,13 +156,14 @@ export default function Calculator({
           />
           <FormRangeInput
             label="Ownership share"
-            type="number"
+            type="text"
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
             maxValue={2.5}
             step={0.01}
             value={calc.precentYourPortfolio}
             setValue={value => handleOnChange('precentYourPortfolio', value)}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="Your entry price"
@@ -204,12 +205,13 @@ export default function Calculator({
             tooltip={{
               text: 'For simplicity in the calculator, this number should take the incurred gas fees into account. The 0.085 value starting value is taking 0.06 (7%) for gas fees from the current 0.091 daily returns.',
             }}
-            type="number"
+            type="text"
             minValue={0.01}
             maxValue={0.09}
             step={0.005}
             value={calc.strongReturn}
             setValue={value => handleOnChange('strongReturn', value)}
+            currencyFormat={true}
           />
           <FormRangeInput
             label="Nodes launch"
@@ -223,22 +225,22 @@ export default function Calculator({
             setValue={value => handleOnChange('nodesCount', value)}
           />
           <FormRangeInput
-              label="Compound"
-              type="number"
-              symbol={{ label: '%', position: 'end' }}
-              minValue={0}
-              maxValue={100}
-              value={calc.precentCompound}
-              setValue={value => handleOnChange('precentCompound', value)}
+            label="Compound"
+            type="number"
+            symbol={{ label: '%', position: 'end' }}
+            minValue={0}
+            maxValue={100}
+            value={calc.precentCompound}
+            setValue={value => handleOnChange('precentCompound', value)}
           />
           <FormRangeInput
-              label="Return"
-              type="number"
-              symbol={{ label: '%', position: 'end' }}
-              minValue={0}
-              maxValue={100}
-              value={calc.precentReturn}
-              setValue={value => handleOnChange('precentReturn', value)}
+            label="Return"
+            type="number"
+            symbol={{ label: '%', position: 'end' }}
+            minValue={0}
+            maxValue={100}
+            value={calc.precentReturn}
+            setValue={value => handleOnChange('precentReturn', value)}
           />
         </Col>
       </Row>
