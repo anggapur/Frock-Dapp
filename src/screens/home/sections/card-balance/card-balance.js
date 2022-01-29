@@ -14,6 +14,7 @@ export default function CardBalance({
     days,
     ftmPrice,
     yourEntryPrice,
+    dailyVolume,
   },
   volumeUsed,
   yearReturn,
@@ -24,6 +25,7 @@ export default function CardBalance({
   // eslint-disable-next-line no-unused-vars
   const [claimable, setClaimable] = useState(0)
   const [yourApr, setYourApr] = useState(0)
+  const [totalReflections, setTotalReflections] = useState(0)
 
   // calculate reflections value
   useEffect(() => {
@@ -65,15 +67,35 @@ export default function CardBalance({
     setYourApr(totalReturns / invested)
   }, [precentYourPortfolio, yourEntryPrice, yearReturn, returnFromTreasury])
 
+  // get total reflections
+  useEffect(() => {
+    const _precentReflection = precentReflection / 100
+    setTotalReflections(dailyVolume * _precentReflection * days)
+  }, [dailyVolume, precentReflection, days])
+
   return (
     <>
       <Card ellipse="top-left" className="global-card-balance-1">
         <h2 className={styles.h2}>Reflections</h2>
         <Row>
           <Col xs={6}>
-            <h5 className={styles.h5}>
-              Your { `${days} day`}
-            </h5>
+            <h5 className={styles.h5}>Total reflections</h5>
+          </Col>
+          <Col xs={6}>
+            <p className={styles.p}>
+              <strong>
+                ${' '}
+                {totalReflections.toLocaleString('en-US', {
+                  maximumFractionDigits: 2,
+                })}
+              </strong>
+            </p>
+          </Col>
+        </Row>
+        <hr className={styles.hr} />
+        <Row>
+          <Col xs={6}>
+            <h5 className={styles.h5}>Your {`${days} day`}</h5>
           </Col>
           <Col xs={6}>
             <p className={styles.p}>

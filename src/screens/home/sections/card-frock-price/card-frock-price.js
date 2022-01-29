@@ -6,11 +6,10 @@ import { FROCK_SUPPLY } from '../../../../constant'
 import styles from './card-frock-price.module.scss'
 
 export default function CardFrockPrice({
-  calc: { frocPrice, precentReflection, ftmPrice, dailyVolume, days },
+  calc: { frocPrice, precentReflection, ftmPrice },
   volumeUsed,
 }) {
   const [frockMarketCap, setFrockMarketCap] = useState(0)
-  const [totalReflections, setTotalReflections] = useState(0)
   // eslint-disable-next-line no-unused-vars
   const [totalPaidReflections] = useState(23000)
   // eslint-disable-next-line no-unused-vars
@@ -23,12 +22,6 @@ export default function CardFrockPrice({
   useEffect(() => {
     setFrockMarketCap(Number(FROCK_SUPPLY * frocPrice))
   }, [frocPrice])
-
-  // get total reflections
-  useEffect(() => {
-    const _precentReflection = precentReflection / 100
-    setTotalReflections(dailyVolume * _precentReflection * days)
-  }, [dailyVolume, precentReflection, days])
 
   // get last 24 hour volume value
   useEffect(() => {
@@ -96,21 +89,7 @@ export default function CardFrockPrice({
             ellipse="top-right"
             lineBottom="light"
             className="global-card-frock-price-2 mt-4"
-          >
-            <h5 className={styles.h5}>
-              Total reflections{' '}
-              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
-              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
-              {/*  malesuada posuere dolor in tempus.*/}
-              {/*</Tooltip>*/}
-            </h5>
-            <p>
-              ${' '}
-              {totalReflections.toLocaleString('en-US', {
-                maximumFractionDigits: 2,
-              })}
-            </p>
-          </Card>
+          ></Card>
           <Card
             ellipse="top-right"
             lineBottom="light"
