@@ -200,9 +200,9 @@ export default function CardInfo({
         lineBottom="light"
         className="global-card-info-1 mt-4 mt-lg-0"
       >
-        <h2 className={styles.h2}>Treasury</h2>
+        <Card.Header>Treasury</Card.Header>
         <h5 className={styles.h5}>
-          Treasury value{' '} at {days > 1 ? `${days} days` : `${days} day`}
+          Treasury value at {days > 1 ? `${days} days` : `${days} day`}{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
             malesuada posuere dolor in tempus.
@@ -242,7 +242,7 @@ export default function CardInfo({
         </p>
 
         <h6 className={styles.h6}>
-          of which returned {' '}
+          of which returned{' '}
           <Tooltip anchorLink="/" anchorText="Read more">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
             malesuada posuere dolor in tempus.

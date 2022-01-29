@@ -76,7 +76,7 @@ export default function CardBalance({
   return (
     <>
       <Card ellipse="top-left" className="global-card-balance-1">
-        <h2 className={styles.h2}>Reflections</h2>
+        <Card.Header>Reflections</Card.Header>
         <Row>
           <Col xs={6}>
             <h5 className={styles.h5}>Total reflections</h5>
