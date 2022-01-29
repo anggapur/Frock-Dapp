@@ -20,16 +20,16 @@ export default function Home() {
     precentClaimPeriod: 100,
     precentReflection: 7,
     precentTreasury: 14,
-    frocPrice: 0.1,
+    frocPrice: 0.12,
     yourEntryPrice: 0.094,
     precentYourPortfolio: 1,
     precentCompound: 67,
     precentReturn: 33,
     precentMarketingWallet: 0,
-    days: 150,
+    days: 31,
     strongPrice: 500,
-    strongReturn: 0.09,
-    nodesCount: 20,
+    strongReturn: 0.085,
+    nodesCount: 2,
   })
   const [ftmPriceFromApi, setFtmPriceFromApi] = useState(0)
   const [strongPriceFromApi, setStrongPriceFromApi] = useState(0)
