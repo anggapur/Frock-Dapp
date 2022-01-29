@@ -49,16 +49,16 @@ export default function Calculator({
       precentClaimPeriod: 100,
       precentReflection: 7,
       precentTreasury: 14,
-      frocPrice: 0.1,
+      frocPrice: 0.12,
       yourEntryPrice: 0.094,
       precentYourPortfolio: 1,
       precentCompound: 67,
       precentReturn: 33,
       precentMarketingWallet: 0,
-      days: 150,
+      days: 31,
       strongPrice: strongPriceFromApi,
-      strongReturn: 0.09,
-      nodesCount: 20,
+      strongReturn: 0.085,
+      nodesCount: 2,
     })
   }
 
@@ -80,7 +80,7 @@ export default function Calculator({
       >
         Reset
       </RoundButton>
-      <Card.Header>Calculator</Card.Header>
+      <Card.Header>Launch Calculator</Card.Header>
       <Row>
         <Col lg={4}>
           {/* <FormRangeInput
@@ -105,6 +105,15 @@ export default function Calculator({
             setValue={value => handleOnChange('dailyVolume', value)}
             currencyFormat={true}
           />
+          <FormRangeInput
+              label="Period"
+              symbol={{ label: 'Days', position: 'end' }}
+              type="number"
+              minValue={1}
+              maxValue={365}
+              value={calc.days}
+              setValue={value => handleOnChange('days', value)}
+          />
           {/* <FormRangeInput
             label="% of claim period"
             type="number"
@@ -115,7 +124,7 @@ export default function Calculator({
             setValue={value => handleOnChange('precentClaimPeriod', value)}
           /> */}
           <FormRangeInput
-            label="Reflection %"
+            label="Reflection tax"
             type="number"
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
@@ -124,7 +133,7 @@ export default function Calculator({
             setValue={value => handleOnChange('precentReflection', value)}
           />
           <FormRangeInput
-            label="Treasury %"
+            label="Treasury tax"
             type="number"
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
@@ -146,12 +155,12 @@ export default function Calculator({
             currencyFormat={true}
           />
           <FormRangeInput
-            label="Your portfolio"
+            label="Ownership share"
             type="number"
             symbol={{ label: '%', position: 'end' }}
             minValue={0}
-            maxValue={100}
-            step={2}
+            maxValue={2.5}
+            step={0.01}
             value={calc.precentYourPortfolio}
             setValue={value => handleOnChange('precentYourPortfolio', value)}
           />
@@ -166,24 +175,6 @@ export default function Calculator({
             setValue={value => handleOnChange('yourEntryPrice', value)}
             currencyFormat={true}
           />
-          <FormRangeInput
-            label="Compound"
-            type="number"
-            symbol={{ label: '%', position: 'end' }}
-            minValue={0}
-            maxValue={100}
-            value={calc.precentCompound}
-            setValue={value => handleOnChange('precentCompound', value)}
-          />
-          <FormRangeInput
-            label="Return"
-            type="number"
-            symbol={{ label: '%', position: 'end' }}
-            minValue={0}
-            maxValue={100}
-            value={calc.precentReturn}
-            setValue={value => handleOnChange('precentReturn', value)}
-          />
         </Col>
         <Col lg={4}>
           {/* <FormRangeInput
@@ -196,15 +187,10 @@ export default function Calculator({
             setValue={value => handleOnChange('precentMarketingWallet', value)}
           /> */}
           <FormRangeInput
-            label="Days"
-            type="number"
-            minValue={1}
-            maxValue={365}
-            value={calc.days}
-            setValue={value => handleOnChange('days', value)}
-          />
-          <FormRangeInput
-            label="Strong price"
+            label="$STRONG price"
+            tooltip={{
+              text: 'The average $STRONG price during the period and year (for APR calculations).',
+            }}
             type="text"
             symbol={{ label: '$', position: 'start' }}
             minValue={1}
@@ -215,6 +201,9 @@ export default function Calculator({
           />
           <FormRangeInput
             label="Strong returns"
+            tooltip={{
+              text: 'For simplicity in the calculator, this number should take the incurred gas fees into account. The 0.085 value starting value is taking 0.06 (7%) for gas fees from the current 0.091 daily returns.',
+            }}
             type="number"
             minValue={0.01}
             maxValue={0.09}
@@ -223,17 +212,33 @@ export default function Calculator({
             setValue={value => handleOnChange('strongReturn', value)}
           />
           <FormRangeInput
-            label="Nodes bought starting point"
+            label="Nodes launch"
             tooltip={{
-              anchorText: 'Read more',
-              anchorLink: '/',
-              text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+              text: 'The number of nodes in treasury at the start of the calculator period. The full amount raised during public sale will buy 2 $STRONG nodes.',
             }}
             type="number"
             minValue={1}
-            maxValue={100}
+            maxValue={10}
             value={calc.nodesCount}
             setValue={value => handleOnChange('nodesCount', value)}
+          />
+          <FormRangeInput
+              label="Compound"
+              type="number"
+              symbol={{ label: '%', position: 'end' }}
+              minValue={0}
+              maxValue={100}
+              value={calc.precentCompound}
+              setValue={value => handleOnChange('precentCompound', value)}
+          />
+          <FormRangeInput
+              label="Return"
+              type="number"
+              symbol={{ label: '%', position: 'end' }}
+              minValue={0}
+              maxValue={100}
+              value={calc.precentReturn}
+              setValue={value => handleOnChange('precentReturn', value)}
           />
         </Col>
       </Row>

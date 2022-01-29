@@ -67,10 +67,10 @@ export default function CardFrockPrice({
           <Col xs={6}>
             <h5 className={styles.h5}>
               $FROCK market cap{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
-              </Tooltip>
+              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
+              {/*  malesuada posuere dolor in tempus.*/}
+              {/*</Tooltip>*/}
             </h5>
             <p className={styles.mb20}>
               ${' '}
@@ -80,11 +80,11 @@ export default function CardFrockPrice({
             </p>
 
             <h5 className={styles.h5}>
-              $FROCK circulating supply{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
-              </Tooltip>
+              $FROCK supply{' '}
+              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
+              {/*  malesuada posuere dolor in tempus.*/}
+              {/*</Tooltip>*/}
             </h5>
             <p>{FROCK_SUPPLY.toLocaleString('en-US')} $FROCK</p>
           </Col>
@@ -99,10 +99,10 @@ export default function CardFrockPrice({
           >
             <h5 className={styles.h5}>
               Total reflections{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
-              </Tooltip>
+              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
+              {/*  malesuada posuere dolor in tempus.*/}
+              {/*</Tooltip>*/}
             </h5>
             <p>
               ${' '}

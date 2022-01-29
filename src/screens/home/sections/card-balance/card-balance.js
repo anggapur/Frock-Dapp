@@ -68,11 +68,11 @@ export default function CardBalance({
   return (
     <>
       <Card ellipse="top-left" className="global-card-balance-1">
-        <h2 className={styles.h2}>Balance</h2>
+        <h2 className={styles.h2}>Reflections</h2>
         <Row>
           <Col xs={6}>
             <h5 className={styles.h5}>
-              Your {days > 1 ? `${days} days` : `${days} day`}
+              Your { `${days} day`}
             </h5>
           </Col>
           <Col xs={6}>
@@ -80,8 +80,8 @@ export default function CardBalance({
               <strong>
                 $FTM{' '}
                 {Number(pending).toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
                 })}
               </strong>
             </p>
@@ -95,8 +95,8 @@ export default function CardBalance({
             <p className={styles.p}>
               ${' '}
               {Number(reflections).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
               })}
             </p>
           </Col>
