@@ -24,7 +24,7 @@
     "test-local": "npx hardhat test --network localhost",
     "run-script": "npx ts-node --files",
     "run-local": "env HARDHAT_NETWORK=localhost npx ts-node --files",
-    "start": "env HARDHAT_DEPLOY_FORK=bsc_testnet npx hardhat node --hostname 0.0.0.0 --watch",
+    "start": "env HARDHAT_DEPLOY_FORK=fantom npx hardhat node --hostname 0.0.0.0 --watch",
     "start-no-fork": "env npx hardhat node --hostname 0.0.0.0 --watch",
     "deploy": "npx hardhat deploy",
     "verify": "npx hardhat etherscan-verify",
