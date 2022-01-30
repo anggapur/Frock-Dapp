@@ -14,19 +14,7 @@
 
     + p {
       font-size: 16px;
+      margin-bottom: 60px;
     }
-  }
-
-  &__card__coin-raised {
-    margin: -35px -30px 0;
-    padding: 35px 30px;
-    background: linear-gradient(
-      226.31deg,
-      color.$redLight 21.33%,
-      color.$redDark 45.72%
-    );
-    border-top-left-radius: 17px;
-    border-top-right-radius: 17px;
-    color: color.$white;
   }
 }
