@@ -1,0 +1,22 @@
+@use '../../../../styles/color';
+
+.h2 {
+  color: color.$grayDark;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 24px;
+
+  + div {
+    a {
+      display: inline-block;
+      margin-right: 17px;
+
+      div {
+        background: color.$grayDark;
+        border-radius: 100%;
+        width: 45px;
+        height: 45px;
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import Countdown from "../../../components/countdown/countdown"
 import CardBalance from "../sections/card-balance/card-balance"
 import CardCoinRaised from "../sections/card-coin-raised/card-coin-raised"
 import CardDeposit from "../sections/card-deposit/card-deposit"
+import CommunityList from "../sections/community-list/community-list"
 import "./../sale.scss"
 
 export default function PublicSale() {
@@ -33,6 +34,7 @@ export default function PublicSale() {
         <Col lg={5}>
           <CardBalance />
           <CardDeposit />
+          <CommunityList />
         </Col>
       </Row>
     </Container>
