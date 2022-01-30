@@ -26,7 +26,7 @@
   color: #fff;
 
   &:hover {
-    background: color.$redDark;
+    background: darken(color.$redDark, 5%);
   }
 
   &.active {
@@ -49,7 +49,7 @@
   color: color.$redDark;
 
   &:hover {
-    background: color.$white;
+    background: darken(color.$white, 5%);
   }
 
   &.active {
