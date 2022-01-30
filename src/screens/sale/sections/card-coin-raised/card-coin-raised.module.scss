@@ -18,6 +18,16 @@ $paddingXMobile: 24px;
   color: color.$white;
   box-shadow: 0px 4px 4px 0px #00000026;
 
+  &.withoutCoinPrice {
+    margin-bottom: (-$paddingYMobile);
+    border-bottom-left-radius: 17px;
+    border-bottom-right-radius: 17px;
+
+    @media (min-width: 769px) {
+      margin-bottom: (-$paddingY);
+    }
+  }
+
   @media (min-width: 769px) {
     margin: (-$paddingY) (-$paddingX) 0;
     padding: $paddingY $paddingX;

@@ -3,10 +3,15 @@ import { Col, Row } from 'react-bootstrap'
 import Card from '../../../../components/card/card'
 import styles from './card-coin-raised.module.scss'
 
-export default function CardCoinRaised() {
+export default function CardCoinRaised({ withoutCoinPrice = false }) {
   return (
-    <Card lineBottom="light">
-      <div className={styles.main}>
+    <Card lineBottom={!withoutCoinPrice ? 'light' : ''}>
+      <div
+        className={clsx(
+          styles.main,
+          withoutCoinPrice ? styles.withoutCoinPrice : ''
+        )}
+      >
         <div className={styles.startEnd}>
           <div className={styles.timeWrapper}>
             <TimeSymbol />
@@ -38,28 +43,30 @@ export default function CardCoinRaised() {
         </div>
         <ProgressBar />
       </div>
-      <Row className={clsx(styles.priceWrapper, 'gx-5')}>
-        <Col lg={6} className={styles.priceBorder}>
-          <div className={styles.price}>
-            <h4>Starting $Frock Price</h4>
-            <p>0.8 $</p>
-          </div>
-          <div className={clsx(styles.price, styles.priceLast)}>
-            <h4>Total Investors:</h4>
-            <p>3136</p>
-          </div>
-        </Col>
-        <Col lg={6}>
-          <div className={styles.price}>
-            <h4>Current $bFROCK Price:</h4>
-            <p>0.8 $</p>
-          </div>
-          <div className={styles.price}>
-            <h4>Global Contribution:</h4>
-            <p>0.8 $</p>
-          </div>
-        </Col>
-      </Row>
+      {!withoutCoinPrice && (
+        <Row className={clsx(styles.priceWrapper, 'gx-5')}>
+          <Col lg={6} className={styles.priceBorder}>
+            <div className={styles.price}>
+              <h4>Starting $Frock Price</h4>
+              <p>0.8 $</p>
+            </div>
+            <div className={clsx(styles.price, styles.priceLast)}>
+              <h4>Total Investors:</h4>
+              <p>3136</p>
+            </div>
+          </Col>
+          <Col lg={6}>
+            <div className={styles.price}>
+              <h4>Current $bFROCK Price:</h4>
+              <p>0.8 $</p>
+            </div>
+            <div className={styles.price}>
+              <h4>Global Contribution:</h4>
+              <p>0.8 $</p>
+            </div>
+          </Col>
+        </Row>
+      )}
     </Card>
   )
 }
