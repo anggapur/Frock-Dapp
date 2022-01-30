@@ -1,0 +1,36 @@
+@use '../../../../styles/color';
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  @media (min-width: 769px) {
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 0;
+    color: color.$grayDark;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 10px;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+}

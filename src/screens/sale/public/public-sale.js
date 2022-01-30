@@ -1,6 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap"
 import Card from "../../../components/card/card"
 import Countdown from "../../../components/countdown/countdown"
+import CardBalance from "../sections/card-balance/card-balance"
 import CardCoinRaised from "../sections/card-coin-raised/card-coin-raised"
 import "./../sale.scss"
 
@@ -29,7 +30,7 @@ export default function PublicSale() {
           <CardCoinRaised />
         </Col>
         <Col lg={5}>
-          <Card>sa</Card>
+          <CardBalance />
         </Col>
       </Row>
     </Container>
