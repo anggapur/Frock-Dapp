@@ -1,7 +1,7 @@
 // https://eips.ethereum.org/EIPS/eip-20
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.5;
-import "./FairLaunchNRT.sol";
+import "./FairPriceLaunchNRT.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -21,7 +21,7 @@ contract FairPriceLaunch is Ownable {
     address public investToken;
 
     // The Non-transferable token used for sale, redeemable for Mag
-    FairLaunchNRT public redeemableToken;
+    FairPriceLaunchNRT public redeemableToken;
 
     //Limits
     uint256 public maxInvestAllowed;
@@ -131,7 +131,7 @@ contract FairPriceLaunch is Ownable {
         maxRedeemableToIssue = _maxRedeemableToIssue;
         startingPrice = _startingPrice;
         //NRT is passed in as argument and this contract needs to be set as owner
-        redeemableToken = FairLaunchNRT(_redeemableToken);
+        redeemableToken = FairPriceLaunchNRT(_redeemableToken);
         saleEnabled = false;
         redeemEnabled = false;
     }

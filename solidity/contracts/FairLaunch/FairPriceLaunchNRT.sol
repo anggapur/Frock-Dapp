@@ -7,7 +7,7 @@ import "./OwnableMulti.sol";
 //NRT is like a private stock
 //can only be traded with the issuer who remains in control of the market
 //until he opens the redemption window
-contract FairLaunchNRT is OwnableMulti {
+contract FairPriceLaunchNRT is OwnableMulti {
     uint256 private _issuedSupply;
     uint256 private _outstandingSupply;
     uint256 private _decimals;
