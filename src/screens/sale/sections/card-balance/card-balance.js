@@ -11,7 +11,7 @@ export default function CardBalance() {
       </div>
       <div>
         <FrockLogo />
-        <p>00.00 $FTM</p>
+        <p>00.00 $FROCK</p>
       </div>
     </Card>
   )
