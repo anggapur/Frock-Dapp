@@ -19,6 +19,9 @@ export default function Header() {
       <Container>
         <CompanyLogo />
         <nav>
+          <Link to="/" className="nav-link">
+            Calculator
+          </Link>
           <Link to="/public-sale" className="nav-link">
             Public Sale
           </Link>
