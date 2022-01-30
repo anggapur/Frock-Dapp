@@ -3,6 +3,7 @@ import Card from "../../../components/card/card"
 import Countdown from "../../../components/countdown/countdown"
 import CardBalance from "../sections/card-balance/card-balance"
 import CardCoinRaised from "../sections/card-coin-raised/card-coin-raised"
+import CardDeposit from "../sections/card-deposit/card-deposit"
 import "./../sale.scss"
 
 export default function PublicSale() {
@@ -31,6 +32,7 @@ export default function PublicSale() {
         </Col>
         <Col lg={5}>
           <CardBalance />
+          <CardDeposit />
         </Col>
       </Row>
     </Container>
