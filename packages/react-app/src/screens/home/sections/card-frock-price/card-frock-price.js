@@ -1,10 +1,42 @@
+import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import RoundButton from '../../../../components/button/button'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
+import { FROCK_SUPPLY } from '../../../../constant'
 import styles from './card-frock-price.module.scss'
 
-export default function CardFrockPrice() {
+export default function CardFrockPrice({
+  calc: { frocPrice, precentReflection, ftmPrice },
+  volumeUsed,
+}) {
+  const [frockMarketCap, setFrockMarketCap] = useState(0)
+  // eslint-disable-next-line no-unused-vars
+  const [totalPaidReflections] = useState(23000)
+  // eslint-disable-next-line no-unused-vars
+  const [totalPaid] = useState(80050)
+  const [last24HourVolume, setLast24HourVolume] = useState(volumeUsed)
+  const [last24HourVolumeReflections, setLast24HourVolumeReflections] =
+    useState(0)
+
+  // get frock market cap value
+  useEffect(() => {
+    setFrockMarketCap(Number(FROCK_SUPPLY * frocPrice))
+  }, [frocPrice])
+
+  // get last 24 hour volume value
+  useEffect(() => {
+    setLast24HourVolume(volumeUsed)
+  }, [volumeUsed])
+
+  // get last 24 hour volume reflections value
+  useEffect(() => {
+    const _precentReflection = precentReflection / 100
+    const _last24HourVolumeReflections = Number(
+      (last24HourVolume * _precentReflection) / ftmPrice
+    )
+    setLast24HourVolumeReflections(_last24HourVolumeReflections)
+  }, [last24HourVolume, precentReflection, ftmPrice])
+
   return (
     <>
       <Card
@@ -15,34 +47,39 @@ export default function CardFrockPrice() {
         <Row>
           <Col xs={6} className="pb-3">
             <h3 className={styles.h3}>$FROCK Price</h3>
-            <h1 className={styles.h1}>$0,00394</h1>
-            <RoundButton
+            <h1 className={styles.h1}>${frocPrice}</h1>
+            {/* <RoundButton
               variant="primary"
               className={styles.buyFrock}
               isRounded
               isOutline
             >
               Buy $FRock
-            </RoundButton>
+            </RoundButton> */}
           </Col>
           <Col xs={6}>
             <h5 className={styles.h5}>
               $FROCK market cap{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
-              </Tooltip>
+              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
+              {/*  malesuada posuere dolor in tempus.*/}
+              {/*</Tooltip>*/}
             </h5>
-            <p className={styles.mb20}>$ 3,947,383</p>
+            <p className={styles.mb20}>
+              ${' '}
+              {frockMarketCap.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
 
             <h5 className={styles.h5}>
-              $FROCK circulating supply{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
-              </Tooltip>
+              $FROCK supply{' '}
+              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
+              {/*  malesuada posuere dolor in tempus.*/}
+              {/*</Tooltip>*/}
             </h5>
-            <p>1,000,000,000 $FROCK</p>
+            <p>{FROCK_SUPPLY.toLocaleString('en-US')} $FROCK</p>
           </Col>
         </Row>
       </Card>
@@ -52,17 +89,7 @@ export default function CardFrockPrice() {
             ellipse="top-right"
             lineBottom="light"
             className="global-card-frock-price-2 mt-4"
-          >
-            <h5 className={styles.h5}>
-              Total pending reflections{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
-              </Tooltip>
-            </h5>
-            <p>$ 3,947,383</p>
-            <small>$ 1,000.00</small>
-          </Card>
+          ></Card>
           <Card
             ellipse="top-right"
             lineBottom="light"
@@ -75,7 +102,12 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$ 200,000.00</p>
+            <p>
+              ${' '}
+              {last24HourVolume.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </Card>
         </Col>
         <Col xs={6}>
@@ -84,15 +116,25 @@ export default function CardFrockPrice() {
             lineBottom="light"
             className="global-card-frock-price-2 mt-4"
           >
-            <h5 className={styles.h5}>
+            {/* <h5 className={styles.h5}>
               Total paid reflections{' '}
               <Tooltip anchorLink="/" anchorText="Read more">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$FTM 80,050.00</p>
-            <small>$ 23,000.00</small>
+            <p>
+              $FTM{' '}
+              {totalPaid.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
+            <small>
+              ${' '}
+              {totalPaidReflections.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </small> */}
           </Card>
           <Card
             ellipse="top-right"
@@ -106,7 +148,12 @@ export default function CardFrockPrice() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h5>
-            <p>$FTM 1,230.00</p>
+            <p>
+              $FTM{' '}
+              {last24HourVolumeReflections.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </Card>
         </Col>
       </Row>

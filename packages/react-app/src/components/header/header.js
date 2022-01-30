@@ -1,5 +1,6 @@
 import { Container, Dropdown } from 'react-bootstrap'
-import Button from '../button/button'
+import { Link } from 'react-router-dom'
+import RoundButton from '../button/button'
 import CompanyLogo from '../logo/company-logo'
 import './header.scss'
 
@@ -18,6 +19,12 @@ export default function Header() {
       <Container>
         <CompanyLogo />
         <nav>
+          <Link to="/public-sale" className="nav-link">
+            Public Sale
+          </Link>
+          <Link to="/community-sale" className="nav-link">
+            Community Sale
+          </Link>
           <Dropdown align="end">
             <Dropdown.Toggle variant="link">
               $FROCK{' '}
@@ -31,14 +38,14 @@ export default function Header() {
                 <path
                   d="M10.9004 4.94995L5.95064 9.8997"
                   stroke="#CB2D3E"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
                 <path
                   d="M1 4.94995L5.94975 9.8997"
                   stroke="#CB2D3E"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
               </svg>
             </Dropdown.Toggle>
@@ -49,7 +56,7 @@ export default function Header() {
               <Dropdown.Item href="#/action-2">Buy $FROCK</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          <Button variant="primary" isRounded>
+          <RoundButton variant="primary" isRounded>
             <svg
               width="21"
               height="21"
@@ -72,7 +79,7 @@ export default function Header() {
               />
             </svg>
             Connect
-          </Button>
+          </RoundButton>
         </nav>
       </Container>
     </header>

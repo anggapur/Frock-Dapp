@@ -1,0 +1,17 @@
+.input-group
+  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  border-top-left-radius: $input-border-radius;
+  border-bottom-left-radius: $input-border-radius;
+}
+
+.input-group:not(.has-validation)
+  > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+  border-top-right-radius: $input-border-radius;
+  border-bottom-right-radius: $input-border-radius;
+}
+
+.input-group-text {
+  background: none;
+  border: none;
+  color: #b6a0a0;
+}

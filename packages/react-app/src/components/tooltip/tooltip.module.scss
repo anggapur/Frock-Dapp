@@ -6,10 +6,12 @@
 }
 
 .p {
-  margin-bottom: 14px;
+  margin-bottom: 0;
 }
 
 .a {
+  display: block;
+  margin-top: 14px;
   font-weight: 500;
   color: color.$redDark;
   text-decoration: none;

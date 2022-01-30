@@ -26,6 +26,12 @@ const Card = ({
   )
 }
 
+Card.Header = ({ children, className = '', ...rest }) => (
+  <h2 className={clsx(styles.header, className)} {...rest}>
+    {children}
+  </h2>
+)
+
 Card.Footer = ({ children, className = '', ...rest }) => (
   <div className={clsx(styles.footer, className)} {...rest}>
     {children}

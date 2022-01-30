@@ -12,11 +12,32 @@ header {
     padding-bottom: 37px;
   }
 
-  nav > .dropdown {
-    display: none;
+  nav {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  nav > a.nav-link {
+    margin-right: 35px;
+    display: block;
+    padding: 0.375rem 0.75rem;
+    text-decoration: none;
+    color: color.$redDark;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+
+    &:hover,
+    &:focus {
+      color: darken(color.$redDark, 5%);
+    }
   }
 
   nav > .dropdown {
+    display: none;
     margin-right: 40px;
 
     .dropdown-toggle::after {
@@ -30,11 +51,9 @@ header {
       color: color.$redDark;
       text-decoration: none;
 
-      &:hover {
-        color: color.$redDark;
-      }
-
+      &:hover,
       &:focus {
+        color: darken(color.$redDark, 5%);
         box-shadow: none;
       }
     }
@@ -82,10 +101,8 @@ header {
 
 @media (min-width: 769px) {
   header {
-    box-shadow: none;
-
     nav > .dropdown {
-      display: inline-block;
+      display: block;
     }
   }
 }
