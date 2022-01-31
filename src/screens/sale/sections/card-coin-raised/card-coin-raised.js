@@ -1,9 +1,41 @@
 import clsx from 'clsx'
+import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Card from '../../../../components/card/card'
 import styles from './card-coin-raised.module.scss'
 
 export default function CardCoinRaised({ withoutCoinPrice = false }) {
+  const [precent] = useState(75)
+  const [width, setWidth] = useState(window.innerWidth)
+
+  const circleRef = useRef()
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  useEffect(() => {
+    const circle = circleRef.current
+    const radius = circle.r.baseVal.value
+    const circumference = radius * 2 * Math.PI
+
+    circle.style.strokeDasharray = `${circumference} ${circumference}`
+    circle.style.strokeDashoffset = `${circumference}`
+
+    function setProgress(percent) {
+      const offset = circumference - (percent / 100) * circumference
+      circle.style.strokeDashoffset = offset
+    }
+
+    if (precent <= 100 && precent >= 0) {
+      setProgress(precent)
+    }
+  }, [precent, width])
+
   return (
     <Card lineBottom={!withoutCoinPrice ? 'light' : ''}>
       <div
@@ -32,12 +64,27 @@ export default function CardCoinRaised({ withoutCoinPrice = false }) {
           <ShadowCircle className={styles.shadowStart} />
           <ShadowCircle className={styles.shadowEnd} />
           <div className={styles.circle1}>
-            <div className={styles.circle2}>
-              <div className={styles.circle3}>
-                <h4>Total raised so far</h4>
-                <h2>$00.000.000</h2>
-                <h3>$10M Limit</h3>
-              </div>
+            <svg className={styles.progressRing}>
+              <defs>
+                <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#cb2d3e" />
+                  <stop offset="100%" stopColor="#ef473a" />
+                </linearGradient>
+              </defs>
+              <circle
+                ref={circleRef}
+                className={styles.progressRingCircle}
+                fill="transparent"
+                stroke="url(#linear)"
+                r={width <= 576 ? 115 : 137}
+                cx="50%"
+                cy="50%"
+              />
+            </svg>
+            <div className={styles.circle3}>
+              <h4>Total raised so far</h4>
+              <h2>$00.000.000</h2>
+              <h3>$10M Limit</h3>
             </div>
           </div>
         </div>
