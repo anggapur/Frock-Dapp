@@ -2,12 +2,12 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Web3Modal from 'web3modal'
 
-function useWeb3Modal(config) {
+export function useWeb3Modal(config) {
   const [provider, setProvider] = useState()
   const [autoLoaded, setAutoLoaded] = useState(false)
   const [walletExist, setWalletExist] = useState(false)
 
-  const { autoLoad = true, network } = config
+  const { autoLoad = true, network = '' } = config
 
   const web3Modal = useMemo(() => {
     return new Web3Modal({
@@ -52,5 +52,3 @@ function useWeb3Modal(config) {
     logoutWeb3Modal,
   }
 }
-
-export default useWeb3Modal

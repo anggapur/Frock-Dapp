@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Card from '../../../../components/card/card'
 import Tooltip from '../../../../components/tooltip/tooltip'
-import { FROCK_SUPPLY } from '../../../../constant'
+import { FROCK_SUPPLY } from '../../../../constants'
 import styles from './card-frock-price.module.scss'
 
 export default function CardFrockPrice({

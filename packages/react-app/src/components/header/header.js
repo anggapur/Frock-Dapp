@@ -1,9 +1,15 @@
-import { Container, Dropdown } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import RoundButton from '../button/button'
 import CompanyLogo from '../logo/company-logo'
 import './header.scss'
 import { useStore } from '../../hooks/useStore'
+import { useWeb3Modal } from '../../hooks/useWeb3Modal'
+import { useWeb3Accounts } from '../../hooks/ethers/account'
+import { useEffect } from 'react'
+import shallow from 'zustand/shallow'
+import { FANTOM_CHAIN_PARAMS } from '../../constants'
+import { handleShortenAddress } from '../../utils'
 
 function NotificationBar({ text }) {
   return (
@@ -14,7 +20,49 @@ function NotificationBar({ text }) {
 }
 
 export default function Header() {
-  const setProvider = useStore(state => state.setProvider)
+  const web3ModalConfig = {
+    autoLoad: true,
+    network: '',
+  }
+  const { walletExist, provider, loadWeb3Modal, logoutWeb3Modal } =
+    useWeb3Modal(web3ModalConfig)
+
+  const accounts = useWeb3Accounts()
+
+  const setProvider = useStore(state => state.setProvider, shallow)
+
+  useEffect(() => {
+    if (provider) {
+      setProvider({ provider })
+    }
+  }, [provider, setProvider])
+
+  const handleAddOrChangeNetwork = async () => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: FANTOM_CHAIN_PARAMS.chainId }],
+      })
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [FANTOM_CHAIN_PARAMS],
+          })
+        } catch (addError) {}
+      }
+    }
+  }
+
+  const handleConnectWallet = async () => {
+    if (!provider && !walletExist) {
+      await loadWeb3Modal()
+      return await handleAddOrChangeNetwork()
+    }
+
+    return await logoutWeb3Modal()
+  }
 
   return (
     <header>
@@ -31,7 +79,7 @@ export default function Header() {
           <Link to="/public-sale" className="nav-link">
             Public Sale
           </Link>
-          {/*<Dropdown align="end">*/}
+          {/* <Dropdown align="end">*/}
           {/*  <Dropdown.Toggle variant="link">*/}
           {/*    $FROCK{' '}*/}
           {/*    <svg*/}
@@ -61,8 +109,12 @@ export default function Header() {
           {/*    </Dropdown.Item>*/}
           {/*    <Dropdown.Item href="#/action-2">Buy $FROCK</Dropdown.Item>*/}
           {/*  </Dropdown.Menu>*/}
-          {/*</Dropdown>*/}
-          <RoundButton variant="primary" isRounded>
+          {/*</Dropdown> */}
+          <RoundButton
+            variant="primary"
+            isRounded
+            onClick={handleConnectWallet}
+          >
             <svg
               width="21"
               height="21"
@@ -84,7 +136,9 @@ export default function Header() {
                 fill="white"
               />
             </svg>
-            Connect
+            {provider && accounts
+              ? handleShortenAddress(accounts[0])
+              : 'Connect'}
           </RoundButton>
         </nav>
       </Container>

@@ -8,7 +8,7 @@ import {
   FROCK_SUPPLY,
   GAS_FEE_FOR_CLAIM,
   GAS_FEE_FOR_CREATE,
-} from '../../../../constant'
+} from '../../../../constants'
 import styles from './card-info.module.scss'
 
 export default function CardInfo({

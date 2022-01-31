@@ -5,4 +5,9 @@ module.exports = Object.freeze({
   GAS_FEE_FOR_CLAIM: 15,
   GAS_FEE_FOR_CREATE: 100,
   LINK_VOLUME_PER_PRICE: 0,
+  FANTOM_CHAIN_PARAMS: {
+    chainId: '0xfa',
+    chainName: 'Fantom Opera',
+    rpcUrls: ['https://rpc.ftm.tools'],
+  },
 })

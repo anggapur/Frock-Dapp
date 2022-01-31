@@ -11,7 +11,7 @@ import {
   DAYS_IN_YEAR,
   GROWTH_IN_PRICE,
   LINK_VOLUME_PER_PRICE,
-} from '../../constant'
+} from '../../constants'
 
 export default function Home() {
   const [calculator, setCalculator] = useState({

@@ -29,6 +29,6 @@ export function useChainId(provider) {
 }
 
 export function useProvider() {
-  const { provider } = useStore()
+  const provider = useStore(state => state.provider)
   return provider
 }
