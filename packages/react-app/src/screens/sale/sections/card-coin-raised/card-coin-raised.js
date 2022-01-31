@@ -3,13 +3,13 @@ import { Col, Row } from 'react-bootstrap'
 import Card from '../../../../components/card/card'
 import styles from './card-coin-raised.module.scss'
 
-export default function CardCoinRaised({ withoutCoinPrice = false }) {
+export default function CardCoinRaised({ communitySale = false }) {
   return (
-    <Card lineBottom={!withoutCoinPrice ? 'light' : ''}>
+    <Card lineBottom={!communitySale ? 'light' : ''}>
       <div
         className={clsx(
           styles.main,
-          withoutCoinPrice ? styles.withoutCoinPrice : ''
+          communitySale ? styles.communitySale : ''
         )}
       >
         <div className={styles.startEnd}>
@@ -29,40 +29,31 @@ export default function CardCoinRaised({ withoutCoinPrice = false }) {
           </div>
         </div>
         <div className={styles.totalWrapper}>
-          <ShadowCircle className={styles.shadowStart} />
-          <ShadowCircle className={styles.shadowEnd} />
+            <ShadowCircle className={communitySale ? styles.shadowEnd: styles.shadowStart} />
           <div className={styles.circle1}>
             <div className={styles.circle2}>
               <div className={styles.circle3}>
-                <h4>Total raised so far</h4>
-                <h2>$00.000.000</h2>
-                <h3>$10M Limit</h3>
+                <h4>Raised by XX investors:</h4>
+                <h2>$5,000</h2>
+                <h3>$10,000 Limit</h3>
               </div>
             </div>
           </div>
         </div>
         <ProgressBar />
       </div>
-      {!withoutCoinPrice && (
+      {!communitySale && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
           <Col lg={6} className={styles.priceBorder}>
             <div className={styles.price}>
               <h4>Starting $Frock Price</h4>
-              <p>0.8 $</p>
-            </div>
-            <div className={clsx(styles.price, styles.priceLast)}>
-              <h4>Total Investors:</h4>
-              <p>3136</p>
+              <p>0.08 $</p>
             </div>
           </Col>
           <Col lg={6}>
             <div className={styles.price}>
               <h4>Current $bFROCK Price:</h4>
-              <p>0.8 $</p>
-            </div>
-            <div className={styles.price}>
-              <h4>Global Contribution:</h4>
-              <p>0.8 $</p>
+              <p>0.12 $</p>
             </div>
           </Col>
         </Row>

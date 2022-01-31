@@ -25,43 +25,43 @@ export default function Header() {
           <Link to="/" className="nav-link">
             Calculator
           </Link>
-          <Link to="/public-sale" className="nav-link">
-            Public Sale
-          </Link>
           <Link to="/community-sale" className="nav-link">
             Community Sale
           </Link>
-          <Dropdown align="end">
-            <Dropdown.Toggle variant="link">
-              $FROCK{' '}
-              <svg
-                width="12"
-                height="11"
-                viewBox="0 0 12 11"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.9004 4.94995L5.95064 9.8997"
-                  stroke="#CB2D3E"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M1 4.94995L5.94975 9.8997"
-                  stroke="#CB2D3E"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">
-                Add $FROCK to wallet
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Buy $FROCK</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <Link to="/public-sale" className="nav-link">
+            Public Sale
+          </Link>
+          {/*<Dropdown align="end">*/}
+          {/*  <Dropdown.Toggle variant="link">*/}
+          {/*    $FROCK{' '}*/}
+          {/*    <svg*/}
+          {/*      width="12"*/}
+          {/*      height="11"*/}
+          {/*      viewBox="0 0 12 11"*/}
+          {/*      fill="none"*/}
+          {/*      xmlns="http://www.w3.org/2000/svg"*/}
+          {/*    >*/}
+          {/*      <path*/}
+          {/*        d="M10.9004 4.94995L5.95064 9.8997"*/}
+          {/*        stroke="#CB2D3E"*/}
+          {/*        strokeWidth="2"*/}
+          {/*        strokeLinecap="round"*/}
+          {/*      />*/}
+          {/*      <path*/}
+          {/*        d="M1 4.94995L5.94975 9.8997"*/}
+          {/*        stroke="#CB2D3E"*/}
+          {/*        strokeWidth="2"*/}
+          {/*        strokeLinecap="round"*/}
+          {/*      />*/}
+          {/*    </svg>*/}
+          {/*  </Dropdown.Toggle>*/}
+          {/*  <Dropdown.Menu>*/}
+          {/*    <Dropdown.Item href="#/action-1">*/}
+          {/*      Add $FROCK to wallet*/}
+          {/*    </Dropdown.Item>*/}
+          {/*    <Dropdown.Item href="#/action-2">Buy $FROCK</Dropdown.Item>*/}
+          {/*  </Dropdown.Menu>*/}
+          {/*</Dropdown>*/}
           <RoundButton variant="primary" isRounded>
             <svg
               width="21"

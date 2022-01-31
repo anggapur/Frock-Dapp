@@ -27,7 +27,7 @@ export default function PublicSale() {
       </p>
       <Row>
         <Col lg={7}>
-          <CardCoinRaised withoutCoinPrice={true} />
+          <CardCoinRaised communitySale={true} />
         </Col>
         <Col lg={5}>
           <CardBalance />
