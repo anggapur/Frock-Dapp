@@ -89,6 +89,7 @@ export default function CardCoinRaised({ withoutCoinPrice = false }) {
           </div>
         </div>
         <ProgressBar />
+        <p className={styles.bottomBar}>Maximum Contribution: 24,574.54 $FTM</p>
       </div>
       {!withoutCoinPrice && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
