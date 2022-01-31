@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import RoundButton from '../button/button'
 import CompanyLogo from '../logo/company-logo'
 import './header.scss'
+import { useStore } from '../../hooks/useStore'
 
 function NotificationBar({ text }) {
   return (
@@ -13,6 +14,8 @@ function NotificationBar({ text }) {
 }
 
 export default function Header() {
+  const setProvider = useStore(state => state.setProvider)
+
   return (
     <header>
       <NotificationBar text="Some notice can go here to alert users on anything newsworthy" />
