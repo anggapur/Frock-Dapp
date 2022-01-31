@@ -58,8 +58,8 @@ export default function CardDeposit() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h3>
-            <h2>54,000 $FTM</h2>
-            <p>Maximum Contribution: 24,574.54 $FTM</p>
+            <h2>200 $USDC</h2>
+            <p>Maximum Contribution: 800 $USDC</p>
             <InputGroup size="lg" className={styles.inputGroup}>
               <FormControl
                 type="text"
@@ -85,8 +85,8 @@ export default function CardDeposit() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h3>
-            <h2>54,000 $FTM</h2>
-            <p>Maximum Contribution: 24,574.54 $FTM</p>
+            <h2>200 $USDC</h2>
+            <p>Maximum Contribution: 800 $USDC</p>
             <InputGroup size="lg" className={styles.inputGroup}>
               <FormControl
                 type="text"
