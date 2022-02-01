@@ -72,6 +72,14 @@ export default function CardCoinRaised({ communitySale = false }) {
                 </linearGradient>
               </defs>
               <circle
+                className={styles.progressRingShadow}
+                fill="transparent"
+                stroke="#f2ebeb"
+                r={width <= 576 ? 115 : 137}
+                cx="50%"
+                cy="50%"
+              />
+              <circle
                 ref={circleRef}
                 className={styles.progressRingCircle}
                 fill="transparent"
