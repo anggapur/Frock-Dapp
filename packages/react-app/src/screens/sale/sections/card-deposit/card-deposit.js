@@ -6,7 +6,7 @@ import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import styles from './card-deposit.module.scss';
 
-export default function CardDeposit() {
+export default function CardDeposit({ totalContribution }) {
   const [selected, setSelected] = useState('deposit');
 
   return (
@@ -59,7 +59,7 @@ export default function CardDeposit() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h3>
-            <h2>200 $USDC</h2>
+            <h2>{totalContribution} $USDC</h2>
             <p>Maximum Contribution: 800 $USDC</p>
             <InputGroup size="lg" className={styles.inputGroup}>
               <FormControl
@@ -86,7 +86,7 @@ export default function CardDeposit() {
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h3>
-            <h2>200 $USDC</h2>
+            <h2>{totalContribution} $USDC</h2>
             <p>Maximum Contribution: 800 $USDC</p>
             <InputGroup size="lg" className={styles.inputGroup}>
               <FormControl
