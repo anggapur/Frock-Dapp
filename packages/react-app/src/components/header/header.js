@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { Container, Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import RoundButton from '../button/button'
 import CompanyLogo from '../logo/company-logo'
@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import shallow from 'zustand/shallow'
 import { FANTOM_CHAIN_PARAMS } from '../../constants'
 import { handleShortenAddress } from '../../utils'
+import './header.scss'
 
 function NotificationBar({ text }) {
   return (
@@ -81,24 +82,24 @@ export default function Header() {
               <Link to="/" className="nav-link">
                 Calculator
               </Link>
-              <Link to="/community-sale" className="nav-link">
-                Community Sale
-              </Link>
               <Link to="/public-sale" className="nav-link">
                 Public Sale
               </Link>
+              <Link to="/community-sale" className="nav-link">
+                Community Sale
+              </Link>
               {/* <NavDropdown title="$FROCK" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">
-              Add $FROCK to wallet
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">
-              Buy $FROCK
-            </NavDropdown.Item>
-          </NavDropdown> */}
+                <NavDropdown.Item href="#action/3.1">
+                  Add $FROCK to wallet
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                  Buy $FROCK
+                </NavDropdown.Item>
+              </NavDropdown> */}
               <RoundButton
+                onClick={handleConnectWallet}
                 variant="primary"
                 isRounded
-                onClick={handleConnectWallet}
               >
                 <svg
                   width="21"

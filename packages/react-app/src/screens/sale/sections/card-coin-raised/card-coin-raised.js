@@ -88,9 +88,9 @@ export default function CardCoinRaised({ communitySale = false }) {
               />
             </svg>
             <div className={styles.circle3}>
-              <h4>Raised by XX investors:</h4>
-              <h2>$5,000</h2>
-              <h3>$10,000 Limit</h3>
+              <h4>Total raised so far</h4>
+              <h2>$00.000.000</h2>
+              <h3>$10M Limit</h3>
             </div>
           </div>
         </div>
