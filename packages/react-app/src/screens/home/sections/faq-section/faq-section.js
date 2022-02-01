@@ -1,5 +1,6 @@
-import { Accordion, Col, Row } from 'react-bootstrap'
-import styles from './faq-section.module.scss'
+import React, { Accordion, Col, Row } from 'react-bootstrap';
+
+import styles from './faq-section.module.scss';
 
 export default function FaqSection() {
   return (
@@ -73,5 +74,5 @@ export default function FaqSection() {
         </Row>
       </div>
     </div>
-  )
+  );
 }

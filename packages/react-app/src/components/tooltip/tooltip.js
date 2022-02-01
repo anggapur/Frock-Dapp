@@ -1,5 +1,7 @@
-import { OverlayTrigger, Popover } from 'react-bootstrap'
-import styles from './tooltip.module.scss'
+import React from 'react';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+
+import styles from './tooltip.module.scss';
 
 const popover = ({ body, anchorLink = '', anchorText = '' }) => (
   <Popover>
@@ -16,7 +18,7 @@ const popover = ({ body, anchorLink = '', anchorText = '' }) => (
       )}
     </Popover.Body>
   </Popover>
-)
+);
 
 export default function Tooltip({
   children,
@@ -63,5 +65,5 @@ export default function Tooltip({
         </defs>
       </svg>
     </OverlayTrigger>
-  )
+  );
 }

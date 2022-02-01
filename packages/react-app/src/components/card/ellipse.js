@@ -1,4 +1,6 @@
-const Ellipse = ({ position }) => {
+import React from 'react';
+
+function Ellipse({ position }) {
   const styles = {
     topLeft: {
       position: 'absolute',
@@ -10,7 +12,7 @@ const Ellipse = ({ position }) => {
       top: 0,
       right: 0,
     },
-  }
+  };
 
   if (position === 'top-left') {
     return (
@@ -29,8 +31,9 @@ const Ellipse = ({ position }) => {
           strokeWidth="11"
         />
       </svg>
-    )
-  } else if (position === 'top-right') {
+    );
+  }
+  if (position === 'top-right') {
     return (
       <svg
         width="61"
@@ -49,10 +52,10 @@ const Ellipse = ({ position }) => {
           strokeWidth="11"
         />
       </svg>
-    )
+    );
   }
 
-  return <></>
+  return <></>;
 }
 
-export default Ellipse
+export default Ellipse;

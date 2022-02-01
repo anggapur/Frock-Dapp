@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import Calculator from './sections/calculator/calculator'
-import CardBalance from './sections/card-balance/card-balance'
-import CardFrockPrice from './sections/card-frock-price/card-frock-price'
-import CardInfo from './sections/card-info/card-info'
-import FaqSection from './sections/faq-section/faq-section'
-import { GetFantomPrice, GetStrongPrice } from '../../api'
-import './home.scss'
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+
+import { GetFantomPrice, GetStrongPrice } from '../../api';
 import {
   DAYS_IN_YEAR,
   GROWTH_IN_PRICE,
   LINK_VOLUME_PER_PRICE,
-} from '../../constants'
+} from '../../constants';
+import './home.scss';
+import Calculator from './sections/calculator/calculator';
+import CardBalance from './sections/card-balance/card-balance';
+import CardFrockPrice from './sections/card-frock-price/card-frock-price';
+import CardInfo from './sections/card-info/card-info';
+import FaqSection from './sections/faq-section/faq-section';
 
 export default function Home() {
   const [calculator, setCalculator] = useState({
@@ -30,9 +31,9 @@ export default function Home() {
     strongPrice: 500,
     strongReturn: 0.085,
     nodesCount: 2,
-  })
-  const [ftmPriceFromApi, setFtmPriceFromApi] = useState(0)
-  const [strongPriceFromApi, setStrongPriceFromApi] = useState(0)
+  });
+  const [ftmPriceFromApi, setFtmPriceFromApi] = useState(0);
+  const [strongPriceFromApi, setStrongPriceFromApi] = useState(0);
 
   useEffect(() => {
     Promise.all([GetStrongPrice(), GetFantomPrice()]).then(
@@ -41,55 +42,54 @@ export default function Home() {
           ...calculator,
           strongPrice: strongInUsd,
           ftmPrice: fantomInUsd,
-        })
+        });
 
-        setFtmPriceFromApi(fantomInUsd)
-        setStrongPriceFromApi(strongInUsd)
-      }
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+        setFtmPriceFromApi(fantomInUsd);
+        setStrongPriceFromApi(strongInUsd);
+      },
+    );
+  }, []);
 
-  const [volumeUsed, setVolumeUsed] = useState(0)
+  const [volumeUsed, setVolumeUsed] = useState(0);
   useEffect(() => {
     const linkedDailyVolume =
-      calculator.dailyVolume * (1 + GROWTH_IN_PRICE / 10)
+      calculator.dailyVolume * (1 + GROWTH_IN_PRICE / 10);
     const _volumeUsed =
-      LINK_VOLUME_PER_PRICE === 1 ? linkedDailyVolume : calculator.dailyVolume
-    setVolumeUsed(_volumeUsed)
-  }, [calculator.dailyVolume])
+      LINK_VOLUME_PER_PRICE === 1 ? linkedDailyVolume : calculator.dailyVolume;
+    setVolumeUsed(_volumeUsed);
+  }, [calculator.dailyVolume]);
 
-  const [yearReturn, setYearReturn] = useState(0)
+  const [yearReturn, setYearReturn] = useState(0);
   useEffect(() => {
-    const _precentYourPortfolio = calculator.precentYourPortfolio / 100
-    const _precentReflection = calculator.precentReflection / 100
+    const _precentYourPortfolio = calculator.precentYourPortfolio / 100;
+    const _precentReflection = calculator.precentReflection / 100;
     setYearReturn(
-      volumeUsed * DAYS_IN_YEAR * _precentYourPortfolio * _precentReflection
-    )
+      volumeUsed * DAYS_IN_YEAR * _precentYourPortfolio * _precentReflection,
+    );
   }, [
     volumeUsed,
     calculator.precentYourPortfolio,
     calculator.precentReflection,
-  ])
+  ]);
 
-  const [returnFromTreasury, setReturnFromTreasury] = useState(0)
+  const [returnFromTreasury, setReturnFromTreasury] = useState(0);
   const [cumulativeStrongTotalInYear, setCumulativeStrongTotalInYear] =
-    useState(0)
+    useState(0);
   useEffect(() => {
-    const _precentYourPortfolio = calculator.precentYourPortfolio / 100
-    const _precentReturn = calculator.precentReturn / 100
+    const _precentYourPortfolio = calculator.precentYourPortfolio / 100;
+    const _precentReturn = calculator.precentReturn / 100;
     setReturnFromTreasury(
       cumulativeStrongTotalInYear *
         calculator.strongPrice *
         _precentYourPortfolio *
-        _precentReturn
-    )
+        _precentReturn,
+    );
   }, [
     cumulativeStrongTotalInYear,
     calculator.strongPrice,
     calculator.precentYourPortfolio,
     calculator.precentReturn,
-  ])
+  ]);
 
   return (
     <Container className="home overflow-hidden">
@@ -132,5 +132,5 @@ export default function Home() {
         </Col>
       </Row>
     </Container>
-  )
+  );
 }

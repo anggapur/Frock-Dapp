@@ -1,5 +1,8 @@
-import clsx from 'clsx'
-import styles from './countdown.module.scss'
+import React from 'react';
+
+import clsx from 'clsx';
+
+import styles from './countdown.module.scss';
 
 export default function Countdown({ className = '' }) {
   return (
@@ -33,5 +36,5 @@ export default function Countdown({ className = '' }) {
       </svg>
       <p>Ends In 00:00:00</p>
     </div>
-  )
+  );
 }

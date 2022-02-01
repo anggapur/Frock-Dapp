@@ -10,4 +10,4 @@ module.exports = Object.freeze({
     chainName: 'Fantom Opera',
     rpcUrls: ['https://rpc.ftm.tools'],
   },
-})
+});

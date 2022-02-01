@@ -1,8 +1,10 @@
-import clsx from 'clsx'
-import { useEffect, useState } from 'react'
-import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap'
-import Tooltip from '../../../../components/tooltip/tooltip'
-import styles from './calculator.module.scss'
+import React, { useEffect, useState } from 'react';
+import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
+
+import clsx from 'clsx';
+
+import Tooltip from '../../../../components/tooltip/tooltip';
+import styles from './calculator.module.scss';
 
 export default function FormRangeInput({
   label,
@@ -17,22 +19,21 @@ export default function FormRangeInput({
   currencyFormat = false,
   hideBar = false,
 }) {
-  const [inputValue, setInputValue] = useState(value)
+  const [inputValue, setInputValue] = useState(value);
 
   useEffect(() => {
-    setValue(Number(inputValue))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValue])
+    setValue(Number(inputValue));
+  }, [inputValue]);
 
-  const labelId = label.replace(' ', '-')
+  const labelId = label.replace(' ', '-');
 
   const handleInputNumberChange = _value => {
     if (currencyFormat) {
-      _value = Number(String(_value).replaceAll(',', ''))
+      _value = Number(String(_value).replaceAll(',', ''));
     }
 
-    setInputValue(_value)
-  }
+    setInputValue(_value);
+  };
 
   return (
     <Row className="gx-4 gx-md-3 gx-lg-2">
@@ -91,5 +92,5 @@ export default function FormRangeInput({
         </InputGroup>
       </Col>
     </Row>
-  )
+  );
 }

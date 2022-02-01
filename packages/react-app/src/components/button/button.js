@@ -1,5 +1,8 @@
-import clsx from 'clsx'
-import styles from './button.module.scss'
+import React from 'react';
+
+import clsx from 'clsx';
+
+import styles from './button.module.scss';
 
 export default function RoundButton({
   variant,
@@ -20,11 +23,11 @@ export default function RoundButton({
         styles[size],
         isRounded ? styles.round : '',
         isOutline ? styles.outline : '',
-        className
+        className,
       )}
       {...rest}
     >
       {children}
     </button>
-  )
+  );
 }

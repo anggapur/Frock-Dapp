@@ -1,41 +1,42 @@
-import { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Card from '../../../../components/card/card'
-import Tooltip from '../../../../components/tooltip/tooltip'
-import { FROCK_SUPPLY } from '../../../../constants'
-import styles from './card-frock-price.module.scss'
+import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
+
+import Card from '../../../../components/card/card';
+import Tooltip from '../../../../components/tooltip/tooltip';
+import { FROCK_SUPPLY } from '../../../../constants';
+import styles from './card-frock-price.module.scss';
 
 export default function CardFrockPrice({
   calc: { frocPrice, precentReflection, ftmPrice },
   volumeUsed,
 }) {
-  const [frockMarketCap, setFrockMarketCap] = useState(0)
+  const [frockMarketCap, setFrockMarketCap] = useState(0);
   // eslint-disable-next-line no-unused-vars
-  const [totalPaidReflections] = useState(23000)
+  const [totalPaidReflections] = useState(23000);
   // eslint-disable-next-line no-unused-vars
-  const [totalPaid] = useState(80050)
-  const [last24HourVolume, setLast24HourVolume] = useState(volumeUsed)
+  const [totalPaid] = useState(80050);
+  const [last24HourVolume, setLast24HourVolume] = useState(volumeUsed);
   const [last24HourVolumeReflections, setLast24HourVolumeReflections] =
-    useState(0)
+    useState(0);
 
   // get frock market cap value
   useEffect(() => {
-    setFrockMarketCap(Number(FROCK_SUPPLY * frocPrice))
-  }, [frocPrice])
+    setFrockMarketCap(Number(FROCK_SUPPLY * frocPrice));
+  }, [frocPrice]);
 
   // get last 24 hour volume value
   useEffect(() => {
-    setLast24HourVolume(volumeUsed)
-  }, [volumeUsed])
+    setLast24HourVolume(volumeUsed);
+  }, [volumeUsed]);
 
   // get last 24 hour volume reflections value
   useEffect(() => {
-    const _precentReflection = precentReflection / 100
+    const _precentReflection = precentReflection / 100;
     const _last24HourVolumeReflections = Number(
-      (last24HourVolume * _precentReflection) / ftmPrice
-    )
-    setLast24HourVolumeReflections(_last24HourVolumeReflections)
-  }, [last24HourVolume, precentReflection, ftmPrice])
+      (last24HourVolume * _precentReflection) / ftmPrice,
+    );
+    setLast24HourVolumeReflections(_last24HourVolumeReflections);
+  }, [last24HourVolume, precentReflection, ftmPrice]);
 
   return (
     <>
@@ -60,10 +61,10 @@ export default function CardFrockPrice({
           <Col xs={6}>
             <h5 className={styles.h5}>
               $FROCK market cap{' '}
-              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
-              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
-              {/*  malesuada posuere dolor in tempus.*/}
-              {/*</Tooltip>*/}
+              {/* <Tooltip anchorLink="/" anchorText="Read more"> */}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras */}
+              {/*  malesuada posuere dolor in tempus. */}
+              {/* </Tooltip> */}
             </h5>
             <p className={styles.mb20}>
               ${' '}
@@ -74,10 +75,10 @@ export default function CardFrockPrice({
 
             <h5 className={styles.h5}>
               $FROCK supply{' '}
-              {/*<Tooltip anchorLink="/" anchorText="Read more">*/}
-              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras*/}
-              {/*  malesuada posuere dolor in tempus.*/}
-              {/*</Tooltip>*/}
+              {/* <Tooltip anchorLink="/" anchorText="Read more"> */}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras */}
+              {/*  malesuada posuere dolor in tempus. */}
+              {/* </Tooltip> */}
             </h5>
             <p>{FROCK_SUPPLY.toLocaleString('en-US')} $FROCK</p>
           </Col>
@@ -158,5 +159,5 @@ export default function CardFrockPrice({
         </Col>
       </Row>
     </>
-  )
+  );
 }

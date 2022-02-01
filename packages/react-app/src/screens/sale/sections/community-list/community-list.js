@@ -1,4 +1,6 @@
-import styles from './community-list.module.scss'
+import React from 'react';
+
+import styles from './community-list.module.scss';
 
 export default function CommunityList() {
   return (
@@ -25,5 +27,5 @@ export default function CommunityList() {
         </a>
       </div>
     </>
-  )
+  );
 }

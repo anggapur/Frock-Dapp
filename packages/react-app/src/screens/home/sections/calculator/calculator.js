@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import RoundButton from '../../../../components/button/button'
-import Card from '../../../../components/card/card'
-import FormRangeInput from './form-range-input'
+import React, { useEffect } from 'react';
+import { Col, Row } from 'react-bootstrap';
+
+import RoundButton from '../../../../components/button/button';
+import Card from '../../../../components/card/card';
+import FormRangeInput from './form-range-input';
 
 export default function Calculator({
   calc,
@@ -14,33 +15,29 @@ export default function Calculator({
     setCalc({
       ...calc,
       precentReflection: 21 - calc.precentTreasury,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calc.precentTreasury])
+    });
+  }, [calc.precentTreasury]);
 
   useEffect(() => {
     setCalc({
       ...calc,
       precentTreasury: 21 - calc.precentReflection,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calc.precentReflection])
+    });
+  }, [calc.precentReflection]);
 
   useEffect(() => {
     setCalc({
       ...calc,
       precentReturn: 100 - calc.precentCompound,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calc.precentCompound])
+    });
+  }, [calc.precentCompound]);
 
   useEffect(() => {
     setCalc({
       ...calc,
       precentCompound: 100 - calc.precentReturn,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calc.precentReturn])
+    });
+  }, [calc.precentReturn]);
 
   const handleResetClicked = () => {
     setCalc({
@@ -59,15 +56,15 @@ export default function Calculator({
       strongPrice: strongPriceFromApi,
       strongReturn: 0.085,
       nodesCount: 2,
-    })
-  }
+    });
+  };
 
   const handleOnChange = (state, value) => {
     setCalc({
       ...calc,
       [state]: value,
-    })
-  }
+    });
+  };
 
   return (
     <Card ellipse="top-left">
@@ -103,7 +100,7 @@ export default function Calculator({
             step={5000}
             value={calc.dailyVolume}
             setValue={value => handleOnChange('dailyVolume', value)}
-            currencyFormat={true}
+            currencyFormat
           />
           <FormRangeInput
             label="Period"
@@ -152,7 +149,7 @@ export default function Calculator({
             step={0.01}
             value={calc.frocPrice}
             setValue={value => handleOnChange('frocPrice', value)}
-            currencyFormat={true}
+            currencyFormat
           />
           <FormRangeInput
             label="Ownership share"
@@ -163,7 +160,7 @@ export default function Calculator({
             step={0.01}
             value={calc.precentYourPortfolio}
             setValue={value => handleOnChange('precentYourPortfolio', value)}
-            currencyFormat={true}
+            currencyFormat
           />
           <FormRangeInput
             label="Your entry price"
@@ -174,7 +171,7 @@ export default function Calculator({
             step={0.01}
             value={calc.yourEntryPrice}
             setValue={value => handleOnChange('yourEntryPrice', value)}
-            currencyFormat={true}
+            currencyFormat
           />
         </Col>
         <Col lg={4}>
@@ -198,7 +195,7 @@ export default function Calculator({
             maxValue={1000}
             value={calc.strongPrice}
             setValue={value => handleOnChange('strongPrice', value)}
-            currencyFormat={true}
+            currencyFormat
           />
           <FormRangeInput
             label="Strong returns"
@@ -211,7 +208,7 @@ export default function Calculator({
             step={0.005}
             value={calc.strongReturn}
             setValue={value => handleOnChange('strongReturn', value)}
-            currencyFormat={true}
+            currencyFormat
           />
           <FormRangeInput
             label="Nodes launch"
@@ -245,5 +242,5 @@ export default function Calculator({
         </Col>
       </Row>
     </Card>
-  )
+  );
 }

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function CompanyLogo() {
   return (
     <svg
@@ -199,5 +201,5 @@ export default function CompanyLogo() {
         </clipPath>
       </defs>
     </svg>
-  )
+  );
 }

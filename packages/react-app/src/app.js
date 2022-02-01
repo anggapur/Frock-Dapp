@@ -1,13 +1,14 @@
-import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import Layout from './components/layout/layout'
-import SuspenseLoading from './components/suspense-loading/suspense-loading'
+import React, { Suspense, lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-const Home = lazy(() => import('./screens/home/home'))
-const PublicSale = lazy(() => import('./screens/sale/public/public-sale'))
+import Layout from './components/layout/layout';
+import SuspenseLoading from './components/suspense-loading/suspense-loading';
+
+const Home = lazy(() => import('./screens/home/home'));
+const PublicSale = lazy(() => import('./screens/sale/public/public-sale'));
 const CommunitySale = lazy(() =>
-  import('./screens/sale/community/community-sale')
-)
+  import('./screens/sale/community/community-sale'),
+);
 
 export default function App() {
   return (
@@ -20,5 +21,5 @@ export default function App() {
         </Routes>
       </Suspense>
     </Layout>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import create from 'zustand'
+import create from 'zustand';
 
 export const useStore = create(set => ({
   provider: undefined,
-  setProvider: provider => set(state => provider),
-}))
+  setProvider: provider => set(_state => provider),
+}));

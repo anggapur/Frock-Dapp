@@ -1,12 +1,13 @@
-import { FormControl, InputGroup } from 'react-bootstrap'
-import Card from '../../../../components/card/card'
-import RoundButton from '../../../../components/button/button'
-import Tooltip from '../../../../components/tooltip/tooltip'
-import styles from './card-deposit.module.scss'
-import { useState } from 'react'
+import React, { useState } from 'react';
+import { FormControl, InputGroup } from 'react-bootstrap';
+
+import RoundButton from '../../../../components/button/button';
+import Card from '../../../../components/card/card';
+import Tooltip from '../../../../components/tooltip/tooltip';
+import styles from './card-deposit.module.scss';
 
 export default function CardDeposit() {
-  const [selected, setSelected] = useState('deposit')
+  const [selected, setSelected] = useState('deposit');
 
   return (
     <Card lineBottom="light" className={styles.wrapper}>
@@ -106,5 +107,5 @@ export default function CardDeposit() {
         )}
       </div>
     </Card>
-  )
+  );
 }

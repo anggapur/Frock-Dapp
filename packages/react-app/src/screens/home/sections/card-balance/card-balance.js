@@ -1,10 +1,12 @@
-import clsx from 'clsx'
-import { useState, useEffect } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Card from '../../../../components/card/card'
-import Tooltip from '../../../../components/tooltip/tooltip'
-import { FROCK_SUPPLY } from '../../../../constants'
-import styles from './card-balance.module.scss'
+import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
+
+import clsx from 'clsx';
+
+import Card from '../../../../components/card/card';
+import Tooltip from '../../../../components/tooltip/tooltip';
+import { FROCK_SUPPLY } from '../../../../constants';
+import styles from './card-balance.module.scss';
 
 export default function CardBalance({
   calc: {
@@ -20,58 +22,58 @@ export default function CardBalance({
   yearReturn,
   returnFromTreasury,
 }) {
-  const [pending, setPending] = useState(0)
-  const [reflections, setReflections] = useState(0)
+  const [pending, setPending] = useState(0);
+  const [reflections, setReflections] = useState(0);
   // eslint-disable-next-line no-unused-vars
-  const [claimable, setClaimable] = useState(0)
-  const [yourApr, setYourApr] = useState(0)
-  const [totalReflections, setTotalReflections] = useState(0)
+  const [claimable, setClaimable] = useState(0);
+  const [yourApr, setYourApr] = useState(0);
+  const [totalReflections, setTotalReflections] = useState(0);
 
   // calculate reflections value
   useEffect(() => {
-    const _precentClaimPeriod = precentClaimPeriod / 100
-    const _precentYourPortfolio = precentYourPortfolio / 100
-    const _precentReflection = precentReflection / 100
+    const _precentClaimPeriod = precentClaimPeriod / 100;
+    const _precentYourPortfolio = precentYourPortfolio / 100;
+    const _precentReflection = precentReflection / 100;
 
     const _reflections =
       _precentClaimPeriod *
       _precentYourPortfolio *
       volumeUsed *
       _precentReflection *
-      days
+      days;
 
-    setReflections(_reflections)
+    setReflections(_reflections);
   }, [
     precentClaimPeriod,
     precentYourPortfolio,
     precentReflection,
     days,
     volumeUsed,
-  ])
+  ]);
 
   // get your pending and your claimable value
   useEffect(() => {
-    const yourPendingValue = reflections / ftmPrice
-    setPending(yourPendingValue)
-    setClaimable(yourPendingValue)
-  }, [reflections, ftmPrice])
+    const yourPendingValue = reflections / ftmPrice;
+    setPending(yourPendingValue);
+    setClaimable(yourPendingValue);
+  }, [reflections, ftmPrice]);
 
   // get your APR
   useEffect(() => {
-    const _precentYourPortfolio = precentYourPortfolio / 100
-    const invested = _precentYourPortfolio * FROCK_SUPPLY * yourEntryPrice
+    const _precentYourPortfolio = precentYourPortfolio / 100;
+    const invested = _precentYourPortfolio * FROCK_SUPPLY * yourEntryPrice;
 
-    const returnsFromReflections = yearReturn
-    const totalReturns = returnsFromReflections + returnFromTreasury
+    const returnsFromReflections = yearReturn;
+    const totalReturns = returnsFromReflections + returnFromTreasury;
 
-    setYourApr(totalReturns / invested)
-  }, [precentYourPortfolio, yourEntryPrice, yearReturn, returnFromTreasury])
+    setYourApr(totalReturns / invested);
+  }, [precentYourPortfolio, yourEntryPrice, yearReturn, returnFromTreasury]);
 
   // get total reflections
   useEffect(() => {
-    const _precentReflection = precentReflection / 100
-    setTotalReflections(dailyVolume * _precentReflection * days)
-  }, [dailyVolume, precentReflection, days])
+    const _precentReflection = precentReflection / 100;
+    setTotalReflections(dailyVolume * _precentReflection * days);
+  }, [dailyVolume, precentReflection, days]);
 
   return (
     <>
@@ -198,5 +200,5 @@ export default function CardBalance({
         </Row>
       </Card>
     </>
-  )
+  );
 }

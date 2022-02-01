@@ -1,2 +1,2 @@
-export * from './get-strong-price'
-export * from './get-fantom-price'
+export * from './get-strong-price';
+export * from './get-fantom-price';

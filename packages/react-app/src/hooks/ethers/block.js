@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useProvider } from './provider'
+import { useEffect, useState } from 'react';
+
+import { useProvider } from './provider';
 
 export function useBlock(blockHashOrBlockTag = 'latest') {
-  const [block, setBlock] = useState()
-  const provider = useProvider()
+  const [block, setBlock] = useState();
+  const provider = useProvider();
 
   useEffect(() => {
-    if (!provider) return
+    if (!provider) return;
 
     provider
       .getBlock(blockHashOrBlockTag)
-      .then(setBlock, err => console.error(err))
-  }, [block, blockHashOrBlockTag, provider])
+      .then(setBlock, err => console.error(err));
+  }, [block, blockHashOrBlockTag, provider]);
 
-  return block
+  return block;
 }

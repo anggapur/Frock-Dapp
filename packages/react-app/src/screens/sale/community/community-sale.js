@@ -1,10 +1,12 @@
-import { Col, Container, Row } from 'react-bootstrap'
-import Countdown from '../../../components/countdown/countdown'
-import CardBalance from '../sections/card-balance/card-balance'
-import CardCoinRaised from '../sections/card-coin-raised/card-coin-raised'
-import CardDeposit from '../sections/card-deposit/card-deposit'
-import CommunityList from '../sections/community-list/community-list'
-import './../sale.scss'
+import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+
+import Countdown from '../../../components/countdown/countdown';
+import '../sale.scss';
+import CardBalance from '../sections/card-balance/card-balance';
+import CardCoinRaised from '../sections/card-coin-raised/card-coin-raised';
+import CardDeposit from '../sections/card-deposit/card-deposit';
+import CommunityList from '../sections/community-list/community-list';
 
 export default function PublicSale() {
   return (
@@ -27,7 +29,7 @@ export default function PublicSale() {
       </p>
       <Row>
         <Col lg={7}>
-          <CardCoinRaised communitySale={true} />
+          <CardCoinRaised communitySale />
         </Col>
         <Col lg={5}>
           <CardBalance />
@@ -36,5 +38,5 @@ export default function PublicSale() {
         </Col>
       </Row>
     </Container>
-  )
+  );
 }

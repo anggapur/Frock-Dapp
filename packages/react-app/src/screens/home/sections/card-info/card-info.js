@@ -1,15 +1,17 @@
-import clsx from 'clsx'
-import { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Card from '../../../../components/card/card'
-import Tooltip from '../../../../components/tooltip/tooltip'
+import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
+
+import clsx from 'clsx';
+
+import Card from '../../../../components/card/card';
+import Tooltip from '../../../../components/tooltip/tooltip';
 import {
   DAYS_IN_YEAR,
   FROCK_SUPPLY,
   GAS_FEE_FOR_CLAIM,
   GAS_FEE_FOR_CREATE,
-} from '../../../../constants'
-import styles from './card-info.module.scss'
+} from '../../../../constants';
+import styles from './card-info.module.scss';
 
 export default function CardInfo({
   calc: {
@@ -29,112 +31,111 @@ export default function CardInfo({
   yearReturn,
   returnFromTreasury,
 }) {
-  const [treasury, setTreasury] = useState(0)
-  const [lastDayTreasuryNetReturn, setLastDayTreasuryNetReturn] = useState(0)
-  const [compoundedValue, setCompoundedValue] = useState(0)
-  const [returnedValue, setReturnedValue] = useState(0)
-  const [yourReturns, setYourReturns] = useState(0)
+  const [treasury, setTreasury] = useState(0);
+  const [lastDayTreasuryNetReturn, setLastDayTreasuryNetReturn] = useState(0);
+  const [compoundedValue, setCompoundedValue] = useState(0);
+  const [returnedValue, setReturnedValue] = useState(0);
+  const [yourReturns, setYourReturns] = useState(0);
   // eslint-disable-next-line no-unused-vars
-  const [marketingDev, setMarketingDev] = useState(0)
-  const [aprNewInvestors, setAprNewInvestors] = useState(0)
-  const [nodeByDay, setNodeByDay] = useState(0)
+  const [marketingDev, setMarketingDev] = useState(0);
+  const [aprNewInvestors, setAprNewInvestors] = useState(0);
+  const [nodeByDay, setNodeByDay] = useState(0);
   const [cumulativeStrongTotalByDay, setCumulativeStrongTotalByDay] =
-    useState(0)
+    useState(0);
 
   // get nodes from Fractional rocket compounding table
   useEffect(() => {
-    let nodes = nodesCount
-    let balance = 0
-    let costToClaim = 0
-    let payout = 0
-    let cumulativeStrongTotal = 0
-    const rewardPerDay = strongReturn
-    const _precentCompound = precentCompound / 100
-    const _precentTreasury = precentTreasury / 100
-    const treasuryBuildupPerDay = dailyVolume * _precentTreasury
+    let nodes = nodesCount;
+    let balance = 0;
+    let costToClaim = 0;
+    let payout = 0;
+    let cumulativeStrongTotal = 0;
+    const rewardPerDay = strongReturn;
+    const _precentCompound = precentCompound / 100;
+    const _precentTreasury = precentTreasury / 100;
+    const treasuryBuildupPerDay = dailyVolume * _precentTreasury;
 
     const getBalance = (_balance, _nodes, minusValue = 0, _costToClaim = 0) => {
       _balance =
         _balance -
         minusValue +
         _nodes * rewardPerDay * _precentCompound +
-        treasuryBuildupPerDay / strongPrice
+        treasuryBuildupPerDay / strongPrice;
 
       if (_balance > 10) {
-        _balance -= _costToClaim / strongPrice
+        _balance -= _costToClaim / strongPrice;
       }
 
-      return _balance
-    }
+      return _balance;
+    };
 
     for (let day = 1; day <= DAYS_IN_YEAR; day++) {
       if (day === 1) {
-        balance = nodes * rewardPerDay
+        balance = nodes * rewardPerDay;
         costToClaim =
           parseInt(balance / 10) === 1
             ? nodes * GAS_FEE_FOR_CLAIM + GAS_FEE_FOR_CREATE
-            : 0
+            : 0;
       } else {
         if (balance <= 10) {
-          balance = getBalance(balance, nodes)
+          balance = getBalance(balance, nodes);
         } else {
           if (balance <= 20) {
-            balance = getBalance(balance, nodes, 10, costToClaim)
+            balance = getBalance(balance, nodes, 10, costToClaim);
           } else if (balance <= 30) {
-            balance = getBalance(balance, nodes, 20, costToClaim)
+            balance = getBalance(balance, nodes, 20, costToClaim);
           } else if (balance <= 40) {
-            balance = getBalance(balance, nodes, 30, costToClaim)
+            balance = getBalance(balance, nodes, 30, costToClaim);
           } else if (balance <= 50) {
-            balance = getBalance(balance, nodes, 40, costToClaim)
+            balance = getBalance(balance, nodes, 40, costToClaim);
           } else if (balance <= 60) {
-            balance = getBalance(balance, nodes, 50, costToClaim)
+            balance = getBalance(balance, nodes, 50, costToClaim);
           } else if (balance <= 70) {
-            balance = getBalance(balance, nodes, 60, costToClaim)
+            balance = getBalance(balance, nodes, 60, costToClaim);
           } else if (balance <= 80) {
-            balance = getBalance(balance, nodes, 70, costToClaim)
+            balance = getBalance(balance, nodes, 70, costToClaim);
           } else if (balance <= 90) {
-            balance = getBalance(balance, nodes, 80, costToClaim)
+            balance = getBalance(balance, nodes, 80, costToClaim);
           } else if (balance <= 100) {
-            balance = getBalance(balance, nodes, 90, costToClaim)
+            balance = getBalance(balance, nodes, 90, costToClaim);
           } else if (balance <= 110) {
-            balance = getBalance(balance, nodes, 100, costToClaim)
+            balance = getBalance(balance, nodes, 100, costToClaim);
           } else if (balance <= 120) {
-            balance = getBalance(balance, nodes, 110, costToClaim)
+            balance = getBalance(balance, nodes, 110, costToClaim);
           } else if (balance <= 130) {
-            balance = getBalance(balance, nodes, 120, costToClaim)
+            balance = getBalance(balance, nodes, 120, costToClaim);
           } else if (balance <= 140) {
-            balance = getBalance(balance, nodes, 130, costToClaim)
+            balance = getBalance(balance, nodes, 130, costToClaim);
           } else if (balance <= 150) {
-            balance = getBalance(balance, nodes, 140, costToClaim)
+            balance = getBalance(balance, nodes, 140, costToClaim);
           } else if (balance <= 160) {
-            balance = getBalance(balance, nodes, 150, costToClaim)
+            balance = getBalance(balance, nodes, 150, costToClaim);
           } else if (balance <= 170) {
-            balance = getBalance(balance, nodes, 160, costToClaim)
+            balance = getBalance(balance, nodes, 160, costToClaim);
           }
 
           if (day > 3) {
-            nodes += parseInt(balance / 10)
+            nodes += parseInt(balance / 10);
           }
         }
 
         costToClaim =
           parseInt(balance / 10) > 0
             ? nodes * GAS_FEE_FOR_CLAIM + GAS_FEE_FOR_CREATE
-            : 0
+            : 0;
       }
 
-      payout = nodes * rewardPerDay
+      payout = nodes * rewardPerDay;
       cumulativeStrongTotal =
-        day === 1 ? payout : payout + cumulativeStrongTotal
+        day === 1 ? payout : payout + cumulativeStrongTotal;
 
       if (day === days) {
-        setNodeByDay(nodes)
-        setCumulativeStrongTotalByDay(cumulativeStrongTotal)
+        setNodeByDay(nodes);
+        setCumulativeStrongTotalByDay(cumulativeStrongTotal);
       }
     }
 
-    setCumulativeStrongTotalInYear(cumulativeStrongTotal)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCumulativeStrongTotalInYear(cumulativeStrongTotal);
   }, [
     strongPrice,
     nodesCount,
@@ -143,55 +144,55 @@ export default function CardInfo({
     dailyVolume,
     precentTreasury,
     days,
-  ])
+  ]);
 
   // get treasury value
   useEffect(() => {
-    setTreasury(Number(nodeByDay * 10 * strongPrice))
-  }, [nodeByDay, strongPrice])
+    setTreasury(Number(nodeByDay * 10 * strongPrice));
+  }, [nodeByDay, strongPrice]);
 
   // get last day treasury net return value
   useEffect(() => {
     setLastDayTreasuryNetReturn(
-      Number(cumulativeStrongTotalByDay * strongPrice)
-    )
-  }, [cumulativeStrongTotalByDay, strongPrice])
+      Number(cumulativeStrongTotalByDay * strongPrice),
+    );
+  }, [cumulativeStrongTotalByDay, strongPrice]);
 
   // get compounded value
   useEffect(() => {
-    const _precentCompound = precentCompound / 100
-    setCompoundedValue(Number(lastDayTreasuryNetReturn * _precentCompound))
-  }, [lastDayTreasuryNetReturn, precentCompound])
+    const _precentCompound = precentCompound / 100;
+    setCompoundedValue(Number(lastDayTreasuryNetReturn * _precentCompound));
+  }, [lastDayTreasuryNetReturn, precentCompound]);
 
   // get returned value
   useEffect(() => {
-    const _precentReturn = precentReturn / 100
-    const _precentMarketingWallet = precentMarketingWallet / 100
+    const _precentReturn = precentReturn / 100;
+    const _precentMarketingWallet = precentMarketingWallet / 100;
     setReturnedValue(
       Number(
         lastDayTreasuryNetReturn *
           _precentReturn *
-          (1 - _precentMarketingWallet)
-      )
-    )
-  }, [lastDayTreasuryNetReturn, precentReturn, precentMarketingWallet])
+          (1 - _precentMarketingWallet),
+      ),
+    );
+  }, [lastDayTreasuryNetReturn, precentReturn, precentMarketingWallet]);
 
   // get your return
   useEffect(() => {
-    const _precentYourPortfolio = precentYourPortfolio / 100
-    setYourReturns(Number(returnedValue * _precentYourPortfolio))
-  }, [returnedValue, precentYourPortfolio])
+    const _precentYourPortfolio = precentYourPortfolio / 100;
+    setYourReturns(Number(returnedValue * _precentYourPortfolio));
+  }, [returnedValue, precentYourPortfolio]);
 
   // get APR new investor
   useEffect(() => {
-    const _precentYourPortfolio = precentYourPortfolio / 100
-    const invested = _precentYourPortfolio * FROCK_SUPPLY * frocPrice
+    const _precentYourPortfolio = precentYourPortfolio / 100;
+    const invested = _precentYourPortfolio * FROCK_SUPPLY * frocPrice;
 
-    const returnsFromReflections = yearReturn
-    const totalReturns = returnsFromReflections + returnFromTreasury
+    const returnsFromReflections = yearReturn;
+    const totalReturns = returnsFromReflections + returnFromTreasury;
 
-    setAprNewInvestors(totalReturns / invested)
-  }, [precentYourPortfolio, frocPrice, returnFromTreasury, yearReturn])
+    setAprNewInvestors(totalReturns / invested);
+  }, [precentYourPortfolio, frocPrice, returnFromTreasury, yearReturn]);
 
   return (
     <>
@@ -298,5 +299,5 @@ export default function CardInfo({
         </Row>
       </Card>
     </>
-  )
+  );
 }
