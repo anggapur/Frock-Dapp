@@ -23,7 +23,7 @@ contract CommunityOffering is Ownable {
     // the certificate
     CommunityOfferingNRT public nrt;
     // fixed single price
-    uint256 public price = 80;
+    uint256 public price = 8;
     // ratio quote in 100
     uint256 public priceQuote = 100;
     // the cap at the beginning

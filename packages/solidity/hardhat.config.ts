@@ -91,6 +91,9 @@ const config: HardhatUserConfig = {
     usdcHolder: {
       default : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e',
       fantom : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e'
+    },
+    treasury: {
+      default : '0x477F33ead6d79d4A357c9788aDC3Bc5986866f55'
     }
   },
   react: {
