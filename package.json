@@ -1,49 +1,25 @@
 {
-  "name": "frock-dapp",
-  "version": "0.1.0",
+  "name": "@project/monorepo",
+  "version": "1.0.0",
+  "keywords": [
+    "react",
+    "workspaces",
+    "yarn"
+  ],
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "bootstrap": "^5.1.3",
-    "clsx": "^1.1.1",
-    "react": "^17.0.2",
-    "react-bootstrap": "^2.1.1",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^6.2.1",
-    "react-scripts": "5.0.0",
-    "sass": "^1.48.0",
-    "web-vitals": "^2.1.3"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "solidity": "yarn workspace @project/solidity",
+    "solidity:compile": "yarn workspace @project/solidity compile",
+    "react-app": "yarn workspace @project/react-app",
+    "react-app:build": "yarn workspace @project/react-app build",
+    "react-app:eject": "yarn workspace @project/react-app eject",
+    "react-app:start": "yarn workspace @project/react-app start",
+    "react-app:test": "yarn workspace @project/react-app test",
+    "eslint": "eslint --ext .js,.jsx"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
+  "workspaces": {
+    "packages": [
+      "packages/*"
     ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "mini-css-extract-plugin": "2.4.5"
-  },
-  "resolutions": {
-    "mini-css-extract-plugin": "2.4.5"
   }
 }
