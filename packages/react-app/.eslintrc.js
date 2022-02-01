@@ -27,7 +27,16 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': ['error', prettierOptions],
+    'jsx-a11y/click-events-have-key-events': 0,
+    'jsx-a11y/no-static-element-interactions': 0,
     'react/prop-types': 0,
+    'react/button-has-type': 0,
+    'react/jsx-no-useless-fragment': 0,
+    'react/no-unescaped-entities': 0,
+    'jsx-a11y/control-has-associated-label': 0,
+    'consistent-return': 0,
+    'no-param-reassign': 0,
+    'no-plusplus': 0,
     'no-underscore-dangle': 0,
     'class-methods-use-this': 0,
     'import/imports-first': 0,
@@ -56,7 +65,7 @@ module.exports = {
     'for-direction': 0,
     'no-console': 1,
     'no-unused-vars': [
-      'error',
+      1,
       {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
