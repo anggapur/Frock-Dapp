@@ -88,6 +88,10 @@ const config: HardhatUserConfig = {
     deployer: {
       default: 0,
     },
+    usdcHolder: {
+      default : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e',
+      fantom : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e'
+    }
   },
   react: {
     providerPriority: ["web3modal", "fantom", "hardhat"],
