@@ -47,9 +47,9 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       tags: ['test', 'local'],
-      chainId: 80001,
+      chainId: 250,
       forking: {        
-        url: `https://speedy-nodes-nyc.moralis.io/40036aec0d5bfd15ac6417d6/fantom/mainnet`,        
+        url: 'https://nd-248-371-542.p2pify.com/cbfc247834023d478a85c3565f4ffc06',
         blockNumber: 10248781,
       },
     },
@@ -59,7 +59,7 @@ const config: HardhatUserConfig = {
     },
     fantom: {
       tags: ['test'],      
-      url : `https://speedy-nodes-nyc.moralis.io/40036aec0d5bfd15ac6417d6/fantom/mainnet`,
+      url : 'https://nd-248-371-542.p2pify.com/cbfc247834023d478a85c3565f4ffc06',
       accounts: [
         PRIVATE_KEY_0
       ],
