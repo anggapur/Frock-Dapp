@@ -1,7 +1,7 @@
   import { HardhatRuntimeEnvironment } from 'hardhat/types'; // This adds the type from hardhat runtime environment.
   import { DeployFunction } from 'hardhat-deploy/types'; 
 
-  import { CommunityOffering__factory } from '../../contracts/typechain/generated';
+  import { CommunityOffering__factory } from '@project/contracts/typechain/generated';
 
   const func: DeployFunction = async function ({    
     network,
