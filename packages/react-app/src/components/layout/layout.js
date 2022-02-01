@@ -1,4 +1,5 @@
 import React from 'react';
+import { Toaster } from 'react-hot-toast';
 
 import Header from '../header/header';
 
@@ -10,6 +11,7 @@ export default function Layout({ children }) {
 
   return (
     <>
+      <Toaster />
       <Header />
       <main style={styles}>{children}</main>
     </>
