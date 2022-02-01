@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import { formatUnits } from '@ethersproject/units';
+import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
   COMMUNITY_OFFERING_ADDR,
   CommunityOfferingABI,
@@ -21,8 +21,11 @@ import CardDeposit from '../sections/card-deposit/card-deposit';
 import CommunityList from '../sections/community-list/community-list';
 
 export default function CommunitySale() {
-  const [usdcBalance, setUsdcBalance] = useState('00.00');
+  const [usdcBalance, setUsdcBalance] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
+  const [currentCap, setCurrentCap] = useState('0');
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [globalMaximumContribution, setGlobalMaximulContribution] =
     useState('0');
   const [totalRaised, setTotalRaised] = useState('0');
@@ -33,6 +36,7 @@ export default function CommunitySale() {
     CommunityOfferingABI,
     provider,
     COMMUNITY_OFFERING_ADDR,
+    0,
   );
 
   useEffect(() => {
@@ -48,15 +52,33 @@ export default function CommunitySale() {
           formatUnits(totalContributionResult.amountInvested, USDC_DECIMALS),
         );
 
-        // const globalMaximumContributonResult =
-        //   await communityOffering.totalraiseCap();
-        // setGlobalMaximulContribution(globalMaximumContributonResult);
+        const currentCapResult = await communityOffering.currentCap();
+        setCurrentCap(formatUnits(currentCapResult, USDC_DECIMALS));
 
-        // const totalRaisedResult = await communityOffering.totalraised();
-        // setTotalRaised(totalRaisedResult);
+        const startTimeResult = await communityOffering.startTime();
+        setStartTime(startTimeResult);
+
+        const endTimeResult = await communityOffering.endTime();
+        setEndTime(endTimeResult);
+
+        const globalMaximumContributonResult =
+          await communityOffering.totalraiseCap();
+        setGlobalMaximulContribution(globalMaximumContributonResult);
+
+        const totalRaisedResult = await communityOffering.totalraised();
+        setTotalRaised(totalRaisedResult);
       }
     })();
   }, [provider, accounts]);
+
+  const handleDeposit = async depositAmount => {
+    const parsedDepositAmount = parseUnits(
+      String(depositAmount),
+      USDC_DECIMALS,
+    );
+    const tx = await communityOffering.invest(parsedDepositAmount);
+    await tx.wait();
+  };
 
   return (
     <Container className="sale">
@@ -78,11 +100,21 @@ export default function CommunitySale() {
       </p>
       <Row>
         <Col lg={7}>
-          <CardCoinRaised communitySale />
+          <CardCoinRaised
+            communitySale
+            startTime={startTime}
+            endTime={endTime}
+            globalMaximumContribution={globalMaximumContribution}
+            totalRaised={totalRaised}
+          />
         </Col>
         <Col lg={5}>
           <CardBalance usdcBalance={usdcBalance} />
-          <CardDeposit totalContribution={totalContribution} />
+          <CardDeposit
+            totalContribution={totalContribution}
+            maxContribution={currentCap}
+            handleDeposit={handleDeposit}
+          />
           <CommunityList />
         </Col>
       </Row>

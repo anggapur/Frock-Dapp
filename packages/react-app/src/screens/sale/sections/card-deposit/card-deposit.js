@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
-import { FormControl, InputGroup } from 'react-bootstrap';
+import { Form, FormControl, InputGroup } from 'react-bootstrap';
+
+import { useFormik } from 'formik';
 
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
+import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
 import styles from './card-deposit.module.scss';
 
-export default function CardDeposit({ totalContribution }) {
+export default function CardDeposit({
+  totalContribution,
+  maxContribution,
+  handleDeposit,
+}) {
   const [selected, setSelected] = useState('deposit');
+  const initialValues = {
+    depositAmount: '',
+  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema: CommunityOfferingSchema,
+    onSubmit: async data => {
+      await handleDeposit(data.depositAmount);
+    },
+  });
 
   return (
     <Card lineBottom="light" className={styles.wrapper}>
@@ -60,22 +77,43 @@ export default function CardDeposit({ totalContribution }) {
               </Tooltip>
             </h3>
             <h2>{totalContribution} $USDC</h2>
-            <p>Maximum Contribution: 800 $USDC</p>
-            <InputGroup size="lg" className={styles.inputGroup}>
-              <FormControl
-                type="text"
-                aria-label="deposit"
-                aria-describedby="deposit"
-                className={styles.input}
-                placeholder="Contribution Amount"
-              />
-              <InputGroup.Text id="deposit" className={styles.inputSymbol}>
-                MAX
-              </InputGroup.Text>
-            </InputGroup>
-            <RoundButton variant="primary" className={styles.button} isRounded>
-              Deposit
-            </RoundButton>
+            <p>Maximum Contribution: {maxContribution} $USDC</p>
+            <Form onSubmit={formik.handleSubmit}>
+              <InputGroup hasValidation size="lg" className={styles.inputGroup}>
+                <FormControl
+                  required
+                  type="number"
+                  aria-label="depositAmount"
+                  aria-describedby="depositAmount"
+                  name="depositAmount"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.depositAmount}
+                  className={styles.input}
+                  placeholder="Contribution Amount"
+                />
+                <InputGroup.Text
+                  onClick={() =>
+                    formik.setFieldValue('depositAmount', maxContribution)
+                  }
+                  id="deposit"
+                  className={styles.inputSymbol}
+                >
+                  MAX
+                </InputGroup.Text>
+              </InputGroup>
+              {formik.errors.depositAmount && formik.touched.depositAmount ? (
+                <div className="text-danger">{formik.errors.depositAmount}</div>
+              ) : null}
+              <RoundButton
+                variant="primary"
+                className={styles.button}
+                type="submit"
+                isRounded
+              >
+                Deposit
+              </RoundButton>
+            </Form>
           </>
         ) : (
           <>

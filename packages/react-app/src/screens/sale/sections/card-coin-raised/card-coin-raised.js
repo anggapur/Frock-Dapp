@@ -6,7 +6,13 @@ import clsx from 'clsx';
 import Card from '../../../../components/card/card';
 import styles from './card-coin-raised.module.scss';
 
-export default function CardCoinRaised({ communitySale = false }) {
+export default function CardCoinRaised({
+  communitySale = false,
+  _startTime,
+  _endTime,
+  _globalMaximumContribution,
+  _totalRaised,
+}) {
   const [precent] = useState(75);
   const [width, setWidth] = useState(window.innerWidth);
 
