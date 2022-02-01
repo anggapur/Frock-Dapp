@@ -114,6 +114,7 @@ export default function CommunitySale() {
             totalContribution={totalContribution}
             maxContribution={currentCap}
             handleDeposit={handleDeposit}
+            communitySale
           />
           <CommunityList />
         </Col>
