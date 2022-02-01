@@ -1,14 +1,17 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
+import { _CommunityOffering } from '@project/contracts/src/address';
+
 import Countdown from '../../../components/countdown/countdown';
+import { _useContract } from '../../../hooks/ethers/contracts';
 import '../sale.scss';
 import CardBalance from '../sections/card-balance/card-balance';
 import CardCoinRaised from '../sections/card-coin-raised/card-coin-raised';
 import CardDeposit from '../sections/card-deposit/card-deposit';
 import CommunityList from '../sections/community-list/community-list';
 
-export default function PublicSale() {
+export default function CommunitySale() {
   return (
     <Container className="sale">
       <Row className="sale__header">
