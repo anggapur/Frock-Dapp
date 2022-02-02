@@ -21,6 +21,14 @@
   }
 }
 
+.svg {
+  cursor: pointer;
+
+  &:hover g > path:first-child {
+    fill: darken(#d1c7c7, 10%);
+  }
+}
+
 @media (max-width: 768px) {
   .svg {
     width: 20px;
