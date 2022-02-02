@@ -23,7 +23,7 @@ contract CommunityOffering is Ownable {
     // the certificate
     CommunityOfferingNRT public nrt;
     // fixed single price
-    uint256 public price = 80;
+    uint256 public price = 8;
     // ratio quote in 100
     uint256 public priceQuote = 100;
     // the cap at the beginning
@@ -82,7 +82,8 @@ contract CommunityOffering is Ownable {
         uint256 _initialCap,     
         uint256 _totalraiseCap,
         uint256 _minInvest,
-        address _treasury        
+        address _treasury,
+        address _nrtAddress
     ) {
         investToken = _investToken;
         startTime = _startTime;
@@ -94,7 +95,7 @@ contract CommunityOffering is Ownable {
         treasury = _treasury;
         require(duration < 7 days, "duration too long");
         endTime = startTime + duration;
-        nrt = new CommunityOfferingNRT("CommunityFractionalRocket", 9);
+        nrt = CommunityOfferingNRT(_nrtAddress);
         redeemEnabled = false;
         saleEnabled = false;
         maxCap = 4000 * 10 ** 18;
