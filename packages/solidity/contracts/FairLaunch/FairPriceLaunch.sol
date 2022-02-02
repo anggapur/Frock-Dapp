@@ -1,7 +1,6 @@
 // https://eips.ethereum.org/EIPS/eip-20
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.5;
-import "./FairPriceLaunchNRT.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -20,8 +19,9 @@ contract FairPriceLaunch is Ownable {
     // The token used for contributions
     address public investToken;
 
-    // The Non-transferable token used for sale, redeemable for Mag
-    FairPriceLaunchNRT public redeemableToken;
+    // the token to be launched
+    address public launchToken;
+    
 
     //Limits
     uint256 public maxInvestAllowed;
@@ -70,7 +70,7 @@ contract FairPriceLaunch is Ownable {
         uint256 totalInvested,
         uint256 price
     );
-    event IssueNRT(address investor, uint256 amount);
+    event Redeemed(address account, uint256 amount);
 
     //Structs
 
@@ -101,8 +101,7 @@ contract FairPriceLaunch is Ownable {
         uint256 _maxInvestRemovablePerPeriod,
         uint256 _maxGlobalInvestAllowed,
         uint256 _maxRedeemableToIssue,
-        uint256 _startingPrice,
-        address _redeemableToken
+        uint256 _startingPrice        
     ) {
         require(
             _launchStartTime > block.timestamp,
@@ -130,8 +129,7 @@ contract FairPriceLaunch is Ownable {
         maxInvestRemovablePerPeriod = _maxInvestRemovablePerPeriod;
         maxRedeemableToIssue = _maxRedeemableToIssue;
         startingPrice = _startingPrice;
-        //NRT is passed in as argument and this contract needs to be set as owner
-        redeemableToken = FairPriceLaunchNRT(_redeemableToken);
+        //NRT is passed in as argument and this contract needs to be set as owner        
         saleEnabled = false;
         redeemEnabled = false;
     }
@@ -266,18 +264,29 @@ contract FairPriceLaunch is Ownable {
     function claimRedeemable() public {
         require(redeemEnabled, "redeem not enabled");
         require(block.timestamp >= launchEndTime, "Time to claim has not arrived");
+        require(launchToken != address(0), "Launch token not setted");
 
         InvestorInfo storage investor = investorInfoMap[msg.sender];
         require(!investor.hasClaimed, "Tokens already claimed");
-        require(investor.totalInvested > 0, "No investment made");
+        require(investor.totalInvested > 0, "No investment made");        
 
-        uint256 issueAmount = investor.totalInvested.mul(10**9).div(finalPrice);
+        uint256 redeemAmount = investor.totalInvested.mul(10**9).div(finalPrice);
         investor.hasClaimed = true;
-        investor.totalRedeemed = issueAmount;
-        totalGlobalIssued = totalGlobalIssued.add(issueAmount);
-        redeemableToken.issue(msg.sender, issueAmount);
-        emit IssueNRT(msg.sender, issueAmount);
-    }
+        investor.totalRedeemed = redeemAmount;
+        totalGlobalIssued = totalGlobalIssued.add(redeemAmount);
+        
+        // Claim        
+        require(redeemAmount > 0, "no amount issued");
+        require(
+            IERC20(launchToken).transfer(
+                msg.sender,
+                redeemAmount
+            ),
+            "transfer failed"
+        );
+
+        emit Redeemed(msg.sender, redeemAmount);
+    }    
 
     //getters
     //calculates current price
@@ -299,6 +308,11 @@ contract FairPriceLaunch is Ownable {
     }
 
     //------ Owner Functions ------
+
+     // define the launch token to be redeemed
+    function setLaunchToken(address _launchToken) public onlyOwner {
+        launchToken = _launchToken;
+    }
 
     function enableSale() public onlyOwner {
         saleEnabled = true;
