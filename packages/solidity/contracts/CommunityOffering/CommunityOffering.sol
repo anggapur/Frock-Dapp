@@ -147,6 +147,7 @@ contract CommunityOffering is Ownable {
         require(whitelisted[msg.sender] == true, 'msg.sender is not whitelisted');
         require(totalraised + investAmount <= totalraiseCap, "over total raise");
         require(investAmount >= mininvest, "below minimum invest");
+        require(block.timestamp <= endTime, "sales ended");
 
         uint256 xcap = currentCap();
 
@@ -163,8 +164,9 @@ contract CommunityOffering is Ownable {
             "transfer failed"
         );
 
-        //MAG decimals = 9, MIM decimals = 18
-        uint256 issueAmount = investAmount * priceQuote / (price * 10 ** launchDecimals);
+        //Frock decimals = 9, USDC decimals = 6
+        uint256 issueAmount = investAmount * 10**launchDecimals * priceQuote / price / 10**6 ;                
+
 
         nrt.issue(msg.sender, issueAmount);
 
@@ -181,7 +183,7 @@ contract CommunityOffering is Ownable {
     // redeem all tokens
     function redeem() public {        
         require(redeemEnabled, "redeem not enabled");
-        //require(block.timestamp > endTime, "not redeemable yet");
+        require(block.timestamp > endTime, "not redeemable yet");
         uint256 redeemAmount = nrt.balanceOf(msg.sender);
         require(redeemAmount > 0, "no amount issued");
         InvestorInfo storage investor = investorInfoMap[msg.sender];
