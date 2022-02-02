@@ -63,10 +63,12 @@ export default function CommunitySale() {
 
         const globalMaximumContributonResult =
           await communityOffering.totalraiseCap();
-        setGlobalMaximulContribution(globalMaximumContributonResult);
+        setGlobalMaximulContribution(
+          formatUnits(globalMaximumContributonResult, USDC_DECIMALS),
+        );
 
         const totalRaisedResult = await communityOffering.totalraised();
-        setTotalRaised(totalRaisedResult);
+        setTotalRaised(formatUnits(totalRaisedResult, USDC_DECIMALS));
       }
     })();
   }, [provider, accounts]);
