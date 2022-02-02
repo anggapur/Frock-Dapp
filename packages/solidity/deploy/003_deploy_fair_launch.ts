@@ -1,7 +1,7 @@
+import { FairPriceLaunch } from './../../react-app/src/generated/typechain/FairPriceLaunch.d';
 import { HardhatRuntimeEnvironment } from 'hardhat/types'; // This adds the type from hardhat runtime environment.
 import { DeployFunction } from 'hardhat-deploy/types'; 
-
-import { USDC, FairPriceLaunchNRT, FairPriceLaunch__factory } from '@project/contracts/typechain/generated';
+import { Frock, USDC, FairPriceLaunch__factory } from '@project/contracts/typechain/generated';
 
 const func: DeployFunction = async function ({    
   ethers,
@@ -21,8 +21,8 @@ const func: DeployFunction = async function ({
   const CONTRACT_NAME = 'FairPriceLaunch';
 
   // Deploy logic
-  let receiverContract = network.live && (await deployments.getOrNull(CONTRACT_NAME));
-  if (!receiverContract) {        
+  let fairLaunch = network.live && (await deployments.getOrNull(CONTRACT_NAME));
+  if (!fairLaunch) {        
       console.debug(`Deploying FairLaunch Contract`);
 
       // Get USDC Token
@@ -30,12 +30,7 @@ const func: DeployFunction = async function ({
       const usdc = (await ethers.getContract<USDC>(`USDC`)).attach(
         usdcFtm.address
       ) as USDC;
-      const usdcDecimals = await usdc.decimals();   
-      // Get Community Offering NRT
-      const fairPriceLaunchNRT = await ethers.getContract<FairPriceLaunchNRT>(
-        'FairPriceLaunchNRT',
-        deployerAddress
-      );
+      const usdcDecimals = await usdc.decimals();        
             
       // Params
       const launchStartTime = 1645286400 // 19 feb 2022 04:00 PM UTC 
@@ -59,21 +54,27 @@ const func: DeployFunction = async function ({
         maxInvestRemovablePerPeriod, // maxInvestRemovablePerPeriod
         maxGlobalInvestAllowed, // maxGlobalInvestAllowed
         maxRedeemableToIssue, //maxRedeemableToIssue
-        statingPrice, // startingPrice
-        fairPriceLaunchNRT.address // redeemableToken
+        statingPrice, // startingPrice        
       ];
   
-      receiverContract = await deployments.deploy(CONTRACT_NAME, {
-      contract: CONTRACT_NAME,
-      from: deployerAddress, // Deployer will be performing the deployment transaction.
-      args, // Arguments to the contract's constructor.
-      log: true, // Display the address and gas used in the console (not when run in test though).
+      fairLaunch = await deployments.deploy(CONTRACT_NAME, {
+        contract: CONTRACT_NAME,
+        from: deployerAddress, // Deployer will be performing the deployment transaction.
+        args, // Arguments to the contract's constructor.
+        log: true, // Display the address and gas used in the console (not when run in test though).
       });
+
+        // Get Named Accounts
+        const deployer = await ethers.getNamedSigner('deployer')        
+        // Set Launch Token
+        const frock = await ethers.getContract<Frock>(`Frock`)        
+        const fairLaunchContract = await ethers.getContract<FairPriceLaunch>(`FairPriceLaunch`)
+        await fairLaunchContract.connect(deployer).setLaunchToken(frock.address)
   }    
 
 };
 
 func.tags = ['FairLaunch']; // This sets up a tag so you can execute the script on its own (and its dependencies).
-func.dependencies = ['FairLaunchNRT']
+func.dependencies = ['Frock'];
 
 export default func;
