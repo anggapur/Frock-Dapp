@@ -6,8 +6,6 @@ import Web3Modal from 'web3modal';
 export function useWeb3Modal(config) {
   const [provider, setProvider] = useState();
   const [autoLoaded, setAutoLoaded] = useState(false);
-  const [walletExist, setWalletExist] = useState(false);
-
   const { autoLoad = true, network = '' } = config;
 
   const web3Modal = useMemo(
@@ -21,14 +19,8 @@ export function useWeb3Modal(config) {
   );
 
   const loadWeb3Modal = useCallback(async () => {
-    if (
-      typeof window.ethereum !== 'undefined' ||
-      typeof window.web3 !== 'undefined'
-    ) {
-      const web3Provider = await web3Modal.connect();
-      return setProvider(new Web3Provider(web3Provider, 'any'));
-    }
-    return setWalletExist(true);
+    const web3Provider = await web3Modal.connect();
+    return setProvider(new Web3Provider(web3Provider, 'any'));
   }, [web3Modal]);
 
   const logoutWeb3Modal = useCallback(async () => {
@@ -49,7 +41,6 @@ export function useWeb3Modal(config) {
   }, [autoLoad, autoLoaded, loadWeb3Modal, web3Modal.cachedProvider]);
 
   return {
-    walletExist,
     provider,
     loadWeb3Modal,
     logoutWeb3Modal,

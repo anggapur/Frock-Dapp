@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import clsx from 'clsx';
+import moment from 'moment';
 
 import Card from '../../../../components/card/card';
 import styles from './card-coin-raised.module.scss';
 
 export default function CardCoinRaised({
   communitySale = false,
-  _startTime,
-  _endTime,
-  _globalMaximumContribution,
-  _totalRaised,
+  startTime,
+  endTime,
+  globalMaximumContribution,
+  totalRaised,
 }) {
   const [precent] = useState(75);
   const [progressBarPrecent] = useState(40);
@@ -55,14 +56,14 @@ export default function CardCoinRaised({
             <TimeSymbol />
             <div>
               <h4>Start Time:</h4>
-              <p>28 Dec. 17:00 UTC</p>
+              <p>{moment.unix(startTime).utc().format('DD MMM. h:mm A')}</p>
             </div>
           </div>
           <div className={styles.timeWrapper}>
             <TimeSymbol />
             <div>
               <h4>End Time:</h4>
-              <p>30 Dec. 17:00 UTC</p>
+              <p>{moment.unix(endTime).utc().format('DD MMM. h:mm A')}</p>
             </div>
           </div>
         </div>
@@ -98,13 +99,15 @@ export default function CardCoinRaised({
             </svg>
             <div className={styles.circle3}>
               <h4>Total raised so far</h4>
-              <h2>$00.000.000</h2>
+              <h2>${totalRaised}</h2>
               <h3>$10M Limit</h3>
             </div>
           </div>
         </div>
         <ProgressBar precent={progressBarPrecent} />
-        <p className={styles.bottomBar}>Maximum Contribution: 24,574.54 $FTM</p>
+        <p className={styles.bottomBar}>
+          Maximum Contribution: {globalMaximumContribution} $USDC
+        </p>
       </div>
       {!communitySale && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
