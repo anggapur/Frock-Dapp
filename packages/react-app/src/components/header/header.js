@@ -11,6 +11,7 @@ import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
 import RoundButton from '../button/button';
 import CompanyLogo from '../logo/company-logo';
+import { ToastError } from '../toast/toast';
 import './header.scss';
 
 function NotificationBar({ text }) {
@@ -60,7 +61,16 @@ export default function Header() {
   };
 
   const handleConnectWallet = async () => {
-    if (!provider && !walletExist) {
+    if (
+      typeof window.ethereum === 'undefined' ||
+      typeof window.web3 === 'undefined'
+    ) {
+      return ToastError(
+        <>No wallet found in your browser, Please install Metamask!</>,
+      );
+    }
+
+    if (provider === undefined) {
       await loadWeb3Modal();
       await handleAddOrChangeNetwork();
     }

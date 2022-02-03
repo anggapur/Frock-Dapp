@@ -11,4 +11,5 @@ module.exports = Object.freeze({
     rpcUrls: ['https://rpc.ftm.tools'],
   },
   USDC_DECIMALS: 6,
+  FROCK_DECIMALS: 18,
 });
