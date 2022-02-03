@@ -142,10 +142,9 @@ contract FairPriceLaunch is Ownable {
         require(saleEnabled, "Sale is not enabled yet");
         require(block.timestamp >= launchStartTime, "Sale has not started yet");
         require(amountToInvest >= minInvestAllowed, "Invest amount too small");
-        require(!hasSaleEnded(), "Sale period has ended");
-        uint256 buffer = maxGlobalInvestAllowed.div(10000);
+        require(!hasSaleEnded(), "Sale period has ended");        
         require(
-            totalGlobalInvested.add(amountToInvest) <= maxGlobalInvestAllowed + buffer,
+            totalGlobalInvested.add(amountToInvest) <= maxGlobalInvestAllowed,
             "Maximum Investments reached"
         );
 
