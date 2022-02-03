@@ -106,7 +106,50 @@ const config: HardhatUserConfig = {
     },
     user4: {
       default: 4,
-    }
+    },
+    user5: {
+      default: 5,
+    },
+    user6: {
+      default: 6,
+    },
+    user7: {
+      default: 7,
+    },
+    user8: {
+      default: 8,
+    },
+    user9: {
+      default: 9,
+    },
+    user10: {
+      default: 10,
+    },
+    user11: {
+      default: 11,
+    },
+    user12: {
+      default: 12,
+    },
+    user13: {
+      default: 13,
+    },
+    user14: {
+      default: 14,
+    },
+    user15: {
+      default: 15,
+    },
+    user16: {
+      default: 16,
+    },
+    user17: {
+      default: 17,
+    },
+    notInvestor: {
+      default: 18,
+    },
+    
   },
   react: {
     providerPriority: ["web3modal", "fantom", "hardhat"],
