@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import styles from './countdown.module.scss';
 
-export default function Countdown({ className = '' }) {
+export default function Countdown({ countdown, className = '' }) {
   return (
     <div className={clsx(styles.wrapper, className)}>
       <svg
@@ -34,7 +34,7 @@ export default function Countdown({ className = '' }) {
           </clipPath>
         </defs>
       </svg>
-      <p>Ends In 00:00:00</p>
+      <p>Ends In {countdown}</p>
     </div>
   );
 }

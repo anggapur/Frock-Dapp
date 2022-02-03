@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import clsx from 'clsx';
+import _ from 'lodash';
 import moment from 'moment';
+import { useElapsedTime } from 'use-elapsed-time';
 
 import Card from '../../../../components/card/card';
+import { converSecondsToHours } from '../../../../utils';
 import styles from './card-coin-raised.module.scss';
 
 export default function CardCoinRaised({
@@ -14,11 +17,38 @@ export default function CardCoinRaised({
   globalMaximumContribution,
   totalRaised,
 }) {
-  const [precent] = useState(75);
-  const [progressBarPrecent] = useState(40);
+  const getPercentage =
+    (Number(totalRaised) / Number(globalMaximumContribution)) * 100;
+  const [precent, setPrecent] = useState(getPercentage);
+  const currentTimeUtc = moment(new Date()).utc();
+  const startTimeUtc = moment.unix(startTime).utc();
+  const endTimeUtc = moment.unix(endTime).utc();
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const duration = moment(currentTimeUtc).diff(startTimeUtc, 'seconds');
+  const endDuration = moment(endTimeUtc).diff(startTimeUtc, 'seconds');
+  const [progressBarPrecent, setProgressBarPrecent] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
 
   const circleRef = useRef();
+
+  useEffect(() => {
+    if (currentTimeUtc.isSame(startTimeUtc) && elapsedTime <= endDuration) {
+      const intervalId = setInterval(() => {
+        setElapsedTime(duration);
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [elapsedTime, duration, endDuration]);
+
+  useEffect(() => {
+    setPrecent(getPercentage);
+  }, [totalRaised, globalMaximumContribution]);
+
+  useEffect(() => {
+    if (currentTimeUtc.isSame(startTimeUtc)) {
+      setProgressBarPrecent((elapsedTime / endDuration) * 100);
+    }
+  }, [elapsedTime]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -56,14 +86,14 @@ export default function CardCoinRaised({
             <TimeSymbol />
             <div>
               <h4>Start Time:</h4>
-              <p>{moment.unix(startTime).utc().format('DD MMM. h:mm A')}</p>
+              <p>{startTimeUtc.format('DD MMM. h:mm A')}</p>
             </div>
           </div>
           <div className={styles.timeWrapper}>
             <TimeSymbol />
             <div>
               <h4>End Time:</h4>
-              <p>{moment.unix(endTime).utc().format('DD MMM. h:mm A')}</p>
+              <p>{endTimeUtc.format('DD MMM. h:mm A')}</p>
             </div>
           </div>
         </div>
@@ -100,11 +130,14 @@ export default function CardCoinRaised({
             <div className={styles.circle3}>
               <h4>Total raised so far</h4>
               <h2>${totalRaised}</h2>
-              <h3>$10M Limit</h3>
+              <h3>$10K Limit</h3>
             </div>
           </div>
         </div>
-        <ProgressBar precent={progressBarPrecent} />
+        <ProgressBar
+          elapsed={converSecondsToHours(duration)}
+          precent={progressBarPrecent}
+        />
         <p className={styles.bottomBar}>
           Maximum Contribution: {globalMaximumContribution} $USDC
         </p>
@@ -129,7 +162,7 @@ export default function CardCoinRaised({
   );
 }
 
-function ProgressBar({ precent }) {
+function ProgressBar({ elapsed, precent }) {
   return (
     <div className={styles.progressWrapper}>
       <div className={styles.progressBar}>
@@ -140,7 +173,7 @@ function ProgressBar({ precent }) {
           )}
           style={{ width: `${precent}%` }}
         />
-        <p>3 hours 14 min elapsed</p>
+        <p>{elapsed} elapsed</p>
       </div>
     </div>
   );

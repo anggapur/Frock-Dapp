@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import Countdown from 'react-countdown';
 
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
@@ -12,7 +13,8 @@ import {
 } from '@project/contracts/src/address';
 import moment from 'moment';
 
-import Countdown from '../../../components/countdown/countdown';
+import CountdownUI from '../../../components/countdown/countdown';
+import { ToastError } from '../../../components/toast/toast';
 import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
 import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
@@ -99,11 +101,12 @@ export default function CommunitySale() {
   };
 
   const handleGetCurrentCap = async () => {
+    const today = new Date();
     const startDate = moment.unix(startTime).utc();
     const endDate = moment.unix(endTime).utc();
     if (
-      moment(new Date()).isSameOrAfter(startDate) &&
-      moment(new Date()).isSameOrBefore(endDate)
+      moment(today).isSameOrAfter(startDate) &&
+      moment(today).isSameOrBefore(endDate)
     ) {
       const currentCapResult = await communityOffering.currentCap();
       setCurrentCap(formatUnits(currentCapResult, USDC_DECIMALS));
@@ -133,8 +136,7 @@ export default function CommunitySale() {
       const tx = await communityOffering.invest(parsedDepositAmount);
       await tx.wait();
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      ToastError('There is something wrong. Please try again!');
     }
   };
 
@@ -143,9 +145,16 @@ export default function CommunitySale() {
       const tx = await communityOffering.redeem();
       await tx.wait();
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      ToastError('There is something wrong. Please try again!');
     }
+  };
+
+  const renderCountdown = () => {
+    const countdownTime = moment(startTime).add(2, 'days').valueOf();
+    if (moment(startTime).isSame(new Date())) {
+      return <Countdown daysInHours date={countdownTime} />;
+    }
+    return '00:00:00';
   };
 
   return (
@@ -155,7 +164,7 @@ export default function CommunitySale() {
           <h1>Fractional Rocket Community Sale</h1>
         </Col>
         <Col lg={6}>
-          <Countdown className="float-lg-end" />
+          <CountdownUI countdown={renderCountdown()} className="float-lg-end" />
         </Col>
       </Row>
       <p>
