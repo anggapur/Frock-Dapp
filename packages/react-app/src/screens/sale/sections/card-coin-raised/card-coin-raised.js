@@ -15,6 +15,7 @@ export default function CardCoinRaised({
   totalRaised,
 }) {
   const [precent] = useState(75);
+  const [progressBarPrecent] = useState(40);
   const [width, setWidth] = useState(window.innerWidth);
 
   const circleRef = useRef();
@@ -103,7 +104,7 @@ export default function CardCoinRaised({
             </div>
           </div>
         </div>
-        <ProgressBar />
+        <ProgressBar precent={progressBarPrecent} />
         <p className={styles.bottomBar}>
           Maximum Contribution: {globalMaximumContribution} $USDC
         </p>
@@ -137,6 +138,7 @@ function ProgressBar({ precent }) {
             styles.progressBarValue,
             precent > 90 ? styles.full : '',
           )}
+          style={{ width: `${precent}%` }}
         />
         <p>3 hours 14 min elapsed</p>
       </div>
