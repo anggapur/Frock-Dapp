@@ -326,9 +326,15 @@ contract FairPriceLaunch is Ownable {
     function withdrawInvestablePool() public onlyOwner {
         require(block.timestamp > launchEndTime, "Sale has not ended");
         uint256 amount = IERC20(investToken).balanceOf(address(this));
-        IERC20(investToken).transfer(fundsRedeemer, amount);
-        //IERC20(investToken).approve(fundsRedeemer, amount);
-        //MagTreasury(fundsRedeemer).deposit(amount, investToken, amount.div(1e9));
+        IERC20(investToken).transfer(fundsRedeemer, amount);        
+    }
+
+     // withdraw in case some tokens were not redeemed
+    function withdrawLaunchtoken(uint256 amount) public onlyOwner {
+        require(
+            IERC20(launchToken).transfer(msg.sender, amount),
+            "transfer failed"
+        );
     }
 
     function changeStartTime(uint256 newTime) public onlyOwner {
