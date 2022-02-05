@@ -4,7 +4,8 @@ import {
   USDC,
   CommunityOffering,
   CommunityOfferingNRT,
-  Frock,
+  FrockProxy,
+  FrockTokenV1,
 } from "@project/contracts/typechain/generated";
 import { expect } from "chai";
 import { deployments, ethers, upgrades, network } from "hardhat";
@@ -13,7 +14,8 @@ describe("Community Offering", async () => {
   let usdc: USDC;
   let communityOffering: CommunityOffering;
   let nrt: CommunityOfferingNRT;
-  let frock: Frock;
+  let frock: FrockTokenV1
+  let frockProxy: FrockProxy
   let treasury: SignerWithAddress;
   let deployer: SignerWithAddress;
   let usdcHolder: SignerWithAddress;
@@ -42,8 +44,9 @@ describe("Community Offering", async () => {
     );
     nrt = await ethers.getContract<CommunityOfferingNRT>(
       "CommunityOfferingNRT"
-    );
-    frock = await ethers.getContract<Frock>("Frock");
+    );    
+    frockProxy = await ethers.getContract<FrockProxy>('FrockProxy');
+    frock = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address);
 
     ({
       deployer,
@@ -74,7 +77,7 @@ describe("Community Offering", async () => {
 
   it("Send Frock to Community Sales", async () => {
     const frockDecimals = await frock.decimals();
-    const amountFrockToSale = ethers.utils.parseUnits("125000", frockDecimals);
+    const amountFrockToSale = ethers.utils.parseUnits("125000", frockDecimals);    
     await frock
       .connect(deployer)
       .transfer(communityOffering.address, amountFrockToSale);
@@ -236,7 +239,7 @@ describe("Community Offering", async () => {
     expect(await communityOffering.redeemEnabled()).to.be.true;
   });
 
-  it("Redeem", async () => {
+  it("Redeem", async () => {    
     // User1 Redeem
     const investAmount1 = ethers.utils.parseUnits("100", usdcDecimals);
     const nrtAmount1 = calculateNRTAmount(investAmount1);

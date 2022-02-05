@@ -1,4 +1,4 @@
-import { FairPriceLaunch, Frock, USDC } from '@project/contracts/typechain/generated';
+import { FairPriceLaunch, FrockProxy, FrockTokenV1, USDC } from '@project/contracts/typechain/generated';
 import { expect } from 'chai';
 import { deployments, ethers, network } from 'hardhat';
 import { SignerWithAddress } from './utils/interfaces';
@@ -6,7 +6,8 @@ import { SignerWithAddress } from './utils/interfaces';
 describe("Fair Offering", async () => {
     let usdc: USDC
     let fairLaunch: FairPriceLaunch
-    let frock: Frock
+    let frock: FrockTokenV1
+    let frockProxy: FrockProxy
     let treasury: SignerWithAddress
     let deployer: SignerWithAddress
     let usdcHolder: SignerWithAddress
@@ -46,7 +47,8 @@ describe("Fair Offering", async () => {
         usdcDecimals = await usdc.decimals()
         // Community Offering
         fairLaunch = await ethers.getContract<FairPriceLaunch>('FairPriceLaunch');
-        frock = await ethers.getContract<Frock>('Frock');
+        frockProxy = await ethers.getContract<FrockProxy>('FrockProxy');
+        frock = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address);
         frockDecimals = await frock.decimals();
 
         ({
