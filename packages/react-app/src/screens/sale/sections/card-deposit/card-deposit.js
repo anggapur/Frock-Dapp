@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
 
+import clsx from 'clsx';
 import { useFormik } from 'formik';
 
 import RoundButton from '../../../../components/button/button';
@@ -27,6 +28,26 @@ export default function CardDeposit({
       await handleDeposit(data.depositAmount);
     },
   });
+
+  const handleInputChange = e => {
+    const regex = /^(?:[1-9][0-9]*|0)(?:\.\d+)?$/;
+
+    if (e.target.value === '') {
+      return formik.setFieldValue('depositAmount', '');
+    }
+
+    if (regex.test(e.target.value)) {
+      return formik.setFieldValue('depositAmount', e.target.value);
+    }
+    return null;
+  };
+
+  const handleMaxChange = e => {
+    if (maxContribution !== '0') {
+      formik.setFieldValue('depositAmount', maxContribution);
+    }
+    return null;
+  };
 
   return (
     <Card lineBottom="light" className={styles.wrapper}>
@@ -103,23 +124,28 @@ export default function CardDeposit({
             <h2>{totalContribution} $USDC</h2>
             <p>Maximum Contribution: {maxContribution} $USDC</p>
             <Form onSubmit={formik.handleSubmit}>
-              <InputGroup hasValidation size="lg" className={styles.inputGroup}>
+              <InputGroup
+                hasValidation
+                size="lg"
+                className={clsx(
+                  formik.errors.depositAmount && styles.hasError,
+                  styles.inputGroup,
+                )}
+              >
                 <FormControl
                   required
                   type="number"
                   aria-label="depositAmount"
                   aria-describedby="depositAmount"
                   name="depositAmount"
-                  onChange={formik.handleChange}
+                  onChange={handleInputChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.depositAmount}
                   className={styles.input}
                   placeholder="Contribution Amount"
                 />
                 <InputGroup.Text
-                  onClick={() =>
-                    formik.setFieldValue('depositAmount', maxContribution)
-                  }
+                  onClick={handleMaxChange}
                   id="deposit"
                   className={styles.inputSymbol}
                 >
@@ -127,7 +153,9 @@ export default function CardDeposit({
                 </InputGroup.Text>
               </InputGroup>
               {formik.errors.depositAmount && formik.touched.depositAmount ? (
-                <div className="text-danger">{formik.errors.depositAmount}</div>
+                <div className={clsx('text-danger', styles.errorMessage)}>
+                  {formik.errors.depositAmount}
+                </div>
               ) : null}
               <RoundButton
                 variant="primary"
