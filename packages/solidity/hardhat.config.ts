@@ -88,12 +88,24 @@ const config: HardhatUserConfig = {
     deployer: {
       default: 0,
     },
+    wrongAdmin: {
+      default : '0x976EA74026E726554dB657fA54763abd0C3a0aa9'
+    },    
     usdcHolder: {
       default : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e',
       fantom : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e'
+    },  
+    dividenDistributor: {
+      default : '0x627306090abaB3A6e1400e9345bC60c78a8BEf57'
     },
     treasury: {
       default : '0x477F33ead6d79d4A357c9788aDC3Bc5986866f55'
+    },
+    marketing: {
+      default : '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65'
+    },
+    snapshoter: {
+      default: 19
     },
     user1: {
       default: 1,
@@ -148,8 +160,7 @@ const config: HardhatUserConfig = {
     },
     notInvestor: {
       default: 18,
-    },
-    
+    },        
   },
   react: {
     providerPriority: ["web3modal", "fantom", "hardhat"],
