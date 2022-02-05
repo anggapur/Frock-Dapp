@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types'; // This adds the type from hardhat runtime environment.
 import { DeployFunction } from 'hardhat-deploy/types'; 
-import { Frock, USDC, CommunityOfferingNRT, CommunityOffering__factory, CommunityOffering } from '@project/contracts/typechain/generated';
+import { FrockProxy, FrockTokenV1, USDC, CommunityOfferingNRT, CommunityOffering__factory, CommunityOffering } from '@project/contracts/typechain/generated';
 
 const func: DeployFunction = async function ({    
   ethers,
@@ -74,9 +74,13 @@ const func: DeployFunction = async function ({
       await communityOfferingNRT.connect(deployer).transferOwnership(communityOffering.address)
 
       // Set Launch Token
-      const frock = await ethers.getContract<Frock>(`Frock`)
+      const frockProxy = (await ethers.getContract<FrockProxy>('FrockProxy'))
+      const frock = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address)    
       const communityOfferingContract = await ethers.getContract<CommunityOffering>(`CommunityOffering`)
       await communityOfferingContract.connect(deployer).setLaunchToken(frock.address)
+
+      // Set Sales Contract as Excluded from fee
+      await frock.connect(deployer).excludeFromFees(communityOfferingContract.address, true);
   }    
 
 };

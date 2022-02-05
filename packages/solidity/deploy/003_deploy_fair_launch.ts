@@ -1,7 +1,7 @@
 import { FairPriceLaunch } from './../../react-app/src/generated/typechain/FairPriceLaunch.d';
 import { HardhatRuntimeEnvironment } from 'hardhat/types'; // This adds the type from hardhat runtime environment.
 import { DeployFunction } from 'hardhat-deploy/types'; 
-import { Frock, USDC, FairPriceLaunch__factory } from '@project/contracts/typechain/generated';
+import { FrockProxy, FrockTokenV1, USDC, FairPriceLaunch__factory } from '@project/contracts/typechain/generated';
 
 const func: DeployFunction = async function ({    
   ethers,
@@ -67,9 +67,13 @@ const func: DeployFunction = async function ({
         // Get Named Accounts
         const deployer = await ethers.getNamedSigner('deployer')        
         // Set Launch Token
-        const frock = await ethers.getContract<Frock>(`Frock`)        
+        const frockProxy = (await ethers.getContract<FrockProxy>('FrockProxy'))
+        const frock = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address)         
         const fairLaunchContract = await ethers.getContract<FairPriceLaunch>(`FairPriceLaunch`)
         await fairLaunchContract.connect(deployer).setLaunchToken(frock.address)
+
+        // Set Sales Contract as Excluded from fee
+        await frock.connect(deployer).excludeFromFees(fairLaunchContract.address, true);
   }    
 
 };
