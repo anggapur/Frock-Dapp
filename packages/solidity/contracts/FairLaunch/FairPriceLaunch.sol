@@ -4,6 +4,7 @@ pragma solidity 0.8.5;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "./FairLaunchNRT.sol";
 
 ////////////////////////////////////
 //
@@ -14,6 +15,8 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 ////////////////////////////////////
 contract FairPriceLaunch is Ownable {   
     using SafeMath for uint256; 
+
+    FairLaunchNRT public nrt;
 
     address public fundsRedeemer;
     // The token used for contributions
@@ -33,6 +36,7 @@ contract FairPriceLaunch is Ownable {
     //totals
     uint256 public totalGlobalInvested;
     uint256 public totalGlobalIssued;
+    uint256 public totalGlobalRedeemed;
     uint256 public totalInvestors;
 
     //TIMES
@@ -51,11 +55,13 @@ contract FairPriceLaunch is Ownable {
     //toggles
     // sale has started
     bool public saleEnabled;
+    bool public claimEnabled;
     bool public redeemEnabled;
     bool public finalized;
 
     //EVENTS
     event SaleEnabled(bool enabled, uint256 time);
+    event ClaimEnabled(bool enabled, uint256 time);
     event RedeemEnabled(bool enabled, uint256 time);
 
     event Invest(
@@ -70,6 +76,7 @@ contract FairPriceLaunch is Ownable {
         uint256 totalInvested,
         uint256 price
     );
+    event Claimed(address account, uint256 amount);
     event Redeemed(address account, uint256 amount);
 
     //Structs
@@ -81,10 +88,12 @@ contract FairPriceLaunch is Ownable {
 
     struct InvestorInfo {
         uint256 totalInvested;
+        uint256 totalClaimed;
         uint256 totalRedeemed;
         uint256 totalInvestableExchanged;
         Withdrawal[] withdrawHistory;
         bool hasClaimed;
+        bool hasRedeemed;
     }
 
     mapping(address => InvestorInfo) public investorInfoMap;
@@ -93,6 +102,7 @@ contract FairPriceLaunch is Ownable {
     constructor(
         address _fundsRedeemer,
         address _investToken,
+        address _nrtAddress,
         uint256 _launchStartTime,
         uint256 _saleDuration,
         uint256 _investRemovalDelay,
@@ -131,7 +141,11 @@ contract FairPriceLaunch is Ownable {
         startingPrice = _startingPrice;
         //NRT is passed in as argument and this contract needs to be set as owner        
         saleEnabled = false;
+        claimEnabled = false;
         redeemEnabled = false;
+
+        // NRT
+        nrt = FairLaunchNRT(_nrtAddress);
     }
 
     //User functions
@@ -257,25 +271,46 @@ contract FairPriceLaunch is Ownable {
         );
     }
 
-       /**
-    @dev Claims the NRT tokens equivalent to their contribution
-     */
+    /**
+    * @dev Claims the NRT tokens equivalent to their contribution
+    */
     function claimRedeemable() public {
-        require(redeemEnabled, "redeem not enabled");
-        require(block.timestamp >= launchEndTime, "Time to claim has not arrived");
-        require(launchToken != address(0), "Launch token not setted");
+        require(claimEnabled, "claim not enabled");
+        require(block.timestamp >= launchEndTime, "Time to claim has not arrived");        
 
         InvestorInfo storage investor = investorInfoMap[msg.sender];
         require(!investor.hasClaimed, "Tokens already claimed");
         require(investor.totalInvested > 0, "No investment made");        
 
-        uint256 redeemAmount = investor.totalInvested.mul(10**9).div(finalPrice);
+        uint256 issueAmount = investor.totalInvested.mul(10**9).div(finalPrice);
         investor.hasClaimed = true;
-        investor.totalRedeemed = redeemAmount;
-        totalGlobalIssued = totalGlobalIssued.add(redeemAmount);
+        investor.totalClaimed = issueAmount;
+        totalGlobalIssued = totalGlobalIssued.add(issueAmount);
         
-        // Claim        
+        // Claim bFrock
+        require(issueAmount > 0, "no amount issued");
+        nrt.issue(msg.sender, issueAmount);
+      
+        emit Claimed(msg.sender, issueAmount);
+    }   
+
+
+    /**
+    * @dev redeem all tokens
+    */
+    function redeem() public {        
+        require(redeemEnabled, "redeem not enabled");
+        require(block.timestamp > launchEndTime, "not redeemable yet");
+        uint256 redeemAmount = nrt.balanceOf(msg.sender);
         require(redeemAmount > 0, "no amount issued");
+        InvestorInfo storage investor = investorInfoMap[msg.sender];
+        require(!investor.hasRedeemed, "already redeemed");
+        require(launchToken != address(0), "Launth token not setted");
+
+        // Set ad Redeemed
+        investor.hasRedeemed = true;
+
+        // Send Frock Token to Investor
         require(
             IERC20(launchToken).transfer(
                 msg.sender,
@@ -284,8 +319,14 @@ contract FairPriceLaunch is Ownable {
             "transfer failed"
         );
 
-        emit Redeemed(msg.sender, redeemAmount);
-    }    
+        // Redeem NRT and burn the NRT
+        nrt.redeem(msg.sender, redeemAmount);
+        
+        // Add Flobal Redeemed amount
+        totalGlobalRedeemed += redeemAmount;        
+        
+        emit Redeemed(msg.sender, redeemAmount);        
+    } 
 
     //getters
     //calculates current price
@@ -316,6 +357,11 @@ contract FairPriceLaunch is Ownable {
     function enableSale() public onlyOwner {
         saleEnabled = true;
         emit SaleEnabled(true, block.timestamp);
+    }
+
+    function enableClaim() public onlyOwner {
+        claimEnabled = true;
+        emit ClaimEnabled(true, block.timestamp);
     }
 
     function enableRedeem() public onlyOwner {
