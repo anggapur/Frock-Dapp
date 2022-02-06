@@ -51,7 +51,7 @@ const config: HardhatUserConfig = {
       chainId: 250,
       forking: {        
         url: 'https://nd-248-371-542.p2pify.com/cbfc247834023d478a85c3565f4ffc06',
-        blockNumber: 29697248,
+        blockNumber: 30188747,
       },
     },
     localhost: {
@@ -103,6 +103,9 @@ const config: HardhatUserConfig = {
     },
     marketing: {
       default : '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65'
+    },
+    wftmHolder: {
+      default : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e'
     },
     snapshoter: {
       default: 19
