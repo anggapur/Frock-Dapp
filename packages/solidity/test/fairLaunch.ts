@@ -1,10 +1,11 @@
-import { FairPriceLaunch, FrockProxy, FrockTokenV1, USDC } from '@project/contracts/typechain/generated';
+import { FairPriceLaunch, FrockProxy, FrockTokenV1, USDC, FairLaunchNRT } from '@project/contracts/typechain/generated';
 import { expect } from 'chai';
 import { deployments, ethers, network } from 'hardhat';
 import { SignerWithAddress } from './utils/interfaces';
 
 describe("Fair Offering", async () => {
     let usdc: USDC
+    let nrt: FairLaunchNRT;
     let fairLaunch: FairPriceLaunch
     let frock: FrockTokenV1
     let frockProxy: FrockProxy
@@ -33,6 +34,7 @@ describe("Fair Offering", async () => {
     let usdcDecimals: number
     let frockDecimals: number
     const epochTime = (6 * 3600)
+    let investors: any;
 
     before(async () => {
         await deployments.fixture(['FairLaunch'], {
@@ -50,6 +52,10 @@ describe("Fair Offering", async () => {
         frockProxy = await ethers.getContract<FrockProxy>('FrockProxy');
         frock = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address);
         frockDecimals = await frock.decimals();
+        nrt = await ethers.getContract<FairLaunchNRT>(
+            "FairLaunchNRT"
+        );  
+        
 
         ({
             deployer,
@@ -62,6 +68,16 @@ describe("Fair Offering", async () => {
             user13, user14, user15,
             user16, user17, notInvestor
         } = await ethers.getNamedSigners())
+
+        // Investors
+        investors = [
+            user1, user3,
+            user4, user5, user6,
+            user7, user8, user9,
+            user10, user11, user12,
+            user13, user14, user15,
+            user16, user17
+        ]   
     })
 
     it('Distribute USDC', async () => {
@@ -285,54 +301,46 @@ describe("Fair Offering", async () => {
         ).to.be.revertedWith("Sale period has ended")
     })
 
-    it('Enable Redeem', async () => {
+    it('Enable Claimed', async () => {
         // Cannot be done by non Owner
         await expect(
             fairLaunch
                 .connect(nonDeployer)
-                .enableRedeem()
+                .enableClaim()
         ).to.be.revertedWith("Ownable: caller is not the owner")
 
-        // Success Enable Redeem
+        // Success Enable Claim
         await expect(
             fairLaunch
                 .connect(deployer)
-                .enableRedeem()
-        ).to.emit(fairLaunch, "RedeemEnabled")
+                .enableClaim()
+        ).to.emit(fairLaunch, "ClaimEnabled")
 
-        expect(await fairLaunch.redeemEnabled()).to.be.true
+        expect(await fairLaunch.claimEnabled()).to.be.true
     })
 
 
-    it('Redeem', async () => {
+    it('Claim', async () => {
         // Price should be
         // (40_000 * 10^6) * 10^9 / (350_000*10^9) = 114_285
         const finalPriceCalculated = ethers.utils.parseUnits("0.114285", usdcDecimals)
         const finalPrice = await fairLaunch.finalPrice();
         expect(finalPrice).to.be.eq(finalPriceCalculated)
-        
-
-        const investors = [
-            user1, user3,
-            user4, user5, user6,
-            user7, user8, user9,
-            user10, user11, user12,
-            user13, user14, user15,
-            user16, user17
-        ]        
+               
         const investAmount = ethers.utils.parseUnits("2500", usdcDecimals)
-        const redeemAmount = investAmount.mul(ethers.utils.parseUnits("1", frockDecimals)).div(finalPrice)
+        const issueAmount = investAmount.mul(ethers.utils.parseUnits("1", frockDecimals)).div(finalPrice)
         
-        const redeems = investors.map((investor) => {
+        // Claim NRT
+        const claims = investors.map((investor: SignerWithAddress) => {
             expect(
                 fairLaunch.connect(investor).claimRedeemable()
-            ).to.emit(fairLaunch, "Redeemed")
-            .withArgs(investor.address, redeemAmount)        
-        })  
-        await Promise.all(redeems)
-        const balances = investors.map((investor) => frock.balanceOf(investor.address))                
+            ).to.emit(fairLaunch, "Claimed")
+            .withArgs(investor.address, issueAmount)        
+        })          
+        await Promise.all(claims)
+        const balances = investors.map((investor: SignerWithAddress) => nrt.balanceOf(investor.address))                
         const getBalances = await Promise.all(balances)
-        getBalances.map((balance) => expect(redeemAmount).to.be.eq(balance))
+        getBalances.map((balance) => expect(issueAmount).to.be.eq(balance))
 
         // Only able to redeem once
         await expect(
@@ -348,13 +356,76 @@ describe("Fair Offering", async () => {
         ).to.be.revertedWith('No investment made')
     })
 
+    it("Not able to redeem before Redeem enabled", async() => {    
+        const redeems = investors.map((investor: SignerWithAddress) => {
+            expect(
+                fairLaunch.connect(investor).claimRedeemable()
+            ).to.be.reverted                 
+        })          
+        await Promise.all(redeems)
+    })
+
+    it("Enable Redeem", async() => {
+         // Cannot be done by non Owner
+         await expect(
+            fairLaunch
+                .connect(nonDeployer)
+                .enableRedeem()
+        ).to.be.revertedWith("Ownable: caller is not the owner")
+        expect(await fairLaunch.redeemEnabled()).to.be.false
+
+        // Success Enable Redeem
+        await expect(
+            fairLaunch
+                .connect(deployer)
+                .enableRedeem()
+        ).to.emit(fairLaunch, "RedeemEnabled")
+
+        expect(await fairLaunch.redeemEnabled()).to.be.true
+    })
+
+    it("Redeem", async() => {
+        // Price should be
+        // (40_000 * 10^6) * 10^9 / (350_000*10^9) = 114_285
+        const finalPriceCalculated = ethers.utils.parseUnits("0.114285", usdcDecimals)
+        const finalPrice = await fairLaunch.finalPrice();
+        expect(finalPrice).to.be.eq(finalPriceCalculated)
+                     
+        const investAmount = ethers.utils.parseUnits("2500", usdcDecimals)
+        const redeemAmount = investAmount.mul(ethers.utils.parseUnits("1", frockDecimals)).div(finalPrice)
+        
+        // Claim NRT
+        const redeems = investors.map((investor: SignerWithAddress) => {
+            expect(
+                fairLaunch.connect(investor).redeem()
+            ).to.emit(fairLaunch, "Redeemed")
+            .withArgs(investor.address, redeemAmount)        
+        })          
+        await Promise.all(redeems)
+        const balances = investors.map((investor: SignerWithAddress) => frock.balanceOf(investor.address))                
+        const getBalances = await Promise.all(balances)
+        getBalances.map((balance) => expect(redeemAmount).to.be.eq(balance))
+
+        // Only able to redeem once
+        await expect(
+            fairLaunch.connect(user1).redeem()
+        ).to.be.revertedWith('no amount issued')
+
+        // No Amount to redeem
+        await expect(
+            fairLaunch.connect(notInvestor).redeem()
+        ).to.be.revertedWith('no amount issued')
+        await expect(
+            fairLaunch.connect(user2).redeem()
+        ).to.be.revertedWith('no amount issued')
+    })
+
     it('Withdraw Treasury', async () => {
         const investAmount = ethers.utils.parseUnits("40000", usdcDecimals)
         const treasuryUsdcBalanceBefore = await usdc.balanceOf(treasury.address)
         await fairLaunch.connect(deployer).withdrawInvestablePool()
         const treasuryUsdcBalanceAfter = await usdc.balanceOf(treasury.address)
         expect(treasuryUsdcBalanceAfter).to.be.eq(treasuryUsdcBalanceBefore.add(investAmount))
-
     })
 
     it('Withdraw Launch Token', async () => {
