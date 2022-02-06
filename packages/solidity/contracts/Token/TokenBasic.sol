@@ -28,10 +28,11 @@ contract TokenBasic is
 {            
     bytes32 public constant SNAPSHOTER = keccak256("SNAPSHOTER");
 
-    mapping (address => bool) public _isExcludedFromFees;
-    mapping (address => bool) public automatedMarketMakerPairs;
+    mapping (address => bool) public isExcludedFromFees;    
+    mapping(address => bool) public isBlacklisted;
 
-    event ExcludeFromFees(address indexed account, bool isExcluded);    
+    event ExcludeFromFees(address indexed account, bool isExcluded);   
+    event Blacklisted(address indexed account, bool blacklisted);
 
     function initialize(
         string memory name,
@@ -65,9 +66,15 @@ contract TokenBasic is
     
 		
     function excludeFromFees(address account, bool excluded) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(_isExcludedFromFees[account] != excluded, "Account is already the value of 'excluded'");
-        _isExcludedFromFees[account] = excluded;
+        require(isExcludedFromFees[account] != excluded, "Account is already the value of 'excluded'");
+        isExcludedFromFees[account] = excluded;
         emit ExcludeFromFees(account, excluded);
+    }
+
+    function setBlacklist(address account, bool blacklisted) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(isBlacklisted[account] != blacklisted, "Account is already the value of 'blacklisted'");
+        isBlacklisted[account] = blacklisted;
+        emit Blacklisted(account, blacklisted);
     }
 
     /**
@@ -120,6 +127,7 @@ contract TokenBasic is
         uint256 amount
     ) internal virtual override(ERC20SnapshotUpgradeable, ERC20Upgradeable) {
         require(!PausableUpgradeable.paused(), "ERC20Pausable: token transfer while paused");
+        require(!isBlacklisted[from] && !isBlacklisted[to], "Blacklisted: user blacklisted");
         ERC20SnapshotUpgradeable._beforeTokenTransfer(from, to, amount);                
     }
 

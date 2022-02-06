@@ -73,7 +73,7 @@ contract FrockTokenV1 is TokenBasic {
     }
 
     function _taxDeduction(address sender, address recipient, uint256 amount) internal virtual {
-        if(!(_isExcludedFromFees[sender] || _isExcludedFromFees[recipient])) {                   
+        if(!(isExcludedFromFees[sender] || isExcludedFromFees[recipient])) {                   
             require(reflection != address(0) && treasury != address(0) && marketing != address(0), "Tax : Address not set correctly");
             require(reflectionPercentage + treasuryPercentage + marketingPercentage != 0, "Tax : Percentage not set correctly");
 
