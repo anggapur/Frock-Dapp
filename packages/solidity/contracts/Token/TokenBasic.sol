@@ -10,7 +10,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20Pe
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
-import "./ERC1363Upgradeable.sol";
+import "../Extensions/ERC1363Upgradeable.sol";
 import "../EIP/SafeTokenRecoverUpgradeable.sol";
 
 
