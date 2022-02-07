@@ -404,8 +404,8 @@ describe('Frock Proxy', async () => {
 
       await expect(
         frockToken.connect(proxyAdmin).snapshot()
-      ).to.be.revertedWith('')
-    })
+      ).to.be.reverted
+    })    
    
   });
 });
