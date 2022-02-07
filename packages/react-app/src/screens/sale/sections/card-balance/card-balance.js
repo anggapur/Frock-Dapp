@@ -3,7 +3,11 @@ import React from 'react';
 import Card from '../../../../components/card/card';
 import styles from './card-balance.module.scss';
 
-export default function CardBalance({ usdcBalance, frockBalance }) {
+export default function CardBalance({
+  communitySale = false,
+  usdcBalance,
+  frockBalance,
+}) {
   return (
     <Card className={styles.wrapper}>
       <h2>Balance:</h2>
@@ -13,7 +17,9 @@ export default function CardBalance({ usdcBalance, frockBalance }) {
       </div>
       <div>
         <FrockLogo />
-        <p>{frockBalance} $FROCK</p>
+        <p>
+          {frockBalance} {communitySale ? '$aFROCK' : '$bFROCK'}
+        </p>
       </div>
     </Card>
   );
