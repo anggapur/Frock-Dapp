@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import React, { Col, Container, Row } from 'react-bootstrap';
+import Countdown from 'react-countdown';
 
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
-  COMMUNITY_OFFERING_NRT_ADDR,
-  CommunityOfferingNRTABI,
   FAIR_PRICE_ADDR,
   FAIR_PRICE_NRT_ADDR,
   FairPriceLaunchABI,
@@ -29,13 +28,16 @@ import CommunityList from '../sections/community-list/community-list';
 export default function PublicSale() {
   const [usdcBalance, setUsdcBalance] = useState('0');
   const [frockBalance, setFrockBalance] = useState('0');
+  const [prices, setPrices] = useState({
+    startPrice: '0',
+    currentPrice: '0',
+  });
+  const [maxGlobalInvest, setMaxGlobalInvest] = useState('0');
+  const [totalGlobalInvested, setTotalGlobalInvested] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
   const [currentCap, setCurrentCap] = useState('0');
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  const [globalMaximumContribution, setGlobalMaximulContribution] =
-    useState('0');
-  const [totalRaised, setTotalRaised] = useState('0');
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
@@ -46,8 +48,6 @@ export default function PublicSale() {
     FAIR_PRICE_ADDR,
     accounts ? accounts[0] : 0,
   );
-
-  console.log('fairLaunch', fairLaunch);
 
   const fairLaunchNRT = useContract(
     FairPriceLaunchNRTABI,
@@ -62,15 +62,15 @@ export default function PublicSale() {
         await handleGetUSDC();
         await handleGetFrock();
 
-        // await handleGetTotalContribution();
+        await handleGetGlobalMaxInvest();
+        await handleGetTotalInvested();
+        await handleGetPrices();
+        await handleGetTotalContribution();
 
         await handleGetStartTime();
         await handleGetEndTime();
 
         await handleGetCurrentCap();
-
-        await handleGetMaxContribution();
-        await handleGetTotalRaised();
       }
     })();
   }, [provider, accounts]);
@@ -85,12 +85,27 @@ export default function PublicSale() {
     setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
   };
 
+  const handleGetPrices = async () => {
+    const getStartPriceResult = await fairLaunch.startingPrice();
+    const getCurrentPriceResult = await fairLaunch.currentPrice();
+
+    setPrices({
+      startPrice: formatUnits(getStartPriceResult, USDC_DECIMALS),
+      currentPrice: formatUnits(getCurrentPriceResult, USDC_DECIMALS),
+    });
+  };
+
+  const handleGetGlobalMaxInvest = async () => {
+    const maxGlobalInvestResult = await fairLaunch.maxGlobalInvestAllowed();
+    setMaxGlobalInvest(formatUnits(maxGlobalInvestResult, USDC_DECIMALS));
+  };
+
   const handleGetTotalContribution = async () => {
     const totalContributionResult = await fairLaunch.investorInfoMap(
       accounts[0],
     );
     setTotalContribution(
-      formatUnits(totalContributionResult.amountInvested, USDC_DECIMALS),
+      formatUnits(totalContributionResult[0], USDC_DECIMALS),
     );
   };
 
@@ -117,16 +132,11 @@ export default function PublicSale() {
     }
   };
 
-  const handleGetMaxContribution = async () => {
-    const globalMaximumContributonResult = await fairLaunch.totalraiseCap();
-    setGlobalMaximulContribution(
-      formatUnits(globalMaximumContributonResult, USDC_DECIMALS),
+  const handleGetTotalInvested = async () => {
+    const totalGlobalInvestedResult = await fairLaunch.totalGlobalInvested();
+    setTotalGlobalInvested(
+      formatUnits(totalGlobalInvestedResult, USDC_DECIMALS),
     );
-  };
-
-  const handleGetTotalRaised = async () => {
-    const totalRaisedResult = await fairLaunch.totalraised();
-    setTotalRaised(formatUnits(totalRaisedResult, USDC_DECIMALS));
   };
 
   const handleDeposit = async withdrawAmount => {
@@ -166,6 +176,14 @@ export default function PublicSale() {
     }
   };
 
+  const renderCountdown = () => {
+    const countdownTime = moment(startTime).add(2, 'days').valueOf();
+    if (moment(startTime).isSame(new Date())) {
+      return <Countdown daysInHours date={countdownTime} />;
+    }
+    return '00:00:00';
+  };
+
   return (
     <Container className="sale">
       <Row className="sale__header">
@@ -173,7 +191,7 @@ export default function PublicSale() {
           <h1>Fractional Rocket Public Sale</h1>
         </Col>
         <Col lg={6}>
-          <CountdownUI className="float-lg-end" />
+          <CountdownUI countdown={renderCountdown()} className="float-lg-end" />
         </Col>
       </Row>
       <p>
@@ -187,11 +205,12 @@ export default function PublicSale() {
       <Row>
         <Col lg={7}>
           <CardCoinRaised
-            communitySale
+            communitySale={false}
             startTime={startTime}
             endTime={endTime}
-            globalMaximumContribution={globalMaximumContribution}
-            totalRaised={totalRaised}
+            globalMaximumContribution={maxGlobalInvest}
+            totalRaised={totalGlobalInvested}
+            prices={prices}
           />
         </Col>
         <Col lg={5}>

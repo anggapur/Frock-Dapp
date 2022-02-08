@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import clsx from 'clsx';
 import _ from 'lodash';
 import moment from 'moment';
-import { useElapsedTime } from 'use-elapsed-time';
+import 'moment-timezone';
 
 import Card from '../../../../components/card/card';
 import { converSecondsToHours } from '../../../../utils';
@@ -16,13 +16,16 @@ export default function CardCoinRaised({
   endTime,
   globalMaximumContribution,
   totalRaised,
+  prices,
 }) {
   const getPercentage =
     (Number(totalRaised) / Number(globalMaximumContribution)) * 100;
   const [precent, setPrecent] = useState(getPercentage);
+  const getCurrentTimezone = moment.tz.guess();
   const currentTimeUtc = moment(new Date()).utc();
-  const startTimeUtc = moment.unix(startTime).utc();
-  const endTimeUtc = moment.unix(endTime).utc();
+  const startTimeUtc = moment.unix(startTime).tz(getCurrentTimezone);
+  const endTimeUtc = moment.unix(endTime).tz(getCurrentTimezone);
+
   const [elapsedTime, setElapsedTime] = useState(0);
   const duration = moment(currentTimeUtc).diff(startTimeUtc, 'seconds');
   const endDuration = moment(endTimeUtc).diff(startTimeUtc, 'seconds');
@@ -32,7 +35,11 @@ export default function CardCoinRaised({
   const circleRef = useRef();
 
   useEffect(() => {
-    if (currentTimeUtc.isSame(startTimeUtc) && elapsedTime <= endDuration) {
+    if (
+      currentTimeUtc.isSameOrAfter(startTimeUtc) &&
+      currentTimeUtc.isSameOrBefore(endTimeUtc) &&
+      elapsedTime <= endDuration
+    ) {
       const intervalId = setInterval(() => {
         setElapsedTime(duration);
       }, 1000);
@@ -86,14 +93,16 @@ export default function CardCoinRaised({
             <TimeSymbol />
             <div>
               <h4>Start Time:</h4>
-              <p>{startTimeUtc.format('DD MMM. h:mm A')}</p>
+              <p>{startTimeUtc.format('DD MMM. h:mm A zz')}</p>
+              <span>{startTimeUtc.utc().format('DD MMM. h:mm A UTC')}</span>
             </div>
           </div>
           <div className={styles.timeWrapper}>
             <TimeSymbol />
             <div>
               <h4>End Time:</h4>
-              <p>{endTimeUtc.format('DD MMM. h:mm A')}</p>
+              <p>{endTimeUtc.format('DD MMM. h:mm A zz')}</p>
+              <span>{endTimeUtc.utc().format('DD MMM. h:mm A UTC')}</span>
             </div>
           </div>
         </div>
@@ -146,14 +155,14 @@ export default function CardCoinRaised({
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
           <Col lg={6} className={styles.priceBorder}>
             <div className={styles.price}>
-              <h4>Starting $Frock Price</h4>
-              <p>0.08 $</p>
+              <h4>Starting $bFROCK Price</h4>
+              <p>{prices.startPrice} $</p>
             </div>
           </Col>
           <Col lg={6}>
             <div className={styles.price}>
               <h4>Current $bFROCK Price:</h4>
-              <p>0.12 $</p>
+              <p>{prices.currentPrice} $</p>
             </div>
           </Col>
         </Row>

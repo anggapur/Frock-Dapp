@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useEffect, useState } from 'react';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
 
 import clsx from 'clsx';
@@ -8,7 +9,7 @@ import moment from 'moment';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
-import { FROCK_SUPPLY } from '../../../../constants';
+import { useProvider } from '../../../../hooks/ethers/provider';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
 import styles from './card-deposit.module.scss';
 
@@ -22,8 +23,21 @@ export default function CardDeposit({
   handleRedeem,
   frockBalance,
 }) {
-  const [selected, setSelected] = useState('deposit');
+  const provider = useProvider();
   const endTimeUtc = moment.unix(endTime).utc();
+  const protocolLaunchDate = moment('22 February 2022');
+  const isBeforeEndTime = !moment(new Date()).isSameOrBefore(endTimeUtc);
+  const isAfterLaunch = moment(new Date()).isSameOrAfter(protocolLaunchDate);
+  const [selected, setSelected] = useState('deposit');
+
+  useEffect(() => {
+    if (communitySale === false && isBeforeEndTime) {
+      return setSelected('deposit');
+    }
+
+    return setSelected('redeem');
+  }, [isBeforeEndTime]);
+
   const initialValues = {
     depositAmount: '',
     withdrawAmount: '',
@@ -63,7 +77,7 @@ export default function CardDeposit({
   };
 
   const renderDeposit = () => {
-    if (moment(new Date()).isSameOrBefore(endTimeUtc)) {
+    if (isBeforeEndTime) {
       return (
         <>
           <p>Maximum Contribution: {maxContribution} $USDC</p>
@@ -174,7 +188,7 @@ export default function CardDeposit({
     </>
   );
 
-  const renderRedeem = () => (
+  const renderClaim = () => (
     <>
       <h3>
         Your total Contribution{' '}
@@ -184,19 +198,43 @@ export default function CardDeposit({
         </Tooltip>
       </h3>
       <h2>{totalContribution} $USDC</h2>
-      <p>
-        Your ownership share:{' '}
-        {(Number(frockBalance) / Number(FROCK_SUPPLY)).toFixed(2)} %
-      </p>
+      <br />
+      <h3>
+        Your claimable $bFROCK{' '}
+        <Tooltip anchorLink="/" anchorText="Read more">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+          malesuada posuere dolor in tempus.
+        </Tooltip>
+      </h3>
+      <h2>{frockBalance} $bFROCK</h2>
       <RoundButton
-        onClick={handleRedeem}
+        onClick={() => null}
         variant="primary"
         className={styles.button}
         isRounded
       >
-        {communitySale
-          ? 'Redeem $aFROCK for $FROCK'
-          : 'Redeem $bFROCK for $FROCK'}
+        Claim $bFROCK
+      </RoundButton>
+    </>
+  );
+
+  const renderRedeem = () => (
+    <>
+      <h3>You have </h3>
+      <h2>
+        {frockBalance} {communitySale ? '$aFROCK' : '$bFROCK'}
+      </h2>
+      <RoundButton
+        onClick={isAfterLaunch ? handleRedeem : () => null}
+        variant={isAfterLaunch ? 'primary' : 'disabled'}
+        className={styles.button}
+        isRounded
+      >
+        {provider && isAfterLaunch
+          ? communitySale
+            ? 'Redeem $aFROCK for $FROCK'
+            : 'Redeem $bFROCK for $FROCK'
+          : 'Redeeming not possible yet'}
       </RoundButton>
     </>
   );
@@ -205,7 +243,7 @@ export default function CardDeposit({
     <Card lineBottom="light" className={styles.wrapper}>
       <div className={styles.header}>
         {communitySale === false ? (
-          moment(new Date()).isSameOrBefore(endTimeUtc) && (
+          isBeforeEndTime && (
             <div
               className={selected === 'deposit' ? styles.selected : ''}
               onClick={() => setSelected('deposit')}
@@ -245,30 +283,49 @@ export default function CardDeposit({
             <h2>Deposit</h2>
           </div>
         )}
-        {communitySale === false &&
-          moment(new Date()).isSameOrBefore(endTimeUtc) && (
-            <div
-              className={selected === 'withdraw' ? styles.selected : ''}
-              onClick={() => setSelected('withdraw')}
+        {communitySale === false && isBeforeEndTime && (
+          <div
+            className={selected === 'withdraw' ? styles.selected : ''}
+            onClick={() => setSelected('withdraw')}
+          >
+            <svg
+              width="13"
+              height="15"
+              viewBox="0 0 13 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <svg
-                width="13"
-                height="15"
-                viewBox="0 0 13 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6.49309 0C6.75687 0.0725375 6.94306 0.248155 7.13314 0.431408C8.87872 2.15322 10.6243 3.87121 12.3738 5.58921C12.7035 5.91372 12.8005 6.31077 12.56 6.63146C12.335 6.92924 12.0557 7.19649 11.757 7.42555C11.4893 7.63171 11.0937 7.57063 10.8299 7.35302C10.7756 7.31102 10.7252 7.26139 10.6786 7.21176C9.67781 6.22296 8.67701 5.23416 7.67233 4.24536C7.63354 4.20718 7.59475 4.17282 7.53268 4.11937C7.53268 4.20336 7.53268 4.26063 7.53268 4.31789C7.53268 7.55918 7.53268 10.8005 7.53268 14.0417C7.53268 14.664 7.1952 14.9962 6.55904 15C6.36508 15 6.17113 15.0038 5.97718 15C5.51557 14.9885 5.17421 14.6602 5.15093 14.2021C5.14705 14.1448 5.15093 14.0837 5.15093 14.0265C5.15093 10.8043 5.15093 7.58208 5.15093 4.35989C5.15093 4.30262 5.15093 4.24536 5.15093 4.15755C5.09275 4.211 5.05396 4.24154 5.01904 4.2759C4.01049 5.2647 3.00581 6.25732 1.99725 7.24612C1.67529 7.55918 1.25635 7.65844 0.934384 7.42174C0.631816 7.20031 0.360281 6.92543 0.131416 6.63146C-0.0819328 6.35658 -0.0198677 5.97862 0.205118 5.70756C0.247788 5.65411 0.298216 5.60448 0.348644 5.55867C2.08647 3.84449 3.82817 2.13413 5.56599 0.419954C5.74831 0.236701 5.93838 0.0687198 6.1944 0C6.29526 0 6.39224 0 6.49309 0Z"
-                  fill={selected === 'withdraw' ? '#CB2D3E' : '#7E7A7A'}
-                />
-              </svg>
-              <h2>Withdraw</h2>
-            </div>
-          )}
+              <path
+                d="M6.49309 0C6.75687 0.0725375 6.94306 0.248155 7.13314 0.431408C8.87872 2.15322 10.6243 3.87121 12.3738 5.58921C12.7035 5.91372 12.8005 6.31077 12.56 6.63146C12.335 6.92924 12.0557 7.19649 11.757 7.42555C11.4893 7.63171 11.0937 7.57063 10.8299 7.35302C10.7756 7.31102 10.7252 7.26139 10.6786 7.21176C9.67781 6.22296 8.67701 5.23416 7.67233 4.24536C7.63354 4.20718 7.59475 4.17282 7.53268 4.11937C7.53268 4.20336 7.53268 4.26063 7.53268 4.31789C7.53268 7.55918 7.53268 10.8005 7.53268 14.0417C7.53268 14.664 7.1952 14.9962 6.55904 15C6.36508 15 6.17113 15.0038 5.97718 15C5.51557 14.9885 5.17421 14.6602 5.15093 14.2021C5.14705 14.1448 5.15093 14.0837 5.15093 14.0265C5.15093 10.8043 5.15093 7.58208 5.15093 4.35989C5.15093 4.30262 5.15093 4.24536 5.15093 4.15755C5.09275 4.211 5.05396 4.24154 5.01904 4.2759C4.01049 5.2647 3.00581 6.25732 1.99725 7.24612C1.67529 7.55918 1.25635 7.65844 0.934384 7.42174C0.631816 7.20031 0.360281 6.92543 0.131416 6.63146C-0.0819328 6.35658 -0.0198677 5.97862 0.205118 5.70756C0.247788 5.65411 0.298216 5.60448 0.348644 5.55867C2.08647 3.84449 3.82817 2.13413 5.56599 0.419954C5.74831 0.236701 5.93838 0.0687198 6.1944 0C6.29526 0 6.39224 0 6.49309 0Z"
+                fill={selected === 'withdraw' ? '#CB2D3E' : '#7E7A7A'}
+              />
+            </svg>
+            <h2>Withdraw</h2>
+          </div>
+        )}
+        {communitySale === false && !isBeforeEndTime && (
+          <div
+            className={selected === 'claim' ? styles.selected : ''}
+            onClick={() => setSelected('claim')}
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 13 13"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.8477 6.64714C13.7751 6.91092 13.5995 7.09712 13.4162 7.28719C11.6944 9.03277 9.97644 10.7784 8.25845 12.5278C7.93394 12.8575 7.53689 12.9545 7.2162 12.714C6.91841 12.489 6.65117 12.2097 6.4221 11.911C6.21594 11.6434 6.27703 11.2477 6.49464 10.9839C6.53663 10.9296 6.58627 10.8792 6.6359 10.8327C7.6247 9.83186 8.6135 8.83106 9.6023 7.82638C9.64048 7.78759 9.67484 7.7488 9.72829 7.68673C9.6443 7.68673 9.58703 7.68673 9.52976 7.68673C6.28848 7.68673 3.0472 7.68673 -0.194084 7.68673C-0.816381 7.68673 -1.14853 7.34926 -1.15234 6.71309C-1.15234 6.51913 -1.15616 6.32518 -1.15234 6.13123C-1.14089 5.66962 -0.812563 5.32826 -0.354431 5.30499C-0.297165 5.30111 -0.23608 5.30499 -0.178814 5.30499C3.04338 5.30499 6.26557 5.30499 9.48777 5.30499C9.54503 5.30499 9.6023 5.30499 9.69011 5.30499C9.63666 5.2468 9.60612 5.20801 9.57176 5.1731C8.58296 4.16454 7.59034 3.15986 6.60154 2.1513C6.28848 1.82934 6.18922 1.4104 6.42592 1.08844C6.64735 0.785869 6.92223 0.514334 7.2162 0.285469C7.49108 0.0721197 7.86904 0.134185 8.1401 0.359171C8.19355 0.401841 8.24318 0.452269 8.28899 0.502696C10.0032 2.24052 11.7135 3.98222 13.4277 5.72005C13.611 5.90236 13.7789 6.09244 13.8477 6.34846C13.8477 6.44931 13.8477 6.54629 13.8477 6.64714Z"
+                fill={selected === 'claim' ? '#CB2D3E' : '#7E7A7A'}
+              />
+            </svg>
+            <h2>Claim</h2>
+          </div>
+        )}
         <div
-          className={selected === 'claim' ? styles.selected : ''}
-          onClick={() => setSelected('claim')}
+          className={selected === 'redeem' ? styles.selected : ''}
+          onClick={() => setSelected('redeem')}
         >
           <svg
             width="13"
@@ -279,7 +336,7 @@ export default function CardDeposit({
           >
             <path
               d="M13.8477 6.64714C13.7751 6.91092 13.5995 7.09712 13.4162 7.28719C11.6944 9.03277 9.97644 10.7784 8.25845 12.5278C7.93394 12.8575 7.53689 12.9545 7.2162 12.714C6.91841 12.489 6.65117 12.2097 6.4221 11.911C6.21594 11.6434 6.27703 11.2477 6.49464 10.9839C6.53663 10.9296 6.58627 10.8792 6.6359 10.8327C7.6247 9.83186 8.6135 8.83106 9.6023 7.82638C9.64048 7.78759 9.67484 7.7488 9.72829 7.68673C9.6443 7.68673 9.58703 7.68673 9.52976 7.68673C6.28848 7.68673 3.0472 7.68673 -0.194084 7.68673C-0.816381 7.68673 -1.14853 7.34926 -1.15234 6.71309C-1.15234 6.51913 -1.15616 6.32518 -1.15234 6.13123C-1.14089 5.66962 -0.812563 5.32826 -0.354431 5.30499C-0.297165 5.30111 -0.23608 5.30499 -0.178814 5.30499C3.04338 5.30499 6.26557 5.30499 9.48777 5.30499C9.54503 5.30499 9.6023 5.30499 9.69011 5.30499C9.63666 5.2468 9.60612 5.20801 9.57176 5.1731C8.58296 4.16454 7.59034 3.15986 6.60154 2.1513C6.28848 1.82934 6.18922 1.4104 6.42592 1.08844C6.64735 0.785869 6.92223 0.514334 7.2162 0.285469C7.49108 0.0721197 7.86904 0.134185 8.1401 0.359171C8.19355 0.401841 8.24318 0.452269 8.28899 0.502696C10.0032 2.24052 11.7135 3.98222 13.4277 5.72005C13.611 5.90236 13.7789 6.09244 13.8477 6.34846C13.8477 6.44931 13.8477 6.54629 13.8477 6.64714Z"
-              fill={selected === 'claim' ? '#CB2D3E' : '#7E7A7A'}
+              fill={selected === 'redeem' ? '#CB2D3E' : '#7E7A7A'}
             />
           </svg>
           <h2>Redeem</h2>
@@ -312,7 +369,8 @@ export default function CardDeposit({
             {renderWithdraw()}
           </>
         )}
-        {selected === 'claim' && renderRedeem()}
+        {selected === 'claim' && renderClaim()}
+        {selected === 'redeem' && renderRedeem()}
       </div>
     </Card>
   );

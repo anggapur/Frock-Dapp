@@ -45,6 +45,7 @@ export default function CommunitySale() {
     COMMUNITY_OFFERING_ADDR,
     accounts ? accounts[0] : 0,
   );
+
   const communityOfferingNRT = useContract(
     CommunityOfferingNRTABI,
     provider,

@@ -27,7 +27,7 @@ export default function Header() {
     autoLoad: true,
     network: '',
   };
-  const { walletExist, provider, loadWeb3Modal, logoutWeb3Modal } =
+  const { _walletExist, provider, loadWeb3Modal, logoutWeb3Modal } =
     useWeb3Modal(web3ModalConfig);
 
   const accounts = useWeb3Accounts();
@@ -97,11 +97,11 @@ export default function Header() {
               <Link to="/" className="nav-link">
                 Calculator
               </Link>
-              <Link to="/public-sale" className="nav-link">
-                Public Sale
-              </Link>
               <Link to="/community-sale" className="nav-link">
                 Community Sale
+              </Link>
+              <Link to="/public-sale" className="nav-link">
+                Public Sale
               </Link>
               {/* <NavDropdown title="$FROCK" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">
