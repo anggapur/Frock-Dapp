@@ -35,11 +35,14 @@ export default function PublicSale() {
   const [maxGlobalInvest, setMaxGlobalInvest] = useState('0');
   const [totalGlobalInvested, setTotalGlobalInvested] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
-  const [currentCap, setCurrentCap] = useState('0');
+  const [maxContribution, setMaxContribution] = useState('0');
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
+
+  const startTimeUtc = moment.unix(startTime).utc();
+  const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
 
   const usdCoin = useContract(
     USDCoinABI,
@@ -75,7 +78,7 @@ export default function PublicSale() {
         await handleGetStartTime();
         await handleGetEndTime();
 
-        await handleGetCurrentCap();
+        await handleGetMaxContribution();
       }
     })();
   }, [provider, accounts]);
@@ -124,17 +127,9 @@ export default function PublicSale() {
     setEndTime(endTimeResult.toString());
   };
 
-  const handleGetCurrentCap = async () => {
-    const today = new Date();
-    const startDate = moment.unix(startTime).utc();
-    const endDate = moment.unix(endTime).utc();
-    if (
-      moment(today).isSameOrAfter(startDate) &&
-      moment(today).isSameOrBefore(endDate)
-    ) {
-      const currentCapResult = await fairLaunch.currentCap();
-      setCurrentCap(formatUnits(currentCapResult, USDC_DECIMALS));
-    }
+  const handleGetMaxContribution = async () => {
+    const maxContributionResult = await fairLaunch.maxInvestAllowed();
+    setMaxContribution(formatUnits(maxContributionResult, USDC_DECIMALS));
   };
 
   const handleGetTotalInvested = async () => {
@@ -199,7 +194,12 @@ export default function PublicSale() {
           <h1>Fractional Rocket Public Sale</h1>
         </Col>
         <Col lg={6}>
-          <CountdownUI countdown={renderCountdown()} className="float-lg-end" />
+          {startTime !== null && isAfterStartTime && (
+            <CountdownUI
+              countdown={renderCountdown()}
+              className="float-lg-end"
+            />
+          )}
         </Col>
       </Row>
       <p>
@@ -216,17 +216,19 @@ export default function PublicSale() {
             communitySale={false}
             startTime={startTime}
             endTime={endTime}
-            globalMaximumContribution={maxGlobalInvest}
+            totalLimit={maxGlobalInvest}
             totalRaised={totalGlobalInvested}
+            maxContribution={maxContribution}
             prices={prices}
           />
         </Col>
         <Col lg={5}>
           <CardBalance usdcBalance={usdcBalance} frockBalance={frockBalance} />
           <CardDeposit
+            startTime={startTime}
             endTime={endTime}
             totalContribution={totalContribution}
-            maxContribution={currentCap}
+            maxContribution={maxContribution}
             handleDeposit={handleDeposit}
             handleWithdraw={handleWithdraw}
             handleRedeem={handleRedeem}

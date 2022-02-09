@@ -8,7 +8,11 @@ import 'moment-timezone';
 
 import timeSymbol from '../../../../assets/time-symbol.svg';
 import Card from '../../../../components/card/card';
-import { converSecondsToHours } from '../../../../utils';
+import {
+  converSecondsToHours,
+  handleKFormatter,
+  renderNumberFormatter,
+} from '../../../../utils';
 import styles from './card-coin-raised.module.scss';
 import shadowCircle from './shadow-circle.svg';
 
@@ -16,20 +20,25 @@ export default function CardCoinRaised({
   communitySale = false,
   startTime,
   endTime,
-  globalMaximumContribution,
+  totalLimit,
+  maxContribution,
   totalRaised,
   prices,
 }) {
-  const getPercentage =
-    (Number(totalRaised) / Number(globalMaximumContribution)) * 100;
+  const getPercentage = (Number(totalRaised) / Number(totalLimit)) * 100;
   const [precent, setPrecent] = useState(getPercentage);
   const getCurrentTimezone = moment.tz.guess();
   const currentTimeUtc = moment(new Date()).utc();
   const startTimeUtc = moment.unix(startTime).tz(getCurrentTimezone);
   const endTimeUtc = moment.unix(endTime).tz(getCurrentTimezone);
 
+  const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
+
   const [elapsedTime, setElapsedTime] = useState(0);
-  const duration = moment(currentTimeUtc).diff(startTimeUtc, 'seconds');
+  const duration =
+    startTime !== null
+      ? moment(currentTimeUtc).diff(startTimeUtc, 'seconds')
+      : 0;
   const endDuration = moment(endTimeUtc).diff(startTimeUtc, 'seconds');
   const [progressBarPrecent, setProgressBarPrecent] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
@@ -51,7 +60,7 @@ export default function CardCoinRaised({
 
   useEffect(() => {
     setPrecent(getPercentage);
-  }, [totalRaised, globalMaximumContribution]);
+  }, [totalRaised, totalLimit]);
 
   useEffect(() => {
     if (currentTimeUtc.isSame(startTimeUtc)) {
@@ -91,26 +100,26 @@ export default function CardCoinRaised({
         className={clsx(styles.main, communitySale ? styles.communitySale : '')}
       >
         <div className={styles.startEnd}>
-          <div className={styles.timeWrapper}>
-            <div>
+          {startTime !== null && (
+            <div className={styles.timeWrapper}>
               <img src={timeSymbol} alt="time symbol" />
+              <div>
+                <h4>Start Time:</h4>
+                <p>{startTimeUtc.format('DD MMM. h:mm A zz')}</p>
+                <span>{startTimeUtc.utc().format('DD MMM. h:mm A UTC')}</span>
+              </div>
             </div>
-            <div>
-              <h4>Start Time:</h4>
-              <p>{startTimeUtc.format('DD MMM. h:mm A zz')}</p>
-              <span>{startTimeUtc.utc().format('DD MMM. h:mm A UTC')}</span>
-            </div>
-          </div>
-          <div className={styles.timeWrapper}>
-            <div>
+          )}
+          {endTime !== null && (
+            <div className={styles.timeWrapper}>
               <img src={timeSymbol} alt="time symbol" />
+              <div>
+                <h4>End Time:</h4>
+                <p>{endTimeUtc.format('DD MMM. h:mm A zz')}</p>
+                <span>{endTimeUtc.utc().format('DD MMM. h:mm A UTC')}</span>
+              </div>
             </div>
-            <div>
-              <h4>End Time:</h4>
-              <p>{endTimeUtc.format('DD MMM. h:mm A zz')}</p>
-              <span>{endTimeUtc.utc().format('DD MMM. h:mm A UTC')}</span>
-            </div>
-          </div>
+          )}
         </div>
         <div className={styles.totalWrapper}>
           <img
@@ -146,8 +155,8 @@ export default function CardCoinRaised({
             </svg>
             <div className={styles.circle3}>
               <h4>Total raised so far</h4>
-              <h2>${totalRaised}</h2>
-              <h3>$10K Limit</h3>
+              <h2>${renderNumberFormatter(totalRaised)}</h2>
+              <h3>${handleKFormatter(totalLimit)} Limit</h3>
             </div>
           </div>
         </div>
@@ -155,22 +164,24 @@ export default function CardCoinRaised({
           elapsed={converSecondsToHours(duration)}
           precent={progressBarPrecent}
         />
-        <p className={styles.bottomBar}>
-          Maximum Contribution: {globalMaximumContribution} $USDC
-        </p>
+        {startTime !== null && isAfterStartTime && (
+          <p className={styles.bottomBar}>
+            Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC
+          </p>
+        )}
       </div>
       {!communitySale && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
           <Col lg={6} className={styles.priceBorder}>
             <div className={styles.price}>
               <h4>Starting $bFROCK Price</h4>
-              <p>{prices.startPrice} $</p>
+              <p>{renderNumberFormatter(prices.startPrice)} $</p>
             </div>
           </Col>
           <Col lg={6}>
             <div className={styles.price}>
               <h4>Current $bFROCK Price:</h4>
-              <p>{prices.currentPrice} $</p>
+              <p>{renderNumberFormatter(prices.currentPrice)} $</p>
             </div>
           </Col>
         </Row>

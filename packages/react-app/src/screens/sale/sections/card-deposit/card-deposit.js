@@ -17,10 +17,12 @@ import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { useProvider } from '../../../../hooks/ethers/provider';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
+import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-deposit.module.scss';
 
 export default function CardDeposit({
   communitySale = false,
+  startTime,
   endTime,
   totalContribution,
   maxContribution,
@@ -30,18 +32,22 @@ export default function CardDeposit({
   frockBalance,
 }) {
   const provider = useProvider();
+  const startTimeUtc = moment.unix(startTime).utc();
   const endTimeUtc = moment.unix(endTime).utc();
   const protocolLaunchDate = moment('22 February 2022');
+  const isBeforeStartTime = moment(new Date()).isSameOrBefore(startTimeUtc);
+  const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
   const isBeforeEndTime = moment(new Date()).isSameOrBefore(endTimeUtc);
+  const isAfterEndTime = moment(new Date()).isSameOrAfter(endTimeUtc);
   const isAfterLaunch = moment(new Date()).isSameOrAfter(protocolLaunchDate);
   const [selected, setSelected] = useState('deposit');
 
   useEffect(() => {
-    if (communitySale === false && isBeforeEndTime) {
-      return setSelected('deposit');
+    if (communitySale === false && !isBeforeEndTime) {
+      return setSelected('redeem');
     }
 
-    return setSelected('redeem');
+    return setSelected('deposit');
   }, [isBeforeEndTime]);
 
   const initialValues = {
@@ -83,7 +89,7 @@ export default function CardDeposit({
   };
 
   const renderDeposit = () => {
-    if (isBeforeEndTime) {
+    if (isAfterStartTime && isBeforeEndTime) {
       return (
         <>
           <p>Maximum Contribution: {maxContribution} $USDC</p>
@@ -141,58 +147,79 @@ export default function CardDeposit({
         onClick={() => null}
         isRounded
       >
-        Community sale finished
+        {isBeforeStartTime && communitySale && 'Community sale not started yet'}
+        {isAfterEndTime && communitySale && 'Community sale finished'}
+        {isBeforeStartTime && !communitySale && 'Public sale not started yet'}
+        {isAfterEndTime && !communitySale && 'Public sale finished'}
       </RoundButton>
     );
   };
 
-  const renderWithdraw = () => (
-    <>
-      <p>Maximum Contribution: {maxContribution} $USDC</p>
-      <Form onSubmit={formik.handleSubmit}>
-        <InputGroup
-          hasValidation
-          size="lg"
-          className={clsx(
-            formik.errors.withdrawAmount && styles.hasError,
-            styles.inputGroup,
-          )}
-        >
-          <FormControl
-            type="number"
-            aria-label="withdrawAmount"
-            aria-describedby="withdrawAmount"
-            name="withdrawAmount"
-            onChange={e => handleInputChange(e, 'withdrawAmount')}
-            onBlur={formik.handleBlur}
-            value={formik.values.withdrawAmount}
-            className={styles.input}
-            placeholder="Withdraw Amount"
-          />
-          <InputGroup.Text
-            id="withdraw"
-            onClick={() => handleMaxChange('withdrawAmount')}
-            className={styles.inputSymbol}
-          >
-            MAX
-          </InputGroup.Text>
-        </InputGroup>
-        {formik.errors.withdrawAmount && formik.touched.withdrawAmount ? (
-          <div className={clsx('text-danger', styles.errorMessage)}>
-            {formik.errors.withdrawAmount}
-          </div>
-        ) : null}
-        <RoundButton
-          variant="primary"
-          type="submit"
-          className={styles.button}
-          isRounded
-        >
-          Withdraw
-        </RoundButton>
-      </Form>
-    </>
-  );
+  const renderWithdraw = () => {
+    if (isAfterStartTime && isBeforeEndTime) {
+      return (
+        <>
+          <p>Maximum Contribution: {maxContribution} $USDC</p>
+          <Form onSubmit={formik.handleSubmit}>
+            <InputGroup
+              hasValidation
+              size="lg"
+              className={clsx(
+                formik.errors.withdrawAmount && styles.hasError,
+                styles.inputGroup,
+              )}
+            >
+              <FormControl
+                type="number"
+                aria-label="withdrawAmount"
+                aria-describedby="withdrawAmount"
+                name="withdrawAmount"
+                onChange={e => handleInputChange(e, 'withdrawAmount')}
+                onBlur={formik.handleBlur}
+                value={formik.values.withdrawAmount}
+                className={styles.input}
+                placeholder="Withdraw Amount"
+              />
+              <InputGroup.Text
+                id="withdraw"
+                onClick={() => handleMaxChange('withdrawAmount')}
+                className={styles.inputSymbol}
+              >
+                MAX
+              </InputGroup.Text>
+            </InputGroup>
+            {formik.errors.withdrawAmount && formik.touched.withdrawAmount ? (
+              <div className={clsx('text-danger', styles.errorMessage)}>
+                {formik.errors.withdrawAmount}
+              </div>
+            ) : null}
+            <RoundButton
+              variant="primary"
+              type="submit"
+              className={styles.button}
+              isRounded
+            >
+              Withdraw
+            </RoundButton>
+          </Form>
+        </>
+      );
+    }
+
+    return (
+      <RoundButton
+        variant="disabled"
+        className={clsx(styles.button, 'disabled')}
+        onClick={() => null}
+        isRounded
+      >
+        {isBeforeStartTime && communitySale && 'Community sale not started yet'}
+        {isAfterEndTime && communitySale && 'Community sale finished'}
+        {isBeforeStartTime && !communitySale && 'Public sale not started yet'}
+        {isAfterEndTime && !communitySale && 'Public sale finished'}
+      </RoundButton>
+    );
+  };
 
   const renderClaim = () => (
     <>
@@ -203,7 +230,7 @@ export default function CardDeposit({
           malesuada posuere dolor in tempus.
         </Tooltip>
       </h3>
-      <h2>{totalContribution} $USDC</h2>
+      <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
       <br />
       <h3>
         Your claimable $bFROCK{' '}
@@ -212,7 +239,7 @@ export default function CardDeposit({
           malesuada posuere dolor in tempus.
         </Tooltip>
       </h3>
-      <h2>{frockBalance} $bFROCK</h2>
+      <h2>{renderNumberFormatter(frockBalance)} $bFROCK</h2>
       <RoundButton
         onClick={() => null}
         variant="primary"
@@ -228,7 +255,8 @@ export default function CardDeposit({
     <>
       <h3>You have </h3>
       <h2>
-        {frockBalance} {communitySale ? '$aFROCK' : '$bFROCK'}
+        {renderNumberFormatter(frockBalance)}{' '}
+        {communitySale ? '$aFROCK' : '$bFROCK'}
       </h2>
       <RoundButton
         onClick={isAfterLaunch ? handleRedeem : () => null}
@@ -324,7 +352,7 @@ export default function CardDeposit({
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h3>
-            <h2>{totalContribution} $USDC</h2>
+            <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
             {renderDeposit()}
           </>
         )}
@@ -337,7 +365,7 @@ export default function CardDeposit({
                 malesuada posuere dolor in tempus.
               </Tooltip>
             </h3>
-            <h2>{totalContribution} $USDC</h2>
+            <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
             {renderWithdraw()}
           </>
         )}

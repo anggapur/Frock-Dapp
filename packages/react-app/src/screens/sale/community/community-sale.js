@@ -38,6 +38,9 @@ export default function CommunitySale() {
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
+  const startTimeUtc = moment.unix(startTime).utc();
+  const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
+
   const usdCoin = useContract(
     USDCoinABI,
     provider,
@@ -109,16 +112,8 @@ export default function CommunitySale() {
   };
 
   const handleGetCurrentCap = async () => {
-    const today = new Date();
-    const startDate = moment.unix(startTime).utc();
-    const endDate = moment.unix(endTime).utc();
-    if (
-      moment(today).isSameOrAfter(startDate) &&
-      moment(today).isSameOrBefore(endDate)
-    ) {
-      const currentCapResult = await communityOffering.currentCap();
-      setCurrentCap(formatUnits(currentCapResult, USDC_DECIMALS));
-    }
+    const currentCapResult = await communityOffering.currentCap();
+    setCurrentCap(formatUnits(currentCapResult, USDC_DECIMALS));
   };
 
   const handleGetMaxContribution = async () => {
@@ -174,7 +169,12 @@ export default function CommunitySale() {
           <h1>Fractional Rocket Community Sale</h1>
         </Col>
         <Col lg={6}>
-          <CountdownUI countdown={renderCountdown()} className="float-lg-end" />
+          {startTime !== null && isAfterStartTime && (
+            <CountdownUI
+              countdown={renderCountdown()}
+              className="float-lg-end"
+            />
+          )}
         </Col>
       </Row>
       <p>
@@ -191,8 +191,9 @@ export default function CommunitySale() {
             communitySale
             startTime={startTime}
             endTime={endTime}
-            globalMaximumContribution={globalMaximumContribution}
+            totalLimit={globalMaximumContribution}
             totalRaised={totalRaised}
+            maxContribution={currentCap}
           />
         </Col>
         <Col lg={5}>
@@ -203,6 +204,7 @@ export default function CommunitySale() {
           />
           <CardDeposit
             communitySale
+            startTime={startTime}
             endTime={endTime}
             totalContribution={totalContribution}
             maxContribution={currentCap}
