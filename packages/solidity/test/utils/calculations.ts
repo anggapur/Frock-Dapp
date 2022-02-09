@@ -6,3 +6,7 @@ export function calculateNRTAmount(investAmount: BigNumber): BigNumber{
     .mul(100).div(8) // 0,08, price each frock
     .div(1e6) // neutralize usdc currency decimals   
 }
+
+export function calculateDividen(rewardAmount: BigNumber, tokenHold: BigNumber, supply: BigNumber): BigNumber {
+    return rewardAmount.mul(tokenHold).div(supply)
+}
