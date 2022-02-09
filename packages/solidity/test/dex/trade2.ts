@@ -79,8 +79,8 @@ describe("Trade 2", async () => {
         
         // Check Reserve
         const reserve = await liquidityPool.getReserves();
-        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 18));
-        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 6));        
+        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 6));
+        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 18));        
     })
 
     it('Make User 1 as Free Fee Account', async () => {
@@ -95,7 +95,7 @@ describe("Trade 2", async () => {
         const WFTMUser1Before = await WFTMToken.balanceOf(user1.address);
         const FrockUser1Before = await frockToken.balanceOf(user1.address);
 
-        // Wanna Buy FROCK Token
+        // Wanna Sell FROCK Token
         const amountIn = ethers.utils.parseUnits("10", 6);
         const amountsOut = (await pancakeRouter.getAmountsOut(amountIn, [
             frockToken.address, WFTMToken.address
@@ -120,8 +120,8 @@ describe("Trade 2", async () => {
 
         expect(WFTMUser1After).to.be.eq(WFTMUser1Before.add(amountsOut))
         expect(FrockUser1After).to.be.eq(FrockUser1Before.sub(amountIn))
-        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 18).sub(amountsOut));
-        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 6).add(amountIn));            
+        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 6).add(amountIn));
+        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 18).sub(amountsOut));            
     })
 
     it('Trade by Free Fee Account with WFTM (swapTokensForExactTokens)', async() => {        
@@ -163,7 +163,7 @@ describe("Trade 2", async () => {
         const FrockUser2Before = await frockToken.balanceOf(user2.address);
         const reserveBefore = await liquidityPool.getReserves();     
     
-        // Wanna Buy FROCK Token
+        // Wanna Sell FROCK Token
         const amountIn = ethers.utils.parseUnits("10", 6);
         const amountsOutMin = (await pancakeRouter.getAmountsOut(amountIn.mul(78).div(100), [
             frockToken.address, WFTMToken.address, 
@@ -187,8 +187,8 @@ describe("Trade 2", async () => {
                 
         expect(WFTMUser2After).to.be.gte(WFTMUser2Before.add(amountsOutMin))
         expect(FrockUser2After).to.be.eq(FrockUser2Before.sub(amountIn))
-        expect(reserveAfter[0]).to.be.lte(reserveBefore[0].sub(amountsOutMin));
-        expect(reserveAfter[1]).to.be.eq(reserveBefore[1].add(amountIn.mul(78).div(100)));                  
+        expect(reserveAfter[0]).to.be.lte(reserveBefore[0].add(amountIn));
+        expect(reserveAfter[1]).to.be.lte(reserveBefore[1].sub(amountsOutMin));                  
     })
 
     it('Blacklist Dex and Disable to Trade', async() => {
@@ -225,7 +225,7 @@ describe("Trade 2", async () => {
         const FrockUser2Before = await frockToken.balanceOf(user2.address);
         const reserveBefore = await liquidityPool.getReserves();     
     
-        // Wanna Buy FROCK Token
+        // Wanna Sell FROCK Token
         const amountIn = ethers.utils.parseUnits("10", 6);
         const amountsOutMin = (await pancakeRouter.getAmountsOut(amountIn.mul(78).div(100), [
             frockToken.address, WFTMToken.address, 
@@ -249,7 +249,7 @@ describe("Trade 2", async () => {
                 
         expect(WFTMUser2After).to.be.gte(WFTMUser2Before.add(amountsOutMin))
         expect(FrockUser2After).to.be.eq(FrockUser2Before.sub(amountIn))
-        expect(reserveAfter[0]).to.be.lte(reserveBefore[0].sub(amountsOutMin));
-        expect(reserveAfter[1]).to.be.eq(reserveBefore[1].add(amountIn.mul(78).div(100)));                   
+        expect(reserveAfter[0]).to.be.eq(reserveBefore[0].add(amountIn.mul(78).div(100)));
+        expect(reserveAfter[1]).to.be.lte(reserveBefore[1].sub(amountsOutMin));                   
     })    
 });

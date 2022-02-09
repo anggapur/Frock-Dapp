@@ -28,6 +28,7 @@ import {
         deployer: deployerAddress,    
         developer: developerAddress,    
         marketing: marketingAddress,    
+        snapshoter
     } = await getNamedAccounts();
     // Contract Name
     const LOGIC_NAME = 'FrockTokenV1';
@@ -121,6 +122,7 @@ import {
     // Set snapshooter    
     const snapshoterRole = await frockToken.SNAPSHOTER();
     await frockToken.connect(deployer).grantRole(snapshoterRole, dividenDistributor.address)
+    await frockToken.connect(deployer).grantRole(snapshoterRole, snapshoter)
 
     // Set Main Token on DividenDistributor
     await dividenDistributor.connect(deployer).setMainToken(frockToken.address)

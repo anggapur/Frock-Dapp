@@ -72,8 +72,8 @@ describe("Trade 1", async () => {
         
         // Check Reserve
         const reserve = await liquidityPool.getReserves();
-        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 18));
-        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 6));        
+        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 6));
+        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 18));        
     })
 
     it('Make User 1 as Free Fee Account', async () => {
@@ -113,8 +113,8 @@ describe("Trade 1", async () => {
 
         expect(WFTMUser1After).to.be.eq(WFTMUser1Before.sub(amountIn))
         expect(FrockUser1After).to.be.eq(FrockUser1Before.add(amountsOut))
-        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 18).add(amountIn));
-        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 6).sub(amountsOut));
+        expect(reserve[0]).to.be.eq(ethers.utils.parseUnits("100", 6).sub(amountsOut));
+        expect(reserve[1]).to.be.eq(ethers.utils.parseUnits("100", 18).add(amountIn));
         
     })
 
@@ -180,8 +180,8 @@ describe("Trade 1", async () => {
     
         expect(WFTMUser2After).to.be.eq(WFTMUser2Before.sub(amountIn))
         expect(FrockUser2After).to.be.gte(FrockUser2Before.add(amountsOutMin))
-        expect(reserveAfter[0]).to.be.eq(reserveBefore[0].add(amountIn));
-        expect(reserveAfter[1]).to.be.lte(ethers.utils.parseUnits("100", 6).sub(amountsOutMin));                
+        expect(reserveAfter[0]).to.be.lte(reserveBefore[0].sub(amountsOutMin));
+        expect(reserveAfter[1]).to.be.eq(reserveBefore[1].add(amountIn));                
     })
 
 
@@ -244,8 +244,8 @@ describe("Trade 1", async () => {
     
         expect(WFTMUser2After).to.be.eq(WFTMUser2Before.sub(amountIn))
         expect(FrockUser2After).to.be.gte(FrockUser2Before.add(amountsOutMin))
-        expect(reserveAfter[0]).to.be.eq(reserveBefore[0].add(amountIn));
-        expect(reserveAfter[1]).to.be.lte(ethers.utils.parseUnits("100", 6).sub(amountsOutMin));                        
+        expect(reserveAfter[0]).to.be.lte(reserveBefore[0].sub(amountsOutMin));
+        expect(reserveAfter[1]).to.be.eq(reserveBefore[1].add(amountIn));                        
     })
     
 });

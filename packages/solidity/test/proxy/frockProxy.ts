@@ -1,5 +1,5 @@
 import { ContractFactory } from 'ethers';
-import { FrockTokenV1,FrockProxy } from '@project/contracts/typechain/generated';
+import { FrockTokenV1,FrockProxy, DividenDistributorProxy,DividenDistributorV1 } from '@project/contracts/typechain/generated';
 import chai from 'chai';
 import { deployments, ethers, upgrades } from 'hardhat';
 import { DeployResult } from 'hardhat-deploy/types';
@@ -17,7 +17,8 @@ describe('Frock Proxy', async () => {
   let newProxyAdmin: SignerWithAddress
   let marketing: SignerWithAddress
   let treasury: SignerWithAddress
-  let dividenDistributor: SignerWithAddress
+  let dividenDistributorProxy: DividenDistributorProxy
+  let dividenDistributor: DividenDistributorV1
   let reward: SignerWithAddress
   let frockToken: FrockTokenV1
   let frockProxy: FrockProxy
@@ -27,7 +28,7 @@ describe('Frock Proxy', async () => {
   const args: any[] = [];
 
   before(async () => {
-    await deployments.fixture(['MRBEAST','WRONG'], {
+    await deployments.fixture(['FROCK', ], {
       keepExistingDeployments: true,
     });
 
@@ -36,8 +37,7 @@ describe('Frock Proxy', async () => {
       wrongAdmin,
       marketing,
       reward,
-      treasury,
-      dividenDistributor,
+      treasury,      
       user1: newProxyAdmin,
       user2: recepient,
       user3: middleMan,
@@ -45,6 +45,10 @@ describe('Frock Proxy', async () => {
     } = await ethers.getNamedSigners())
     frockProxy = await ethers.getContract<FrockProxy>('FrockProxy')
     frockToken = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address)
+
+    dividenDistributorProxy = (await ethers.getContract<DividenDistributorProxy>('DividenDistributorProxy'))
+    dividenDistributor = (await ethers.getContract<DividenDistributorV1>('DividenDistributorV1')).attach(dividenDistributorProxy.address)    
+
     newFrockImplementation = await deployments.deploy(
       'FrockTokenNew',
       {
