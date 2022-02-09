@@ -2,7 +2,7 @@ import { network, ethers } from 'hardhat';
 
 /**
  * @dev to run this function :  yarn solidity run-local scripts/timeTravel.ts --time [time_in_timestamp]
- * @dev example :  yarn solidity run-local scripts/timeTravel.ts --time 1644166900
+ * @dev example :  yarn solidity run-local scripts/timeTravel.ts --time 1644681601
  * @dev You cannot time travel to time that already passed, only able time travel to future time
  */
 async function main() {
