@@ -26,7 +26,7 @@ export default function CardDeposit({
   const provider = useProvider();
   const endTimeUtc = moment.unix(endTime).utc();
   const protocolLaunchDate = moment('22 February 2022');
-  const isBeforeEndTime = !moment(new Date()).isSameOrBefore(endTimeUtc);
+  const isBeforeEndTime = moment(new Date()).isSameOrBefore(endTimeUtc);
   const isAfterLaunch = moment(new Date()).isSameOrAfter(protocolLaunchDate);
   const [selected, setSelected] = useState('deposit');
 
