@@ -38,7 +38,12 @@ export default function CommunitySale() {
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
-  const usdCoin = useContract(USDCoinABI, provider, USDC_ADDR);
+  const usdCoin = useContract(
+    USDCoinABI,
+    provider,
+    USDC_ADDR,
+    accounts ? accounts[0] : 0,
+  );
   const communityOffering = useContract(
     CommunityOfferingABI,
     provider,
@@ -130,12 +135,14 @@ export default function CommunitySale() {
   };
 
   const handleDeposit = async depositAmount => {
+    if (!accounts) return;
     const parsedDepositAmount = parseUnits(
       String(depositAmount),
       USDC_DECIMALS,
     );
 
     try {
+      await usdCoin.approve(accounts[0], parsedDepositAmount);
       const tx = await communityOffering.invest(parsedDepositAmount);
       await tx.wait();
     } catch (error) {

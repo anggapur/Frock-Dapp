@@ -41,7 +41,12 @@ export default function PublicSale() {
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
-  const usdCoin = useContract(USDCoinABI, provider, USDC_ADDR);
+  const usdCoin = useContract(
+    USDCoinABI,
+    provider,
+    USDC_ADDR,
+    accounts ? accounts[0] : 0,
+  );
   const fairLaunch = useContract(
     FairPriceLaunchABI,
     provider,
@@ -139,14 +144,15 @@ export default function PublicSale() {
     );
   };
 
-  const handleDeposit = async withdrawAmount => {
-    const parsedWithdrawAmount = parseUnits(
-      String(withdrawAmount),
+  const handleDeposit = async depositAmount => {
+    if (!accounts) return;
+    const parsedDepositAmount = parseUnits(
+      String(depositAmount),
       USDC_DECIMALS,
     );
-
     try {
-      const tx = await fairLaunch.invest(parsedWithdrawAmount);
+      await usdCoin.approve(accounts[0], parsedDepositAmount);
+      const tx = await fairLaunch.invest(parsedDepositAmount);
       await tx.wait();
     } catch (error) {
       ToastError('There is something wrong. Please try again!');
@@ -154,12 +160,14 @@ export default function PublicSale() {
   };
 
   const handleWithdraw = async withdrawAmount => {
+    if (!accounts) return;
     const parsedWithdrawAmount = parseUnits(
       String(withdrawAmount),
       USDC_DECIMALS,
     );
 
     try {
+      await usdCoin.approve(accounts[0], parsedWithdrawAmount);
       const tx = await fairLaunch.claimRedeemable(parsedWithdrawAmount);
       await tx.wait();
     } catch (error) {
