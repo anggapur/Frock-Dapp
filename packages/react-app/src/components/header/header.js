@@ -23,6 +23,31 @@ function NotificationBar({ text }) {
   );
 }
 
+const calculateTimeLeft = () => {
+  const now = new Date();
+  const difference =
+    Date.UTC(2022, 1, 12, 16) -
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes(),
+      now.getUTCSeconds(),
+    );
+
+  if (difference <= 0) {
+    return {};
+  }
+
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+  };
+};
+
 export default function Header() {
   const web3ModalConfig = {
     autoLoad: true,
@@ -81,9 +106,43 @@ export default function Header() {
     await logoutWeb3Modal();
   };
 
+  const [timeLeft, setTimeLeft] = React.useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
+
   return (
     <header>
-      <NotificationBar text="Some notice can go here to alert users on anything newsworthy" />
+      <NotificationBar
+        text={
+          Object.keys(timeLeft).length !== 0
+            ? `Countdown to Community Sale: ${
+                timeLeft.days > 1
+                  ? `${timeLeft.days} days`
+                  : `${timeLeft.days} day`
+              }, ${
+                timeLeft.hours > 1
+                  ? `${timeLeft.hours} hours`
+                  : `${timeLeft.hours} hour`
+              }, ${
+                timeLeft.minutes > 1
+                  ? `${timeLeft.minutes} minutes`
+                  : `${timeLeft.minutes} minute`
+              }, ${
+                timeLeft.seconds > 1
+                  ? `${timeLeft.seconds} seconds`
+                  : `${timeLeft.seconds} second`
+              }`
+            : 'Community Sale is Active Now!'
+        }
+      />
       <Navbar bg="light" expand="lg">
         <Container>
           <Navbar.Brand href="#home">
