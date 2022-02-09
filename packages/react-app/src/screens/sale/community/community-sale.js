@@ -142,7 +142,7 @@ export default function CommunitySale() {
     );
 
     try {
-      await usdCoin.approve(accounts[0], parsedDepositAmount);
+      await usdCoin.approve(COMMUNITY_OFFERING_ADDR, parsedDepositAmount);
       const tx = await communityOffering.invest(parsedDepositAmount);
       await tx.wait();
     } catch (error) {

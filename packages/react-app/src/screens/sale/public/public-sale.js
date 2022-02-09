@@ -151,7 +151,7 @@ export default function PublicSale() {
       USDC_DECIMALS,
     );
     try {
-      await usdCoin.approve(accounts[0], parsedDepositAmount);
+      await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
       const tx = await fairLaunch.invest(parsedDepositAmount);
       await tx.wait();
     } catch (error) {
@@ -167,7 +167,7 @@ export default function PublicSale() {
     );
 
     try {
-      await usdCoin.approve(accounts[0], parsedWithdrawAmount);
+      await usdCoin.approve(FAIR_PRICE_ADDR, parsedWithdrawAmount);
       const tx = await fairLaunch.claimRedeemable(parsedWithdrawAmount);
       await tx.wait();
     } catch (error) {
