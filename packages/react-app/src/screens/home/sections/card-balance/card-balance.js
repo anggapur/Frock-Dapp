@@ -77,13 +77,19 @@ export default function CardBalance({
 
   return (
     <>
-      <Card ellipse="top-left" className="global-card-balance-1">
+      <Card
+        ellipse="top-left"
+        className="global-card-balance-1"
+        lineBottom="light"
+      >
         <Card.Header>Reflections</Card.Header>
         <Row>
-          <Col xs={6}>
-            <h5 className={styles.h5}>Total reflections</h5>
+          <Col xs={6} lg={12} xl={6}>
+            <h6 className={styles.h6} style={{ color: '#7e7a7a' }}>
+              Total {`${days} day`} reflections
+            </h6>
           </Col>
-          <Col xs={6}>
+          <Col xs={6} lg={12} xl={6}>
             <p className={styles.p}>
               <strong>
                 ${' '}
@@ -94,37 +100,58 @@ export default function CardBalance({
             </p>
           </Col>
         </Row>
-        <hr className={styles.hr} />
         <Row>
-          <Col xs={6}>
-            <h5 className={styles.h5}>Your {`${days} day`}</h5>
+          <Col xs={6} lg={12} xl={6}>
+            <h6 className={styles.h6} style={{ color: '#7e7a7a' }}>
+              Ownership share
+            </h6>
           </Col>
-          <Col xs={6}>
+          <Col xs={6} lg={12} xl={6}>
             <p className={styles.p}>
               <strong>
-                $FTM{' '}
-                {Number(pending).toLocaleString('en-US', {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                })}
+                {precentYourPortfolio.toLocaleString('en-US', {
+                  maximumFractionDigits: 2,
+                })}{' '}
+                %
               </strong>
             </p>
           </Col>
         </Row>
+        <hr className={styles.hr} />
         <Row>
-          <Col xs={6}>
-            <h5 className={styles.h5}>reflections</h5>
+          <Col xs={12}></Col>
+          <Col
+            xs={6}
+            lg={12}
+            className="mt-lg-1"
+            style={{
+              float: 'left',
+              color: '#7e7a7a',
+              fontSize: '21px',
+            }}
+          >
+            Your {`${days} day`} reflections:
           </Col>
-          <Col xs={6}>
-            <p className={styles.p}>
+          <Col xs={6} lg={12}>
+            <h1 className="text-red-dark mt-lg-3">
               ${' '}
               {Number(reflections).toLocaleString('en-US', {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })}
-            </p>
+            </h1>
           </Col>
         </Row>
+        {/* <Row>
+          <Col xs={6}>
+            <h5 className={styles.h5}></h5>
+          </Col>
+          <Col xs={6}>
+            <p className={styles.p}>
+
+            </p>
+          </Col>
+        </Row> */}
         {/* <hr className={styles.hr} /> */}
         {/* <Row>
           <Col xs={6}>
@@ -159,28 +186,8 @@ export default function CardBalance({
         {/* <RoundButton variant="primary" className="mt-4 w-100" isRounded>
           Claim
         </RoundButton> */}
-        <Card.Footer>
-          {/* <Row>
-            <Col xs={6}>
-              <h5 className={clsx(styles.h5, styles.textGray)}>Your claimed</h5>
-            </Col>
-            <Col xs={6}>
-              <p className={styles.p}>
-                <strong className={styles.textGray}>$FTM 27.00</strong>
-              </p>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <h5 className={clsx(styles.h5, styles.textGray)}>reflections</h5>
-            </Col>
-            <Col xs={6}>
-              <p className={clsx(styles.p, styles.textGray)}>$ 60.21</p>
-            </Col>
-          </Row> */}
-        </Card.Footer>
       </Card>
-      <Card
+      {/* <Card
         lineBottom="light"
         className={clsx(styles.cardApr, 'global-card-balance-2 my-4')}
       >
@@ -198,7 +205,7 @@ export default function CardBalance({
             <h1 className={styles.h1}>{parseInt(yourApr * 100)}%</h1>
           </Col>
         </Row>
-      </Card>
+      </Card> */}
     </>
   );
 }
