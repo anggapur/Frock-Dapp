@@ -3,7 +3,9 @@ import {
     FrockTokenV1,
     FrockProxy,
     ERC1967Proxy__factory,    
-    FrockProxy__factory
+    FrockProxy__factory,
+    DividenDistributorProxy,
+    DividenDistributorV1
   } from '@project/contracts/typechain/generated';
   import { HardhatRuntimeEnvironment } from 'hardhat/types'; // This adds the type from hardhat runtime environment.
   import { DeployFunction, DeployResult } from 'hardhat-deploy/types'; 
@@ -99,27 +101,32 @@ import {
 
 
 
+    const dividenDistributorProxy = (await ethers.getContract<DividenDistributorProxy>('DividenDistributorProxy'))
+    const dividenDistributor = (await ethers.getContract<DividenDistributorV1>('DividenDistributorV1')).attach(dividenDistributorProxy.address)    
+
     // Set up Value of Contract   
-    const deployer = await ethers.getNamedSigner('deployer'); 
-    const dividenDistributor = await ethers.getNamedSigner('dividenDistributor');  // reflection
+    const deployer = await ethers.getNamedSigner('deployer');     
     const treasury = await ethers.getNamedSigner('treasury');     
     const marketing = await ethers.getNamedSigner('marketing'); 
 
-    const FrockProxy = (await ethers.getContract<FrockProxy>(NAME))
-    const FrockToken = (await ethers.getContract<FrockTokenV1>(LOGIC_NAME)).attach(FrockProxy.address)    
+    const frockProxy = (await ethers.getContract<FrockProxy>(NAME))
+    const frockToken = (await ethers.getContract<FrockTokenV1>(LOGIC_NAME)).attach(frockProxy.address)    
 
     // Set Addresses and Fee percentage
-    await FrockToken.connect(deployer).setReflection(dividenDistributor.address);
-    await FrockToken.connect(deployer).setTreasury(treasury.address);
-    await FrockToken.connect(deployer).setMarketing(marketing.address);
-    await FrockToken.connect(deployer).setPercentage(700,1400,100); // 7% reflection, 14% treasury, 1% Marketing
+    await frockToken.connect(deployer).setReflection(dividenDistributor.address);
+    await frockToken.connect(deployer).setTreasury(treasury.address);
+    await frockToken.connect(deployer).setMarketing(marketing.address);
+    await frockToken.connect(deployer).setPercentage(700,1400,100); // 7% reflection, 14% treasury, 1% Marketing    
+    
+    // Set snapshooter    
+    const snapshoterRole = await frockToken.SNAPSHOTER();
+    await frockToken.connect(deployer).grantRole(snapshoterRole, dividenDistributor.address)
 
-    // Set snapshooter
-    const snapshoter = await ethers.getNamedSigner('snapshoter')
-    const snapshoterRole = await FrockToken.SNAPSHOTER();
-    await FrockToken.connect(deployer).grantRole(snapshoterRole, snapshoter.address)
+    // Set Main Token on DividenDistributor
+    await dividenDistributor.connect(deployer).setMainToken(frockToken.address)
 };
 
 func.tags = ['Frock']; // This sets up a tag so you can execute the script on its own (and its dependencies).
+func.dependencies = ['DividenDistributor']
 
 export default func;
