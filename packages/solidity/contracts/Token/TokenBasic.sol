@@ -160,7 +160,7 @@ contract TokenBasic is
             AccessControlUpgradeable.supportsInterface(interfaceId);
     }
 
-      function snapshot() public onlyRole(SNAPSHOTER) {
-        super._snapshot();
+    function snapshot() public onlyRole(SNAPSHOTER) returns (uint256) {
+        return super._snapshot();
     }
 }
