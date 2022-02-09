@@ -187,6 +187,15 @@ export default function PublicSale() {
     return '00:00:00';
   };
 
+  const handleClaim = async () => {
+    try {
+      const tx = await fairLaunch.claimRedeemable();
+      await tx.wait();
+    } catch (error) {
+      ToastError('There is something wrong. Please try again!');
+    }
+  };
+
   return (
     <Container className="sale">
       <Row className="sale__header">
@@ -232,6 +241,7 @@ export default function PublicSale() {
             handleDeposit={handleDeposit}
             handleWithdraw={handleWithdraw}
             handleRedeem={handleRedeem}
+            handleClaim={handleClaim}
             frockBalance={frockBalance}
           />
           <CommunityList />

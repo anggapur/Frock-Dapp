@@ -19,6 +19,10 @@ import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
 import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
 import { useProvider } from '../../../hooks/ethers/provider';
+import {
+  handleCommunityDepositErr,
+  handleCommunityRedeemErr,
+} from '../../../utils/error';
 import '../sale.scss';
 import CardBalance from '../sections/card-balance/card-balance';
 import CardCoinRaised from '../sections/card-coin-raised/card-coin-raised';
@@ -141,7 +145,8 @@ export default function CommunitySale() {
       const tx = await communityOffering.invest(parsedDepositAmount);
       await tx.wait();
     } catch (error) {
-      ToastError('There is something wrong. Please try again!');
+      const errorMsg = error.data.message;
+      ToastError(handleCommunityDepositErr(errorMsg));
     }
   };
 
@@ -150,7 +155,8 @@ export default function CommunitySale() {
       const tx = await communityOffering.redeem();
       await tx.wait();
     } catch (error) {
-      ToastError('There is something wrong. Please try again!');
+      const errorMsg = error.data.message;
+      ToastError(handleCommunityRedeemErr(errorMsg));
     }
   };
 

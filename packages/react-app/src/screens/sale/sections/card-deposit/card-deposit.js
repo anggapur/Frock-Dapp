@@ -29,6 +29,7 @@ export default function CardDeposit({
   handleDeposit,
   handleWithdraw,
   handleRedeem,
+  handleClaim,
   frockBalance,
 }) {
   const provider = useProvider();
@@ -92,7 +93,9 @@ export default function CardDeposit({
     if (isAfterStartTime && isBeforeEndTime) {
       return (
         <>
-          <p>Maximum Contribution: {maxContribution} $USDC</p>
+          <p>
+            Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC
+          </p>
           <Form onSubmit={formik.handleSubmit}>
             <InputGroup
               hasValidation
@@ -159,7 +162,9 @@ export default function CardDeposit({
     if (isAfterStartTime && isBeforeEndTime) {
       return (
         <>
-          <p>Maximum Contribution: {maxContribution} $USDC</p>
+          <p>
+            Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC
+          </p>
           <Form onSubmit={formik.handleSubmit}>
             <InputGroup
               hasValidation
@@ -241,7 +246,7 @@ export default function CardDeposit({
       </h3>
       <h2>{renderNumberFormatter(frockBalance)} $bFROCK</h2>
       <RoundButton
-        onClick={() => null}
+        onClick={handleClaim}
         variant="primary"
         className={styles.button}
         isRounded
