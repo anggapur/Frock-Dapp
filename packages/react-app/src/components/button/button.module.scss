@@ -18,6 +18,11 @@
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &.disabled {
+    background: #7e7a7a !important;
+    color: #fff;
+  }
 }
 
 .primary {
@@ -31,10 +36,6 @@
 
   &.active {
     background: color.$redDark;
-  }
-
-  &.disabled {
-    background: rgba(203, 45, 62, 0.2);
   }
 
   &.outline {

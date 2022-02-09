@@ -5,9 +5,9 @@ import Countdown from 'react-countdown';
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
   COMMUNITY_OFFERING_ADDR,
+  COMMUNITY_OFFERING_NRT_ADDR,
   CommunityOfferingABI,
-  FROCK_ADDR,
-  FrockABI,
+  CommunityOfferingNRTABI,
   USDC_ADDR,
   USDCoinABI,
 } from '@project/contracts/src/address';
@@ -45,10 +45,11 @@ export default function CommunitySale() {
     COMMUNITY_OFFERING_ADDR,
     accounts ? accounts[0] : 0,
   );
-  const frockToken = useContract(
-    FrockABI,
+
+  const communityOfferingNRT = useContract(
+    CommunityOfferingNRTABI,
     provider,
-    FROCK_ADDR,
+    COMMUNITY_OFFERING_NRT_ADDR,
     accounts ? accounts[0] : 0,
   );
 
@@ -77,7 +78,9 @@ export default function CommunitySale() {
   };
 
   const handleGetFrock = async () => {
-    const frockBalanceResult = await frockToken.balanceOf(accounts[0]);
+    const frockBalanceResult = await communityOfferingNRT.balanceOf(
+      accounts[0],
+    );
     setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
   };
 
@@ -186,13 +189,19 @@ export default function CommunitySale() {
           />
         </Col>
         <Col lg={5}>
-          <CardBalance usdcBalance={usdcBalance} frockBalance={frockBalance} />
+          <CardBalance
+            communitySale
+            usdcBalance={usdcBalance}
+            frockBalance={frockBalance}
+          />
           <CardDeposit
+            communitySale
+            endTime={endTime}
             totalContribution={totalContribution}
             maxContribution={currentCap}
             handleDeposit={handleDeposit}
             handleRedeem={handleRedeem}
-            communitySale
+            frockBalance={frockBalance}
           />
           <CommunityList />
         </Col>
