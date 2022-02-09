@@ -6,9 +6,11 @@ import _ from 'lodash';
 import moment from 'moment';
 import 'moment-timezone';
 
+import timeSymbol from '../../../../assets/time-symbol.svg';
 import Card from '../../../../components/card/card';
 import { converSecondsToHours } from '../../../../utils';
 import styles from './card-coin-raised.module.scss';
+import shadowCircle from './shadow-circle.svg';
 
 export default function CardCoinRaised({
   communitySale = false,
@@ -90,7 +92,9 @@ export default function CardCoinRaised({
       >
         <div className={styles.startEnd}>
           <div className={styles.timeWrapper}>
-            <TimeSymbol />
+            <div>
+              <img src={timeSymbol} alt="time symbol" />
+            </div>
             <div>
               <h4>Start Time:</h4>
               <p>{startTimeUtc.format('DD MMM. h:mm A zz')}</p>
@@ -98,7 +102,9 @@ export default function CardCoinRaised({
             </div>
           </div>
           <div className={styles.timeWrapper}>
-            <TimeSymbol />
+            <div>
+              <img src={timeSymbol} alt="time symbol" />
+            </div>
             <div>
               <h4>End Time:</h4>
               <p>{endTimeUtc.format('DD MMM. h:mm A zz')}</p>
@@ -107,8 +113,10 @@ export default function CardCoinRaised({
           </div>
         </div>
         <div className={styles.totalWrapper}>
-          <ShadowCircle
+          <img
+            src={shadowCircle}
             className={communitySale ? styles.shadowEnd : styles.shadowStart}
+            alt="shadow circle"
           />
           <div className={styles.circle1}>
             <svg className={styles.progressRing}>
@@ -185,85 +193,5 @@ function ProgressBar({ elapsed, precent }) {
         <p>{elapsed} elapsed</p>
       </div>
     </div>
-  );
-}
-
-function TimeSymbol() {
-  return (
-    <svg
-      width="11"
-      height="11"
-      viewBox="0 0 11 11"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M5.27179 0C2.36143 0 0 2.375 0 5.30208C0 8.22917 2.36143 10.6094 5.27179 10.6094C8.18214 10.6094 10.5488 8.23438 10.5488 5.30729H5.27179V0Z"
-        fill="white"
-      />
-    </svg>
-  );
-}
-
-function ShadowCircle({ className }) {
-  return (
-    <svg
-      width="177"
-      height="208"
-      viewBox="0 0 177 208"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <g opacity="0.1" filter="url(#filter0_d_0_1)">
-        <path
-          d="M88 102C88 148.392 50.3919 186 4 186C-42.3919 186 -80 148.392 -80 102C-80 55.6081 -42.3919 18 4 18C50.3919 18 88 55.6081 88 102Z"
-          fill="white"
-        />
-      </g>
-      <path
-        opacity="0.2"
-        d="M177 102L88 102"
-        stroke="#F1EBEB"
-        strokeWidth="5"
-      />
-      <defs>
-        <filter
-          id="filter0_d_0_1"
-          x="-100"
-          y="0"
-          width="208"
-          height="208"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dy="2" />
-          <feGaussianBlur stdDeviation="10" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_0_1"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_0_1"
-            result="shape"
-          />
-        </filter>
-      </defs>
-    </svg>
   );
 }
