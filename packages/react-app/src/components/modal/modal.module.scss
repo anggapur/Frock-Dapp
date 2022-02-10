@@ -1,0 +1,112 @@
+@use '../../styles/color';
+
+.wrapper {
+  div:first-child {
+    border-radius: 11px;
+    border: none;
+  }
+}
+
+.header {
+  position: relative;
+  flex-direction: column;
+  background: linear-gradient(226.31deg, #e9433b 21.33%, #cb2d3e 45.72%);
+
+  > img {
+    position: relative;
+    width: calc(100% + 2rem);
+    margin: -1rem;
+  }
+
+  > div {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &.circle {
+      background: color.$white;
+      border-radius: 100%;
+      border: 20px solid #f2ebeb;
+      box-shadow: 1px 1px 6px 0px #00000040 inset, 0px 4px 4px 0px #00000040;
+      padding: 50px;
+    }
+
+    &.circleBorder {
+      border-radius: 100%;
+      box-shadow: 1px 1px 6px 0px #00000025 inset, 0px 4px 4px 0px #00000025;
+      border: 20px solid #57575720;
+      padding: 20px;
+      min-width: 340px;
+      width: 340px;
+      min-height: 340px;
+      height: 340px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      img.small {
+        width: 40px;
+        margin-bottom: 24px;
+
+        + h3,
+        + h3 + p {
+          color: color.$white;
+          text-align: center;
+        }
+
+        + h3 {
+          bottom: 60px;
+          font-weight: 600;
+          font-size: 20px;
+        }
+
+        + h3 + p {
+          font-size: 14px;
+        }
+      }
+    }
+
+    + h3,
+    + h3 + p {
+      position: absolute;
+      z-index: 1;
+      color: color.$white;
+      text-align: center;
+    }
+
+    + h3 {
+      bottom: 40px;
+      font-weight: 600;
+      font-size: 22px;
+
+      @media (min-width: 769px) {
+        bottom: 60px;
+        font-size: 28px;
+      }
+    }
+
+    + h3 + p {
+      bottom: 5px;
+
+      @media (min-width: 769px) {
+        bottom: 20px;
+      }
+    }
+  }
+
+  button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    filter: invert(100%);
+  }
+}
+
+.body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: block;
+  text-align: center;
+}
