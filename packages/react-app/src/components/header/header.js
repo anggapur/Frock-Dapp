@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Dropdown, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import shallow from 'zustand/shallow';
@@ -102,11 +102,12 @@ export default function Header() {
     }
   };
 
-  const handleDisconnectWallet = async () => {
+  const handleDisconnectWallet = async e => {
+    e.preventDefault();
     await logoutWeb3Modal();
   };
 
-  const [timeLeft, setTimeLeft] = React.useState(calculateTimeLeft());
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -117,6 +118,8 @@ export default function Header() {
       clearInterval(id);
     };
   }, []);
+
+  const [isShowDropdown, setIsShowDropdown] = useState(false);
 
   return (
     <header>
@@ -171,18 +174,43 @@ export default function Header() {
                   Buy $FROCK
                 </NavDropdown.Item>
               </NavDropdown> */}
-              <RoundButton
-                onClick={
-                  !provider ? handleConnectWallet : handleDisconnectWallet
-                }
-                variant="primary"
-                isRounded
-              >
-                <img src={logoSmall} alt="logo fractional rocket white" />
-                {provider && accounts
-                  ? handleShortenAddress(accounts[0])
-                  : 'Connect'}
-              </RoundButton>
+              {!provider ? (
+                <RoundButton
+                  onClick={handleConnectWallet}
+                  variant="primary"
+                  isRounded
+                >
+                  <img src={logoSmall} alt="logo fractional rocket white" />
+                  Connect
+                </RoundButton>
+              ) : (
+                <NavDropdown
+                  title={
+                    <>
+                      <img
+                        src={logoSmall}
+                        style={{ marginRight: '13px' }}
+                        alt="logo fractional rocket white"
+                      />
+                      {accounts && handleShortenAddress(accounts[0])}
+                    </>
+                  }
+                  id="nav-dropdown"
+                  align="end"
+                  renderMenuOnMount
+                  onMouseOver={() => setIsShowDropdown(true)}
+                  onMouseOut={() => setIsShowDropdown(false)}
+                  onClick={() => setIsShowDropdown(!isShowDropdown)}
+                  show={isShowDropdown}
+                >
+                  <NavDropdown.Item onClick={e => handleDisconnectWallet(e)}>
+                    Disconnect
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>Add $aFROCK to wallet</NavDropdown.Item>
+                  <NavDropdown.Item>Add $bFROCK to wallet</NavDropdown.Item>
+                  <NavDropdown.Item>Add $FROCK to wallet</NavDropdown.Item>
+                </NavDropdown>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
