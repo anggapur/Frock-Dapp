@@ -122,8 +122,11 @@ contract CommunityOffering is Ownable {
         whitelisted[_address] = false;
     }
 
-    function currentEpoch() public view returns (uint256){                
-        return (block.timestamp - startTime)/epochTime;
+    function currentEpoch() public view returns (uint256){     
+        if(block.timestamp < startTime)
+            return 0;    
+        else       
+            return (block.timestamp - startTime)/epochTime;
     }
 
     // the current cap. increases exponentially
