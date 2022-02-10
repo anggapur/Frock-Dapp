@@ -13,6 +13,7 @@ import {
 } from '@project/contracts/src/address';
 import moment from 'moment';
 
+import ellipseTopLeft from '../../../assets/ellipse-top-left.svg';
 import CountdownUI from '../../../components/countdown/countdown';
 import { ToastError } from '../../../components/toast/toast';
 import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
@@ -197,56 +198,66 @@ export default function PublicSale() {
   };
 
   return (
-    <Container className="sale">
-      <Row className="sale__header">
-        <Col lg={6}>
-          <h1>Fractional Rocket Public Sale</h1>
-        </Col>
-        <Col lg={6}>
-          {startTime !== null && isAfterStartTime && (
-            <CountdownUI
-              countdown={renderCountdown()}
-              className="float-lg-end"
+    <div className="position-relative">
+      <img
+        src={ellipseTopLeft}
+        className="sale-ellipse-top-left"
+        alt="ellipse on top left"
+      />
+      <Container className="sale">
+        <Row className="sale__header">
+          <Col lg={6}>
+            <h1>Fractional Rocket Public Sale</h1>
+          </Col>
+          <Col lg={6}>
+            {startTime !== null && isAfterStartTime && (
+              <CountdownUI
+                countdown={renderCountdown()}
+                className="float-lg-end"
+              />
+            )}
+          </Col>
+        </Row>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate mi
+          mattis vitae lobortis pharetra tincidunt vivamus dignissim rhoncus.
+          Mi, rhoncus est sapien sed enim. Proin rhoncus augue id viverra nulla
+          ac porttitor. Donec purus amet nunc eget morbi. Vulputate mi mattis
+          vitae lobortis pharetra tincidunt vivamus dignissim rhoncus. Mi,
+          rhoncus est sapien sed enim
+        </p>
+        <Row>
+          <Col lg={7}>
+            <CardCoinRaised
+              communitySale={false}
+              startTime={startTime}
+              endTime={endTime}
+              totalLimit={maxGlobalInvest}
+              totalRaised={totalGlobalInvested}
+              maxContribution={maxContribution}
+              prices={prices}
             />
-          )}
-        </Col>
-      </Row>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate mi
-        mattis vitae lobortis pharetra tincidunt vivamus dignissim rhoncus. Mi,
-        rhoncus est sapien sed enim. Proin rhoncus augue id viverra nulla ac
-        porttitor. Donec purus amet nunc eget morbi. Vulputate mi mattis vitae
-        lobortis pharetra tincidunt vivamus dignissim rhoncus. Mi, rhoncus est
-        sapien sed enim
-      </p>
-      <Row>
-        <Col lg={7}>
-          <CardCoinRaised
-            communitySale={false}
-            startTime={startTime}
-            endTime={endTime}
-            totalLimit={maxGlobalInvest}
-            totalRaised={totalGlobalInvested}
-            maxContribution={maxContribution}
-            prices={prices}
-          />
-        </Col>
-        <Col lg={5}>
-          <CardBalance usdcBalance={usdcBalance} frockBalance={frockBalance} />
-          <CardDeposit
-            startTime={startTime}
-            endTime={endTime}
-            totalContribution={totalContribution}
-            maxContribution={maxContribution}
-            handleDeposit={handleDeposit}
-            handleWithdraw={handleWithdraw}
-            handleRedeem={handleRedeem}
-            handleClaim={handleClaim}
-            frockBalance={frockBalance}
-          />
-          <CommunityList />
-        </Col>
-      </Row>
-    </Container>
+          </Col>
+          <Col lg={5}>
+            <CardBalance
+              usdcBalance={usdcBalance}
+              frockBalance={frockBalance}
+            />
+            <CardDeposit
+              startTime={startTime}
+              endTime={endTime}
+              totalContribution={totalContribution}
+              maxContribution={maxContribution}
+              handleDeposit={handleDeposit}
+              handleWithdraw={handleWithdraw}
+              handleRedeem={handleRedeem}
+              handleClaim={handleClaim}
+              frockBalance={frockBalance}
+            />
+            <CommunityList />
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
