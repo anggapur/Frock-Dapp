@@ -1,10 +1,12 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 
+import './toast-style.scss';
 import styles from './toast.module.scss';
 
 export const ToastSuccess = text => {
   toast.success(text, {
+    className: 'toast-style',
     style: {
       backgroundColor: 'green',
       color: 'white',
@@ -18,6 +20,7 @@ export const ToastSuccess = text => {
 
 export const ToastError = text => {
   toast.error(text, {
+    className: 'toast-style',
     style: {
       backgroundColor: 'red',
       color: 'white',

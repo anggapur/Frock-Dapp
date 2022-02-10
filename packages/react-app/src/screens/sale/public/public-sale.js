@@ -6,8 +6,10 @@ import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
   FAIR_PRICE_ADDR,
   FAIR_PRICE_NRT_ADDR,
+  FROCK_ADDR,
   FairPriceLaunchABI,
   FairPriceLaunchNRTABI,
+  FrockABI,
   USDC_ADDR,
   USDCoinABI,
 } from '@project/contracts/src/address';
@@ -15,7 +17,7 @@ import moment from 'moment';
 
 import ellipseTopLeft from '../../../assets/ellipse-top-left.svg';
 import CountdownUI from '../../../components/countdown/countdown';
-import { ToastError } from '../../../components/toast/toast';
+import { ToastError, ToastSuccess } from '../../../components/toast/toast';
 import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
 import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
@@ -24,10 +26,10 @@ import '../sale.scss';
 import CardBalance from '../sections/card-balance/card-balance';
 import CardCoinRaised from '../sections/card-coin-raised/card-coin-raised';
 import CardDeposit from '../sections/card-deposit/card-deposit';
-import CommunityList from '../sections/community-list/community-list';
 
 export default function PublicSale() {
   const [usdcBalance, setUsdcBalance] = useState('0');
+  const [nrtBalance, setNRTBalance] = useState('0');
   const [frockBalance, setFrockBalance] = useState('0');
   const [prices, setPrices] = useState({
     startPrice: '0',
@@ -37,8 +39,9 @@ export default function PublicSale() {
   const [totalGlobalInvested, setTotalGlobalInvested] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
   const [maxContribution, setMaxContribution] = useState('0');
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+  const [startTime, setStartTime] = useState(1645286400);
+  const [endTime, setEndTime] = useState(1645372800);
+  const [refetch, setRefetch] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
@@ -65,10 +68,18 @@ export default function PublicSale() {
     accounts ? accounts[0] : 0,
   );
 
+  const frockContract = useContract(
+    FrockABI,
+    provider,
+    FROCK_ADDR,
+    accounts ? accounts[0] : 0,
+  );
+
   useEffect(() => {
     (async () => {
       if (provider && accounts) {
         await handleGetUSDC();
+        await handleGetNRT();
         await handleGetFrock();
 
         await handleGetGlobalMaxInvest();
@@ -80,17 +91,28 @@ export default function PublicSale() {
         await handleGetEndTime();
 
         await handleGetMaxContribution();
+
+        await handleRefetch(false);
       }
     })();
-  }, [provider, accounts]);
+  }, [provider, accounts, refetch]);
+
+  const handleRefetch = async value => {
+    setRefetch(value);
+  };
 
   const handleGetUSDC = async () => {
     const usdcBalanceResult = await usdCoin.balanceOf(accounts[0]);
     setUsdcBalance(formatUnits(usdcBalanceResult, USDC_DECIMALS));
   };
 
+  const handleGetNRT = async () => {
+    const nrtBalanceResult = await fairLaunchNRT.balanceOf(accounts[0]);
+    setNRTBalance(formatUnits(nrtBalanceResult, FROCK_DECIMALS));
+  };
+
   const handleGetFrock = async () => {
-    const frockBalanceResult = await fairLaunchNRT.balanceOf(accounts[0]);
+    const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
     setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
   };
 
@@ -150,6 +172,8 @@ export default function PublicSale() {
       await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
       const tx = await fairLaunch.invest(parsedDepositAmount);
       await tx.wait();
+      await handleRefetch(true);
+      ToastSuccess('Your transaction has been processed!');
     } catch (error) {
       ToastError('There is something wrong. Please try again!');
     }
@@ -166,6 +190,8 @@ export default function PublicSale() {
       await usdCoin.approve(FAIR_PRICE_ADDR, parsedWithdrawAmount);
       const tx = await fairLaunch.claimRedeemable(parsedWithdrawAmount);
       await tx.wait();
+      await handleRefetch(true);
+      ToastSuccess('Your transaction has been processed!');
     } catch (error) {
       ToastError('There is something wrong. Please try again!');
     }
@@ -175,6 +201,8 @@ export default function PublicSale() {
     try {
       const tx = await fairLaunch.redeem();
       await tx.wait();
+      await handleRefetch(true);
+      ToastSuccess('Your transaction has been processed!');
     } catch (error) {
       ToastError('There is something wrong. Please try again!');
     }
@@ -206,10 +234,13 @@ export default function PublicSale() {
       />
       <Container className="sale">
         <Row className="sale__header">
-          <Col lg={6}>
-            <h1>Fractional Rocket Public Sale</h1>
+          <Col lg={8}>
+            <h1>
+              Fractional Rocket Public Sale -{' '}
+              {startTimeUtc.utc().format('DD MMM. h:mm A UTC')}
+            </h1>
           </Col>
-          <Col lg={6}>
+          <Col lg={4}>
             {startTime !== null && isAfterStartTime && (
               <CountdownUI
                 countdown={renderCountdown()}
@@ -241,6 +272,7 @@ export default function PublicSale() {
           <Col lg={5}>
             <CardBalance
               usdcBalance={usdcBalance}
+              nrtBalance={nrtBalance}
               frockBalance={frockBalance}
             />
             <CardDeposit
@@ -252,9 +284,9 @@ export default function PublicSale() {
               handleWithdraw={handleWithdraw}
               handleRedeem={handleRedeem}
               handleClaim={handleClaim}
-              frockBalance={frockBalance}
+              nrtBalance={nrtBalance}
             />
-            <CommunityList />
+            {/* <CommunityList /> */}
           </Col>
         </Row>
       </Container>

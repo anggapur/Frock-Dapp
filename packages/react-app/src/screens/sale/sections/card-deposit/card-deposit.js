@@ -30,7 +30,7 @@ export default function CardDeposit({
   handleWithdraw,
   handleRedeem,
   handleClaim,
-  frockBalance,
+  nrtBalance,
 }) {
   const provider = useProvider();
   const startTimeUtc = moment.unix(startTime).utc();
@@ -84,7 +84,8 @@ export default function CardDeposit({
 
   const handleMaxChange = field => {
     if (maxContribution !== '0') {
-      formik.setFieldValue(field, maxContribution);
+      const newMaxValue = Number(maxContribution) - Number(totalContribution);
+      formik.setFieldValue(field, newMaxValue);
     }
     return null;
   };
@@ -244,7 +245,7 @@ export default function CardDeposit({
           malesuada posuere dolor in tempus.
         </Tooltip>
       </h3>
-      <h2>{renderNumberFormatter(frockBalance)} $bFROCK</h2>
+      <h2>{renderNumberFormatter(nrtBalance)} $bFROCK</h2>
       <RoundButton
         onClick={handleClaim}
         variant="primary"
@@ -260,7 +261,7 @@ export default function CardDeposit({
     <>
       <h3>You have </h3>
       <h2>
-        {renderNumberFormatter(frockBalance)}{' '}
+        {renderNumberFormatter(nrtBalance)}{' '}
         {communitySale ? '$aFROCK' : '$bFROCK'}
       </h2>
       <RoundButton

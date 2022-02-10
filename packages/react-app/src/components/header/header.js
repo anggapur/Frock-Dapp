@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom';
 
 import shallow from 'zustand/shallow';
 
-import { FANTOM_CHAIN_PARAMS } from '../../constants';
+import {
+  AFROCK_TOKEN_DATA,
+  BFROCK_TOKEN_DATA,
+  FANTOM_CHAIN_PARAMS,
+  FROCK_TOKEN_DATA,
+} from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useStore } from '../../hooks/useStore';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
@@ -23,32 +28,9 @@ function NotificationBar({ text }) {
   );
 }
 
-const calculateTimeLeft = () => {
-  const now = new Date();
-  const difference =
-    Date.UTC(2022, 1, 12, 16) -
-    Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      now.getUTCHours(),
-      now.getUTCMinutes(),
-      now.getUTCSeconds(),
-    );
-
-  if (difference <= 0) {
-    return { isAfterTwoDays: difference <= -165600000 };
-  }
-
-  return {
-    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((difference / 1000 / 60) % 60),
-    seconds: Math.floor((difference / 1000) % 60),
-  };
-};
-
 export default function Header() {
+  const [isShowDropdown, setIsShowDropdown] = useState(false);
+
   const web3ModalConfig = {
     autoLoad: true,
     network: '',
@@ -60,11 +42,48 @@ export default function Header() {
 
   const setProvider = useStore(state => state.setProvider, shallow);
 
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const difference =
+      Date.UTC(2022, 1, 12, 16) -
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds(),
+      );
+
+    if (difference <= 0) {
+      return { isAfterTwoDays: difference <= -165600000 };
+    }
+
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
   useEffect(() => {
     if (provider) {
       setProvider({ provider });
     }
   }, [provider, setProvider]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   const handleAddOrChangeNetwork = async () => {
     try {
@@ -107,19 +126,20 @@ export default function Header() {
     await logoutWeb3Modal();
   };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => {
-      clearInterval(id);
-    };
-  }, []);
-
-  const [isShowDropdown, setIsShowDropdown] = useState(false);
+  const handleAddToken = async tokenData => {
+    await window.ethereum.request({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+          address: tokenData.address,
+          symbol: tokenData.symbol,
+          decimals: tokenData.decimals,
+          image: tokenData.image,
+        },
+      },
+    });
+  };
 
   return (
     <header>
@@ -168,14 +188,6 @@ export default function Header() {
               <Link to="/public-sale" className="nav-link">
                 Public Sale
               </Link>
-              {/* <NavDropdown title="$FROCK" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  Add $FROCK to wallet
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Buy $FROCK
-                </NavDropdown.Item>
-              </NavDropdown> */}
               {!provider ? (
                 <RoundButton
                   onClick={handleConnectWallet}
@@ -208,9 +220,21 @@ export default function Header() {
                   <NavDropdown.Item onClick={e => handleDisconnectWallet(e)}>
                     Disconnect
                   </NavDropdown.Item>
-                  <NavDropdown.Item>Add $aFROCK to wallet</NavDropdown.Item>
-                  <NavDropdown.Item>Add $bFROCK to wallet</NavDropdown.Item>
-                  <NavDropdown.Item>Add $FROCK to wallet</NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => handleAddToken(AFROCK_TOKEN_DATA)}
+                  >
+                    Add $aFROCK to wallet
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => handleAddToken(BFROCK_TOKEN_DATA)}
+                  >
+                    Add $bFROCK to wallet
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
+                  >
+                    Add $FROCK to wallet
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>

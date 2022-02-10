@@ -11,6 +11,7 @@ import styles from './card-balance.module.scss';
 export default function CardBalance({
   communitySale = false,
   usdcBalance,
+  nrtBalance,
   frockBalance,
 }) {
   return (
@@ -30,7 +31,7 @@ export default function CardBalance({
             alt={`${communitySale ? 'aFROCK' : 'bFROCK'} logo`}
           />
           <div>
-            {renderNumberFormatter(frockBalance)}
+            {renderNumberFormatter(nrtBalance)}
             <p>{communitySale ? '$aFROCK' : '$bFROCK'}</p>
           </div>
         </Col>
