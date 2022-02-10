@@ -19,20 +19,46 @@ export default function FormRangeInput({
   currencyFormat = false,
   hideBar = false,
 }) {
-  const [inputValue, setInputValue] = useState(value);
+  const [rangeValue, setRangeValue] = useState(value);
+  const [inputValue, setInputValue] = useState(0);
 
   useEffect(() => {
-    setValue(Number(inputValue));
-  }, [inputValue]);
+    setRangeValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    setValueToInput(rangeValue);
+    setValue(Number(rangeValue));
+  }, [rangeValue]);
 
   const labelId = label.replace(' ', '-');
 
-  const handleInputNumberChange = _value => {
+  const handleInputNumberBlur = _value => {
     if (currencyFormat) {
       _value = Number(String(_value).replaceAll(',', ''));
     }
 
-    setInputValue(_value);
+    if (_value < minValue) {
+      _value = minValue;
+    }
+
+    if (_value > maxValue) {
+      _value = maxValue;
+    }
+
+    if (_value === rangeValue) {
+      setValueToInput(_value);
+    }
+
+    setRangeValue(_value);
+  };
+
+  const setValueToInput = _value => {
+    const _inputValue = currencyFormat
+      ? Number(_value).toLocaleString('en-US', { maximumFractionDigits: 2 })
+      : _value;
+
+    setInputValue(_inputValue);
   };
 
   return (
@@ -55,13 +81,13 @@ export default function FormRangeInput({
         )}
       </Form.Label>
       {!hideBar && (
-        <Col xs={8} sm={6} lg={8} xl={5} className="pt-1">
+        <Col xs={8} sm={6} lg={8} xl={4} className="pt-1">
           <Form.Range
             min={minValue}
             max={maxValue}
             step={step}
-            value={value}
-            onChange={e => setInputValue(e.target.value)}
+            value={rangeValue}
+            onChange={e => setRangeValue(Number(e.target.value))}
           />
         </Col>
       )}
@@ -74,14 +100,9 @@ export default function FormRangeInput({
             type={type}
             min={minValue}
             max={maxValue}
-            value={
-              currencyFormat
-                ? Number(value).toLocaleString('en-US', {
-                    maximumFractionDigits: 2,
-                  })
-                : value
-            }
-            onChange={e => handleInputNumberChange(e.target.value)}
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
+            onBlur={e => handleInputNumberBlur(e.target.value)}
             aria-label={label}
             aria-describedby={labelId}
             className={clsx(styles.inputNumber, 'text-end')}

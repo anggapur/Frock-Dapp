@@ -1,7 +1,20 @@
+@use '../../../../styles/color';
+
 .inputNumber {
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+}
+
+.checkboxSimplified {
+  margin-top: -10px;
+  margin-bottom: 25px;
+  position: relative;
+
+  input:checked {
+    background-color: color.$redDark;
+    border-color: color.$redDark;
   }
 }

@@ -49,6 +49,24 @@ h5 + p + small {
   .buyFrock {
     font-size: 14px !important;
   }
+
+  .cardApr {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    h5 {
+      margin-top: 3px;
+      margin-bottom: 0 !important;
+    }
+
+    > div:last-child {
+      display: none;
+    }
+
+    .yourApr {
+      font-size: 24px;
+    }
+  }
 }
 
 @media (min-width: 769px) {
