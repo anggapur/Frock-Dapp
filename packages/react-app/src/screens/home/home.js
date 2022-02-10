@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
 import { GetFantomPrice, GetStrongPrice } from '../../api';
+import RoundButton from '../../components/button/button';
+import Modal from '../../components/modal/modal';
 import {
   DAYS_IN_YEAR,
   GROWTH_IN_PRICE,
@@ -91,8 +93,21 @@ export default function Home() {
     calculator.precentReturn,
   ]);
 
+  const [show, setShow] = useState(true);
+
   return (
     <Container className="home overflow-hidden">
+      <>
+        <Modal show={show} onHide={() => setShow(false)}>
+          <Modal.Header type="greeting" title="Welcome to Fractional Rocket!" />
+          <Modal.Body>
+            <p>Woohoo, you're reading this text in a modal!</p>
+            <RoundButton isRounded variant="primary">
+              Connect Wallet
+            </RoundButton>
+          </Modal.Body>
+        </Modal>
+      </>
       <Row>
         <Col className="px-mobile-0 mb-4">
           <Calculator
