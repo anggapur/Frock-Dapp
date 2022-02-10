@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Dropdown, Nav, NavDropdown, Navbar } from 'react-bootstrap';
+import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import shallow from 'zustand/shallow';
@@ -37,7 +37,7 @@ const calculateTimeLeft = () => {
     );
 
   if (difference <= 0) {
-    return {};
+    return { isAfterTwoDays: difference <= -165600000 };
   }
 
   return {
@@ -125,7 +125,7 @@ export default function Header() {
     <header>
       <NotificationBar
         text={
-          Object.keys(timeLeft).length !== 0
+          Object.keys(timeLeft).length !== 1
             ? `Countdown to Community Sale: ${
                 timeLeft.days > 1
                   ? `${timeLeft.days} days`
@@ -143,7 +143,9 @@ export default function Header() {
                   ? `${timeLeft.seconds} seconds`
                   : `${timeLeft.seconds} second`
               }`
-            : 'Community Sale is Active Now!'
+            : `The Community Sale ${
+                !timeLeft.isAfterTwoDays ? 'is Active Now!' : 'has finished.'
+              }`
         }
       />
       <Navbar bg="light" expand="lg">
