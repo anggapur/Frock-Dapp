@@ -1,0 +1,23 @@
+@use '../../styles/color';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+
+  div {
+    margin: -5px;
+  }
+
+  p {
+    margin-left: 5px;
+    color: #000;
+  }
+
+  &.primary p {
+    color: color.$redDark;
+  }
+
+  &.light p {
+    color: color.$white;
+  }
+}
