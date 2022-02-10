@@ -1,3 +1,6 @@
+import React from 'react';
+import NumberFormat from 'react-number-format';
+
 export const timePad = params => String(params).padStart(2, '0');
 
 export const converSecondsToHours = d => {
@@ -24,4 +27,25 @@ export const handleShortenAddress = address => {
     }
   }
   return result;
+};
+
+export const handleKFormatter = num =>
+  Math.abs(num) > 999
+    ? `${Math.sign(num) * (Math.abs(num) / 1000).toFixed(1)}K`
+    : Math.sign(num) * Math.abs(num);
+
+export const renderNumberFormatter = num => {
+  if (num !== '0.0') {
+    return (
+      <NumberFormat
+        value={num}
+        displayType="text"
+        decimalSeparator="."
+        thousandSeparator
+        decimalScale={2}
+        fixedDecimalScale
+      />
+    );
+  }
+  return '0';
 };

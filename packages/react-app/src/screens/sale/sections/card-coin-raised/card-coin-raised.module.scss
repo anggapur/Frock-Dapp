@@ -43,9 +43,13 @@ $paddingXMobile: 24px;
   display: flex;
   justify-content: flex-start;
 
-  svg {
-    margin-top: 5px;
-    margin-right: 7px;
+  div:first-child {
+    display: grid;
+
+    img {
+      margin-top: 5px;
+      margin-right: 7px;
+    }
   }
 
   div {
