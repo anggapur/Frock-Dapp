@@ -1,6 +1,13 @@
 @use '../../styles/color';
 
+.sale-ellipse-top-left {
+  position: absolute;
+  top: -40px;
+  left: 0;
+}
+
 .sale {
+  position: relative;
   padding-top: 20px;
 
   h1 {
