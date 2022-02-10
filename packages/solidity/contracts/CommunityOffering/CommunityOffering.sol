@@ -102,16 +102,14 @@ contract CommunityOffering is Ownable {
     }
 
     // adds an address to the whitelist
-    function addWhitelist(address _address) external onlyOwner {
-        require(!saleEnabled, "sale has already started");
+    function addWhitelist(address _address) external onlyOwner {        
         //require(!whitelisted[_address], "already whitelisted");
         whitelisted[_address] = true;
         numWhitelisted+=1; 
     }
 
     // adds multiple addresses
-    function addMultipleWhitelist(address[] calldata _addresses) external onlyOwner {
-        require(!saleEnabled, "sale has already started");
+    function addMultipleWhitelist(address[] calldata _addresses) external onlyOwner {        
         require(_addresses.length <= 1000, "too many addresses");
         for (uint256 i = 0; i < _addresses.length; i++) {
             whitelisted[_addresses[i]] = true;  
@@ -120,8 +118,7 @@ contract CommunityOffering is Ownable {
     }
 
     // removes a single address from the sale
-    function removeWhitelist(address _address) external onlyOwner {
-        require(!saleEnabled, "sale has already started");
+    function removeWhitelist(address _address) external onlyOwner {        
         whitelisted[_address] = false;
     }
 
