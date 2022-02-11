@@ -39,7 +39,7 @@ const func: DeployFunction = async function ({
 
       // Params
       const startTime = 1644681600 // 12 Feb 2022 4:00 PM UTC , check on https://www.epochconverter.com/
-      const duration = (2 * 86400) // 2 days
+      const duration = (1 * 86400) // 2 days
       const epochTime = (6 * 3600) // every 6 hours
       const initialCap = ethers.utils.parseUnits("100", usdcDecimals) // 100 USDC
 
