@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal as ModalBs } from 'react-bootstrap';
+import { Modal as ModalBs } from 'react-bootstrap';
 
 import alertIcon from '../../assets/alert-icon-big.svg';
 import frockLogo from '../../assets/frock-logo-big.svg';
