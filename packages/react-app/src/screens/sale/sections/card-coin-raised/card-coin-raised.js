@@ -10,6 +10,7 @@ import timeSymbol from '../../../../assets/time-symbol.svg';
 import Card from '../../../../components/card/card';
 import {
   converSecondsToHours,
+  getPercentageFromHour,
   handleKFormatter,
   renderNumberFormatter,
 } from '../../../../utils';
@@ -167,7 +168,10 @@ export default function CardCoinRaised({
         </div>
         <ProgressBar
           elapsed={converSecondsToHours(duration)}
-          precent={progressBarPrecent}
+          precent={getPercentageFromHour(
+            Math.floor(Number(duration) / 3600),
+            24,
+          )}
         />
         {startTime !== null && isAfterStartTime && (
           <p className={styles.bottomBar}>
@@ -204,9 +208,17 @@ function ProgressBar({ elapsed, precent }) {
             styles.progressBarValue,
             precent > 90 ? styles.full : '',
           )}
-          style={{ width: `${precent}%` }}
+          style={{
+            width: `${precent}%`,
+          }}
         />
-        <p>{elapsed} elapsed</p>
+        <p
+          style={{
+            mixBlendMode: `${precent === 100 ? 'normal' : 'difference'}`,
+          }}
+        >
+          {elapsed} elapsed
+        </p>
       </div>
     </div>
   );
