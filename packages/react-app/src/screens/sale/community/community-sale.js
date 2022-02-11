@@ -226,6 +226,7 @@ export default function CommunitySale() {
           Please read all details here:&nbsp;
           <a
             href="https://medium.com/@fr0ck/fractional-rocket-community-sale-in-depth-16b1703bbfcb"
+            className="text-red-dark text-decoration-underline"
             target="_blank"
           >
             Fractional Rocket Community Sale — in depth.
