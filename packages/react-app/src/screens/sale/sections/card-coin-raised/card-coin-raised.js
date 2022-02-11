@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
@@ -157,7 +158,7 @@ export default function CardCoinRaised({
               <h4>Total raised so far</h4>
               <h2>${renderNumberFormatter(totalRaised)}</h2>
               <h3>
-                {totalLimit.toLocaleString('en-US', {
+                {Number(totalLimit).toLocaleString('en-US', {
                   maximumFractionDigits: 0,
                 })}{' '}
                 Limit
@@ -171,7 +172,13 @@ export default function CardCoinRaised({
         />
         {startTime !== null && isAfterStartTime && (
           <p className={styles.bottomBar}>
-            Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC
+            Maximum Contribution:{' '}
+            {communitySale
+              ? Number(maxContribution) <= 800
+                ? renderNumberFormatter(maxContribution)
+                : '800'
+              : renderNumberFormatter(maxContribution)}{' '}
+            $USDC
           </p>
         )}
       </div>

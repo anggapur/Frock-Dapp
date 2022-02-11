@@ -8,15 +8,13 @@
   margin-top: 30px;
   margin-bottom: 30px;
 
-  @media (min-width: 769px) {
+  @media (min-width: 992px) {
     margin-top: 0;
-    margin-bottom: 30px;
   }
 
   h2 {
     font-weight: 600;
     font-size: 16px;
-    margin-bottom: 10px;
     color: color.$grayDark;
   }
 
@@ -40,5 +38,14 @@
       margin-top: -5px;
       margin-bottom: 0;
     }
+  }
+}
+
+.col-xxs-12 {
+  margin-top: 10px;
+
+  @media (max-width: 350px) {
+    flex: 0 0 auto;
+    width: 100%;
   }
 }

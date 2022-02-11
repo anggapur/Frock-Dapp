@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import Countdown from 'react-countdown';
 
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
@@ -48,7 +47,6 @@ export default function CommunitySale() {
   const provider = useProvider();
 
   const startTimeUtc = moment.unix(startTime).utc();
-  const endTimeUtc = moment.unix(endTime).utc();
   const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
 
   const usdCoin = useContract(

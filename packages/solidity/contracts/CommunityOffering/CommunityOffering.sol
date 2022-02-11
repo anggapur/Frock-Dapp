@@ -98,7 +98,7 @@ contract CommunityOffering is Ownable {
         nrt = CommunityOfferingNRT(_nrtAddress);
         redeemEnabled = false;
         saleEnabled = false;
-        maxCap = 4000 * 10 ** 18;
+        maxCap = 800 * 10 ** 18; // Per Person maximum contribution is 800 USDC
     }
 
     // adds an address to the whitelist

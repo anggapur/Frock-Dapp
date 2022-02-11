@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import lottie from 'lottie-web';
 import shallow from 'zustand/shallow';
@@ -19,6 +19,7 @@ import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
 import RoundButton from '../button/button';
 import CompanyLogo from '../logo/company-logo';
+import Modal from '../modal/modal';
 import { ToastError } from '../toast/toast';
 import './header.scss';
 
@@ -31,7 +32,9 @@ function NotificationBar({ text }) {
 }
 
 export default function Header() {
+  const [showModal, setShowModal] = useState(true);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
+  const location = useLocation();
 
   const { setActive } = useFirework();
 
@@ -159,122 +162,145 @@ export default function Header() {
   };
 
   return (
-    <header>
-      <NotificationBar
-        text={
-          Object.keys(timeLeft).length !== 1
-            ? `Countdown to Community Sale: ${
-                timeLeft.days > 1
-                  ? `${timeLeft.days} days`
-                  : `${timeLeft.days} day`
-              }, ${
-                timeLeft.hours > 1
-                  ? `${timeLeft.hours} hours`
-                  : `${timeLeft.hours} hour`
-              }, ${
-                timeLeft.minutes > 1
-                  ? `${timeLeft.minutes} minutes`
-                  : `${timeLeft.minutes} minute`
-              }, ${
-                timeLeft.seconds > 1
-                  ? `${timeLeft.seconds} seconds`
-                  : `${timeLeft.seconds} second`
-              }`
-            : `The Community Sale ${
-                !timeLeft.isAfterTwoDays ? 'is Active Now!' : 'has finished.'
-              }`
-        }
-      />
-      <Navbar bg="light" expand="lg">
-        <Container>
-          <Navbar.Brand onClick={() => setActive(true)}>
-            <CompanyLogo />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className="justify-content-end"
-          >
-            <Nav>
-              <Link to="/" className="nav-link">
-                Calculator
-              </Link>
-              <Link to="/community-sale" className="nav-link">
-                Community Sale
-              </Link>
-              <Link to="/public-sale" className="nav-link">
-                Public Sale
-              </Link>
-              {!provider ? (
-                <RoundButton
-                  onClick={handleConnectWallet}
-                  onMouseOver={() => lottie.play('logo-on-button')}
-                  onMouseOut={() => lottie.pause('logo-on-button')}
-                  variant="primary"
-                  isRounded
-                >
-                  <div
-                    ref={logoButtonRef}
-                    style={{
-                      height: '32px',
-                      display: 'inline-block',
-                      margin: '-5px 5px -5px -5px',
+    <>
+      <header>
+        <NotificationBar
+          text={
+            Object.keys(timeLeft).length !== 1
+              ? `Countdown to Community Sale: ${
+                  timeLeft.days > 1
+                    ? `${timeLeft.days} days`
+                    : `${timeLeft.days} day`
+                }, ${
+                  timeLeft.hours > 1
+                    ? `${timeLeft.hours} hours`
+                    : `${timeLeft.hours} hour`
+                }, ${
+                  timeLeft.minutes > 1
+                    ? `${timeLeft.minutes} minutes`
+                    : `${timeLeft.minutes} minute`
+                }, ${
+                  timeLeft.seconds > 1
+                    ? `${timeLeft.seconds} seconds`
+                    : `${timeLeft.seconds} second`
+                }`
+              : `The Community Sale ${
+                  !timeLeft.isAfterTwoDays ? 'is Active Now!' : 'has finished.'
+                }`
+          }
+        />
+        <Navbar bg="light" expand="lg">
+          <Container>
+            <Navbar.Brand onClick={() => setActive(true)}>
+              <CompanyLogo />
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse
+              id="basic-navbar-nav"
+              className="justify-content-end"
+            >
+              <Nav>
+                <Link to="/" className="nav-link">
+                  Calculator
+                </Link>
+                <Link to="/community-sale" className="nav-link">
+                  Community Sale
+                </Link>
+                <Link to="/public-sale" className="nav-link">
+                  Public Sale
+                </Link>
+                {!provider ? (
+                  <RoundButton
+                    onClick={handleConnectWallet}
+                    onMouseOver={() => lottie.play('logo-on-button')}
+                    onMouseOut={() => lottie.pause('logo-on-button')}
+                    variant="primary"
+                    isRounded
+                  >
+                    <div
+                      ref={logoButtonRef}
+                      style={{
+                        height: '32px',
+                        display: 'inline-block',
+                        margin: '-5px 5px -5px -5px',
+                      }}
+                    />
+                    Connect
+                  </RoundButton>
+                ) : (
+                  <NavDropdown
+                    title={
+                      <>
+                        <div
+                          ref={logoButtonRef}
+                          style={{
+                            height: '32px',
+                            display: 'inline-block',
+                            margin: '-5px 5px -5px -5px',
+                          }}
+                        />
+                        {accounts && handleShortenAddress(accounts[0])}
+                      </>
+                    }
+                    id="nav-dropdown"
+                    align="end"
+                    onMouseOver={() => {
+                      lottie.play('logo-on-button');
+                      setIsShowDropdown(true);
                     }}
-                  />
-                  Connect
-                </RoundButton>
-              ) : (
-                <NavDropdown
-                  title={
-                    <>
-                      <div
-                        ref={logoButtonRef}
-                        style={{
-                          height: '32px',
-                          display: 'inline-block',
-                          margin: '-5px 5px -5px -5px',
-                        }}
-                      />
-                      {accounts && handleShortenAddress(accounts[0])}
-                    </>
-                  }
-                  id="nav-dropdown"
-                  align="end"
-                  onMouseOver={() => {
-                    lottie.play('logo-on-button');
-                    setIsShowDropdown(true);
-                  }}
-                  onMouseOut={() => {
-                    lottie.pause('logo-on-button');
-                    setIsShowDropdown(false);
-                  }}
-                  onClick={() => setIsShowDropdown(!isShowDropdown)}
-                  show={isShowDropdown}
-                >
-                  <NavDropdown.Item onClick={e => handleDisconnectWallet(e)}>
-                    Disconnect
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => handleAddToken(AFROCK_TOKEN_DATA)}
+                    onMouseOut={() => {
+                      lottie.pause('logo-on-button');
+                      setIsShowDropdown(false);
+                    }}
+                    onClick={() => setIsShowDropdown(!isShowDropdown)}
+                    show={isShowDropdown}
                   >
-                    Add $aFROCK to wallet
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => handleAddToken(BFROCK_TOKEN_DATA)}
-                  >
-                    Add $bFROCK to wallet
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
-                  >
-                    Add $FROCK to wallet
-                  </NavDropdown.Item>
-                </NavDropdown>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </header>
+                    <NavDropdown.Item onClick={e => handleDisconnectWallet(e)}>
+                      Disconnect
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => handleAddToken(AFROCK_TOKEN_DATA)}
+                    >
+                      Add $aFROCK to wallet
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => handleAddToken(BFROCK_TOKEN_DATA)}
+                    >
+                      Add $bFROCK to wallet
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
+                    >
+                      Add $FROCK to wallet
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                )}
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      </header>
+      <Modal
+        show={
+          (location.pathname === '/community-sale' ||
+            location.pathname === '/public-sale') &&
+          showModal &&
+          provider === undefined
+        }
+        onHide={() => setShowModal(false)}
+      >
+        <Modal.Header type="greeting" title="Welcome to Fractional Rocket!" />
+        <Modal.Body>
+          <p>Please connect your MetaMask wallet</p>
+          <RoundButton
+            isRounded
+            onClick={handleConnectWallet}
+            variant="primary"
+          >
+            Connect Wallet
+          </RoundButton>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
