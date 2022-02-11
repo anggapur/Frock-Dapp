@@ -18,14 +18,14 @@ export default function CardBalance({
     <Card className={styles.wrapper}>
       <h2>Balance:</h2>
       <Row>
-        <Col>
+        <Col xl={4} lg={12} xs={4} className={styles['col-xxs-12']}>
           <img src={usdcLogo} alt="USDC logo" />
           <div>
             {renderNumberFormatter(usdcBalance)}
             <p>$USDC</p>
           </div>
         </Col>
-        <Col>
+        <Col xl={4} lg={12} xs={4} className={styles['col-xxs-12']}>
           <img
             src={frockDarkLogo}
             alt={`${communitySale ? 'aFROCK' : 'bFROCK'} logo`}
@@ -35,7 +35,7 @@ export default function CardBalance({
             <p>{communitySale ? '$aFROCK' : '$bFROCK'}</p>
           </div>
         </Col>
-        <Col>
+        <Col xl={4} lg={12} xs={4} className={styles['col-xxs-12']}>
           <img src={frockLogo} alt="FROCK logo" />
           <div>
             {renderNumberFormatter(frockBalance)}
