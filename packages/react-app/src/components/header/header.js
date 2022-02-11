@@ -13,6 +13,7 @@ import {
   FROCK_TOKEN_DATA,
 } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
+import { useFirework } from '../../hooks/useFirework';
 import { useStore } from '../../hooks/useStore';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
@@ -31,6 +32,8 @@ function NotificationBar({ text }) {
 
 export default function Header() {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
+
+  const { setActive } = useFirework();
 
   const web3ModalConfig = {
     autoLoad: true,
@@ -184,7 +187,7 @@ export default function Header() {
       />
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand onClick={() => setActive(true)}>
             <CompanyLogo />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
