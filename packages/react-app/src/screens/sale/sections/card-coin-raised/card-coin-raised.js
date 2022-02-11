@@ -156,7 +156,12 @@ export default function CardCoinRaised({
             <div className={styles.circle3}>
               <h4>Total raised so far</h4>
               <h2>${renderNumberFormatter(totalRaised)}</h2>
-              <h3>${handleKFormatter(totalLimit)} Limit</h3>
+              <h3>
+                {totalLimit.toLocaleString('en-US', {
+                  maximumFractionDigits: 0,
+                })}{' '}
+                Limit
+              </h3>
             </div>
           </div>
         </div>
