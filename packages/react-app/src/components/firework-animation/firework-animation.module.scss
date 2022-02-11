@@ -1,0 +1,25 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background-color: #ffffff70;
+  transition: all 2s linear;
+
+  &.hidden {
+    display: none;
+  }
+
+  &.opacityNone {
+    opacity: 0;
+  }
+
+  > div {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import lottie from 'lottie-web';
 import shallow from 'zustand/shallow';
 
+import logoWhiteJson from '../../assets/animations/logo-white.json';
 import {
   AFROCK_TOKEN_DATA,
   BFROCK_TOKEN_DATA,
@@ -11,6 +13,7 @@ import {
   FROCK_TOKEN_DATA,
 } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
+import { useFirework } from '../../hooks/useFirework';
 import { useStore } from '../../hooks/useStore';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
@@ -18,7 +21,6 @@ import RoundButton from '../button/button';
 import CompanyLogo from '../logo/company-logo';
 import { ToastError } from '../toast/toast';
 import './header.scss';
-import logoSmall from './logo-small.svg';
 
 function NotificationBar({ text }) {
   return (
@@ -30,6 +32,8 @@ function NotificationBar({ text }) {
 
 export default function Header() {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
+
+  const { setActive } = useFirework();
 
   const web3ModalConfig = {
     autoLoad: true,
@@ -80,10 +84,23 @@ export default function Header() {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => {
-      clearInterval(id);
-    };
+    return () => clearInterval(id);
   }, []);
+
+  const logoButtonRef = createRef();
+
+  useEffect(() => {
+    lottie.loadAnimation({
+      name: 'logo-on-button',
+      container: logoButtonRef.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: false,
+      animationData: logoWhiteJson,
+    });
+
+    return () => lottie.destroy('logo-on-button');
+  }, [accounts]);
 
   const handleAddOrChangeNetwork = async () => {
     try {
@@ -170,7 +187,7 @@ export default function Header() {
       />
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand onClick={() => setActive(true)}>
             <CompanyLogo />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -191,29 +208,46 @@ export default function Header() {
               {!provider ? (
                 <RoundButton
                   onClick={handleConnectWallet}
+                  onMouseOver={() => lottie.play('logo-on-button')}
+                  onMouseOut={() => lottie.pause('logo-on-button')}
                   variant="primary"
                   isRounded
                 >
-                  <img src={logoSmall} alt="logo fractional rocket white" />
+                  <div
+                    ref={logoButtonRef}
+                    style={{
+                      height: '32px',
+                      display: 'inline-block',
+                      margin: '-5px 5px -5px -5px',
+                    }}
+                  />
                   Connect
                 </RoundButton>
               ) : (
                 <NavDropdown
                   title={
                     <>
-                      <img
-                        src={logoSmall}
-                        style={{ marginRight: '13px' }}
-                        alt="logo fractional rocket white"
+                      <div
+                        ref={logoButtonRef}
+                        style={{
+                          height: '32px',
+                          display: 'inline-block',
+                          margin: '-5px 5px -5px -5px',
+                        }}
                       />
                       {accounts && handleShortenAddress(accounts[0])}
                     </>
                   }
                   id="nav-dropdown"
                   align="end"
-                  renderMenuOnMount
-                  onMouseOver={() => setIsShowDropdown(true)}
-                  onMouseOut={() => setIsShowDropdown(false)}
+                  onMouseOver={() => {
+                    lottie.play('logo-on-button');
+                    setIsShowDropdown(true);
+                  }}
+                  onMouseOut={() => {
+                    lottie.pause('logo-on-button');
+                    setIsShowDropdown(false);
+                  }}
                   onClick={() => setIsShowDropdown(!isShowDropdown)}
                   show={isShowDropdown}
                 >
