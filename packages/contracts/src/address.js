@@ -1,10 +1,10 @@
-import CommunityOffering from "../deployments/localhost/CommunityOffering.json";
-import CommunityOfferingNRT from "../deployments/localhost/CommunityOfferingNRT.json";
+import CommunityOffering from "../deployments/fantom/CommunityOffering.json";
+import CommunityOfferingNRT from "../deployments/fantom/CommunityOfferingNRT.json";
+import USDC from "../deployments/fantom/USDC.json";
 import FairPriceLaunchNRT from "../deployments/localhost/FairLaunchNRT.json";
 import FairPriceLaunch from "../deployments/localhost/FairPriceLaunch.json";
 import FrockProxy from "../deployments/localhost/FrockProxy.json";
 import FrockTokenV1 from "../deployments/localhost/FrockTokenV1.json";
-import USDC from "../deployments/localhost/USDC.json";
 
 export const COMMUNITY_OFFERING_ADDR = CommunityOffering.address;
 export const COMMUNITY_OFFERING_NRT_ADDR = CommunityOfferingNRT.address;
