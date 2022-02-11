@@ -187,16 +187,44 @@ export default function CommunitySale() {
     }
   };
 
-  const renderCountdown = () => {
-    const countdownTime = moment(endTimeUtc).diff(startTimeUtc, 'seconds');
-    if (
-      moment(startTime).isSameOrAfter(new Date()) &&
-      moment(endTime).isSameOrBefore(new Date())
-    ) {
-      return <Countdown daysInHours date={countdownTime} />;
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const difference =
+      Date.UTC(2022, 1, 14, 16) -
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds(),
+      );
+
+    if (difference <= 0) {
+      return null;
     }
-    return '00:00:00';
+
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+      2,
+      '0',
+    )}:${String(seconds).padStart(2, '0')}`;
   };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   return (
     <div className="position-relative">
@@ -210,15 +238,12 @@ export default function CommunitySale() {
           <Col lg={8}>
             <h1>
               Fractional Rocket Community Sale -{' '}
-              {startTimeUtc.utc().format('DD MMM. h:mm A UTC')}
+              {startTimeUtc.utc().format('MMM. Do, h:mm a UTC')}
             </h1>
           </Col>
           <Col lg={4}>
             {startTime !== null && isAfterStartTime && (
-              <CountdownUI
-                countdown={renderCountdown()}
-                className="float-lg-end"
-              />
+              <CountdownUI countdown={timeLeft} className="float-lg-end" />
             )}
           </Col>
         </Row>
@@ -226,6 +251,7 @@ export default function CommunitySale() {
           Please read all details here:&nbsp;
           <a
             href="https://medium.com/@fr0ck/fractional-rocket-community-sale-in-depth-16b1703bbfcb"
+            className="text-red-dark text-decoration-underline"
             target="_blank"
           >
             Fractional Rocket Community Sale — in depth.
