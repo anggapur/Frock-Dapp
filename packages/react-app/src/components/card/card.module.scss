@@ -1,0 +1,72 @@
+@use '../../styles/color';
+
+$borderRadiusSize: 17px;
+$paddingY: 35px;
+$paddingX: 30px;
+$paddingYMobile: 26px;
+$paddingXMobile: 24px;
+
+.card {
+  position: relative;
+  word-wrap: break-word;
+  background-color: #fff;
+  border-radius: $borderRadiusSize;
+  border: 1px solid #eeeeee;
+  box-shadow: 0px 4px 4px 0px #00000026;
+  padding: $paddingYMobile $paddingXMobile;
+}
+
+.header {
+  color: color.$redDark;
+  font-size: 28px;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.line-bottom-primary,
+.line-bottom-light {
+  // margin: calc($paddingYMobile - 22px) (-$paddingXMobile) (-$paddingYMobile);
+  background: linear-gradient(268.67deg, #e9433b 2.91%, #cb2d3e 95.24%);
+  height: 22px;
+  width: inherit;
+}
+
+.line-bottom-light {
+  opacity: 0.05;
+}
+
+.line-bottom-primary,
+.line-bottom-light,
+.footer {
+  border-bottom-left-radius: $borderRadiusSize;
+  border-bottom-right-radius: $borderRadiusSize;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.footer {
+  // margin: $paddingYMobile (-$paddingXMobile) (-$paddingYMobile);
+  padding: 19px $paddingXMobile;
+  background: #f9f4f4;
+  border-top: 5px solid #f1ebeb;
+  color: #afafaf !important;
+}
+
+@media (min-width: 769px) {
+  .card {
+    padding: $paddingY $paddingX;
+  }
+
+  // .line-bottom-primary,
+  // .line-bottom-light {
+  // margin: calc($paddingY - 22px) (-$paddingX) (-$paddingY);
+  // }
+
+  .footer {
+    // margin: $paddingY (-$paddingX) (-$paddingY);
+    padding: 19px $paddingX;
+  }
+}

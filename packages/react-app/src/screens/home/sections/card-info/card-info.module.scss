@@ -1,0 +1,84 @@
+@use '../../../../styles/color';
+
+.h5 {
+  font-size: 16px;
+}
+
+.h5 + p {
+  font-size: 30px;
+}
+
+.h1,
+.h5 {
+  font-weight: 600;
+}
+
+.h5 {
+  color: color.$grayDark;
+  margin-bottom: 7px;
+  line-height: 20px;
+}
+
+.h5 + p,
+.h6 + p {
+  font-weight: 700;
+  color: #000;
+}
+
+.h6 + p {
+  font-size: 20px;
+}
+
+.h6 {
+  font-weight: 500;
+  color: color.$grayDark;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.h1 {
+  font-size: 48px;
+  margin-bottom: 0;
+}
+
+.mb14 {
+  margin-bottom: 14px !important;
+}
+
+@media (max-width: 768px) {
+  .cardApr {
+    padding: 20px 24px !important;
+
+    h5 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    h1 {
+      line-height: 20px;
+      font-size: 16px;
+    }
+
+    strong {
+      color: color.$grayDark;
+    }
+
+    > div:last-child {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .h5 {
+    font-size: 16px;
+  }
+
+  .h5 + p {
+    font-size: 20px;
+  }
+
+  .h6 {
+    font-size: 16px;
+  }
+}

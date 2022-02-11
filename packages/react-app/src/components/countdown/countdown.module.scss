@@ -1,0 +1,18 @@
+@use '../../styles/color';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 10px;
+  }
+
+  p {
+    display: inline-block;
+    margin: 0;
+    font-weight: 600;
+    font-size: 20px;
+    color: color.$grayDark;
+  }
+}

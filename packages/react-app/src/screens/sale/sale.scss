@@ -1,0 +1,32 @@
+@use '../../styles/color';
+
+.sale-ellipse-top-left {
+  position: absolute;
+  top: -40px;
+  left: 0;
+}
+
+.sale {
+  position: relative;
+  padding-top: 20px;
+
+  h1 {
+    font-weight: 600;
+    font-size: 28px;
+    color: color.$redDark;
+  }
+
+  &__header {
+    margin-bottom: 20px;
+
+    + p {
+      font-size: 16px;
+      margin-bottom: 60px;
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+    }
+  }
+}

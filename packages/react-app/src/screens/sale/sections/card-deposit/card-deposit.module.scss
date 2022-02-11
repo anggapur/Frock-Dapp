@@ -1,0 +1,145 @@
+@use '../../../../styles/color';
+
+$borderRadiusSize: 17px;
+$paddingY: 35px;
+$paddingX: 30px;
+$paddingYMobile: 26px;
+$paddingXMobile: 24px;
+
+.wrapper {
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.header {
+  display: flex;
+
+  > div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 22px 0;
+    cursor: pointer;
+    margin-bottom: -4px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+
+    &.selected {
+      background: color.$white;
+      border-bottom: 4px solid color.$redDark;
+
+      h2 {
+        color: color.$redDark;
+      }
+    }
+
+    &:not(.selected) {
+      background: #f2f2f2;
+
+      &:hover {
+        background: darken(color.$white, 10%);
+      }
+    }
+
+    &:first-child {
+      border-top-left-radius: $borderRadiusSize;
+    }
+
+    &:last-child {
+      border-top-right-radius: $borderRadiusSize;
+    }
+
+    &:not(:first-child):not(:last-child) {
+      border-right: 1px solid #eeeeee;
+      border-left: 1px solid #eeeeee;
+    }
+
+    img,
+    svg {
+      margin-right: 10px;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font-weight: 700;
+      font-size: 20px;
+      color: color.$grayDark;
+    }
+  }
+}
+
+.main {
+  padding: $paddingYMobile $paddingXMobile;
+
+  @media (min-width: 769px) {
+    padding: $paddingY $paddingX;
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: 16px;
+    color: color.$grayDark;
+    margin-bottom: 7px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #282828;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #bcb4b4;
+  }
+
+  .inputGroup {
+    margin-top: 30px;
+    margin-bottom: 25px;
+  }
+
+  .hasError {
+    margin-bottom: 10px;
+  }
+
+  .errorMessage {
+    margin-bottom: 25px;
+  }
+
+  .input {
+    padding: 1rem 1.5rem;
+    border-right: 0;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+
+    &:hover,
+    &:focus {
+      border-right: 0;
+    }
+  }
+
+  .inputSymbol {
+    border: 1px solid #e3d6d6;
+    border-left: 0;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    color: color.$grayDark;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      color: darken(color.$grayDark, 10%);
+    }
+  }
+
+  .button {
+    width: 100%;
+    border-radius: 17px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}

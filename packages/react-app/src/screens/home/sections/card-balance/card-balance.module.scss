@@ -1,0 +1,88 @@
+@use '../../../../styles/color';
+
+.h2 {
+  color: color.$redDark;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.h1,
+.h2,
+.h5 {
+  font-weight: 600;
+}
+
+.h5 {
+  color: color.$grayDark;
+  line-height: 20px;
+}
+
+.h5,
+.p {
+  font-size: 16px;
+}
+
+.p {
+  color: color.$grayDark;
+  font-weight: 500;
+  margin-bottom: 5px;
+  line-height: 20px;
+
+  strong {
+    color: #000;
+    font-weight: 600;
+  }
+}
+
+.hr {
+  margin-right: -24px;
+  margin-left: -24px;
+  border: 1px solid #e3d6d64d;
+}
+
+.textGray {
+  color: #afafaf !important;
+}
+
+.h1 {
+  color: color.$redDark;
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+.mb7 {
+  margin-bottom: 7px;
+}
+
+@media (max-width: 768px) {
+  .cardApr {
+    padding: 20px 24px !important;
+
+    h5 {
+      margin: 0;
+    }
+
+    h1 {
+      line-height: 20px;
+    }
+
+    strong {
+      color: #000;
+    }
+
+    > div:last-child {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .h1 {
+    font-size: 48px;
+  }
+
+  .hr {
+    margin-right: -30px;
+    margin-left: -30px;
+  }
+}

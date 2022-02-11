@@ -1,0 +1,279 @@
+@use '../../../../styles/color';
+
+$paddingX: 30px;
+$paddingY: 35px;
+$paddingYMobile: 26px;
+$paddingXMobile: 24px;
+
+.main {
+  margin: (-$paddingYMobile) (-$paddingXMobile) 0;
+  padding: $paddingYMobile $paddingXMobile;
+  background: linear-gradient(
+    226.31deg,
+    color.$redLight 21.33%,
+    color.$redDark 45.72%
+  );
+  border-top-left-radius: 17px;
+  border-top-right-radius: 17px;
+  color: color.$white;
+  box-shadow: 0px 4px 4px 0px #00000026;
+
+  &.communitySale {
+    margin-bottom: (-$paddingYMobile);
+    border-bottom-left-radius: 17px;
+    border-bottom-right-radius: 17px;
+
+    @media (min-width: 769px) {
+      margin-bottom: (-$paddingY);
+    }
+  }
+
+  @media (min-width: 769px) {
+    margin: (-$paddingY) (-$paddingX) 0;
+    padding: $paddingY $paddingX;
+  }
+}
+
+.startEnd {
+  display: flex;
+  justify-content: space-between;
+}
+
+.timeWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  div:first-child {
+    display: grid;
+  }
+
+  img {
+    margin-top: 5px;
+    margin-right: 7px;
+  }
+
+  div {
+    h4,
+    p {
+      font-size: 16px !important;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    span {
+      font-size: 12px;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      font-weight: 600;
+    }
+  }
+}
+
+.totalWrapper {
+  margin: 10px (-$paddingX) 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  $size: 380px;
+  $sizeMobile: 330px;
+
+  .circle {
+    &1,
+    &2,
+    &3 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+    }
+
+    &1 {
+      background: color.$white;
+      border: 3px solid #cb2d3e33;
+      box-shadow: 0px 2px 20px 0px #0000001a;
+      width: $sizeMobile;
+      height: $sizeMobile;
+
+      @media (min-width: 577px) {
+        width: $size;
+        height: $size;
+      }
+    }
+
+    &3 {
+      position: relative;
+      flex-direction: column;
+      background: color.$white;
+      width: calc($sizeMobile - 120px);
+      height: calc($sizeMobile - 120px);
+
+      @media (min-width: 577px) {
+        width: calc($size - 120px);
+        height: calc($size - 120px);
+      }
+
+      h4 {
+        font-weight: 500;
+        font-size: 14px;
+        color: #bcb4b4;
+        margin-bottom: 5px;
+      }
+
+      h2 {
+        font-weight: 600;
+        font-size: 26px;
+        color: color.$redDark;
+        margin-bottom: 7px;
+
+        @media (min-width: 577px) {
+          font-size: 36px;
+          margin-bottom: 10px;
+        }
+      }
+
+      h3 {
+        font-weight: 500;
+        font-size: 16px;
+        color: color.$grayDark;
+      }
+    }
+  }
+
+  .progressRing {
+    position: absolute;
+    z-index: 1;
+    width: calc($sizeMobile - 60px);
+    height: calc($sizeMobile - 60px);
+    transform: rotate(270deg);
+
+    @media (min-width: 577px) {
+      width: calc($size - 60px);
+      height: calc($size - 60px);
+    }
+
+    .progressRingShadow {
+      filter: drop-shadow(0px 4px 4px #00000040);
+    }
+
+    .progressRingShadow,
+    .progressRingCircle {
+      stroke-width: 30;
+    }
+  }
+}
+
+.shadowStart,
+.shadowEnd {
+  position: absolute;
+}
+
+.shadowStart {
+  left: 0;
+}
+
+.shadowEnd {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.progressWrapper {
+  margin-top: 40px;
+  padding: 0 30px;
+
+  @media (min-width: 769px) {
+    padding: 0 80px;
+  }
+}
+
+.progressBar {
+  position: relative;
+  width: 100%;
+  background: color.$white;
+  border-radius: 30px;
+
+  p {
+    padding: 10px 0;
+    color: color.$grayDark;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+  }
+}
+
+.progressBarValue {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  background: color.$redLight;
+
+  + p {
+    position: relative;
+    z-index: 1;
+    mix-blend-mode: difference;
+  }
+
+  &.full {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+
+    + p {
+      color: color.$white;
+    }
+  }
+}
+
+.bottomBar {
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.priceWrapper {
+  > div {
+    margin-top: 35px;
+
+    h4,
+    p {
+      font-size: 16px;
+      color: color.$grayDark;
+      margin: 0;
+    }
+
+    h4 {
+      font-weight: 600;
+    }
+
+    .price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+
+      &.priceLast {
+        margin-bottom: -10px;
+        @media (min-width: 769px) {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+
+  .priceBorder {
+    border-right: none;
+
+    @media (min-width: 769px) {
+      border-right: 1px solid #f1ebeb;
+    }
+  }
+}

@@ -1,0 +1,167 @@
+@use '../../styles/color';
+
+header {
+  box-shadow: 0px 4px 4px 0px #00000026;
+
+  .container {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .navbar-expand-lg {
+    background-color: color.$white !important;
+    position: relative;
+
+    // .collapsing,
+    // .show {
+    //   position: absolute;
+    //   top: 100%;
+    //   z-index: 1;
+    //   width: inherit;
+
+    //   background: color.$white;
+    //   clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+    //   margin: 0 -0.75rem -80px;
+    //   padding: 0 0.75rem 90px;
+    //   border-bottom-left-radius: 10px;
+    //   box-shadow: 0px 4px 4px 0px #66666626;
+    // }
+
+    .collapsing > .navbar-nav,
+    .show > .navbar-nav {
+      align-items: flex-start;
+      margin-top: 40px;
+
+      a.nav-link {
+        width: 100%;
+        background: rgba(245, 213, 216, 0.2);
+        border-radius: 30px;
+        padding: 18px 23px;
+        margin-bottom: 20px;
+
+        &:hover {
+          background: color.$redDark;
+          color: color.$white;
+        }
+      }
+
+      .dropdown {
+        width: 100%;
+
+        a.dropdown-toggle.nav-link {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .dropdown-menu {
+          box-shadow: none;
+
+          .dropdown-item {
+            background: rgba(245, 213, 216, 0.2);
+            border-radius: 30px;
+            padding: 10px 23px;
+            margin-bottom: 20px;
+          }
+        }
+      }
+
+      button {
+        margin-left: 0;
+        margin-top: 20px;
+      }
+    }
+
+    .navbar-nav {
+      align-items: center;
+
+      a.nav-link {
+        padding: 8px 20px;
+        color: color.$redDark;
+        font-family: 'Source Sans Pro';
+        font-weight: 600;
+        font-size: 18px;
+
+        &:hover,
+        &:focus {
+          color: darken(color.$redDark, 5%);
+        }
+      }
+
+      .dropdown-menu {
+        border: none;
+        box-shadow: 0px 4px 4px 0px #00000026;
+        border-radius: 11px;
+        padding: 6px 0;
+
+        .dropdown-item {
+          padding: 12px 18px;
+          font-size: 14px;
+          font-weight: 500;
+          color: color.$grayDark;
+
+          &:hover {
+            color: darken(color.$grayDark, 10%);
+          }
+        }
+      }
+
+      button {
+        margin-left: 20px;
+        > img {
+          margin-right: 13px;
+        }
+      }
+    }
+  }
+
+  .navbar-toggler {
+    border: none;
+
+    .navbar-toggler-icon {
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeT0iMjYuNzg1NiIgd2lkdGg9IjM3Ljg4MDYiIGhlaWdodD0iNC41NDU2NyIgcng9IjIuMjcyODQiIHRyYW5zZm9ybT0icm90YXRlKC00NSAwIDI2Ljc4NTYpIiBmaWxsPSIjQ0IyRDNFIi8+CjxyZWN0IHg9IjMuMjE0ODQiIHdpZHRoPSIzNy44ODA2IiBoZWlnaHQ9IjQuNTQ1NjciIHJ4PSIyLjI3Mjg0IiB0cmFuc2Zvcm09InJvdGF0ZSg0NSAzLjIxNDg0IDApIiBmaWxsPSIjQ0IyRDNFIi8+Cjwvc3ZnPgo=') !important;
+    }
+
+    &.collapsed .navbar-toggler-icon {
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iMzQiIHZpZXdCb3g9IjAgMCA1MCAzNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjQ0IyRDNFIi8+CjxyZWN0IHk9IjE0IiB3aWR0aD0iNTAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiNDQjJEM0UiLz4KPHJlY3QgeT0iMjgiIHdpZHRoPSI1MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI0NCMkQzRSIvPgo8L3N2Zz4K') !important;
+    }
+  }
+
+  .notification-bar {
+    background: color.$redLight;
+    padding: 12px;
+    color: color.$white;
+
+    p {
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0;
+      text-align: center;
+    }
+  }
+
+  #nav-dropdown {
+    background: #cb2d3e;
+    border-color: #cb2d3e;
+    color: #fff;
+    display: inline-block;
+    font-weight: 500;
+    font-family: inter, sans-serif;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    user-select: none;
+    padding: 0.775rem 2rem;
+    font-size: 1rem;
+    border-radius: 2.4rem;
+    box-shadow: 0px 2px 7px 0px #0000003d;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  #nav-dropdown + .dropdown-menu .dropdown-item:focus {
+    background-color: #cb2d3e;
+    color: #fff;
+  }
+}

@@ -1,0 +1,161 @@
+@use './styles/color';
+
+// overwrite variables on bootstrap
+$input-border-color: #e3d6d6;
+$input-border-radius: 9px;
+$input-border-radius-sm: 9px;
+$input-border-radius-lg: 9px;
+$input-focus-border-color: #90909066;
+$input-focus-box-shadow: 0px 0px 5px 0px #7979794a;
+$form-range-track-bg: #e3d6d6;
+$form-range-thumb-bg: color.$redDark;
+$form-range-thumb-active-bg: color.$redDark;
+
+@import '~bootstrap/scss/bootstrap';
+@import './styles/form';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap');
+
+$maxWidth: 1280px;
+
+body {
+  margin: 0;
+  font-family: inter, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.text-red-dark {
+  color: color.$redDark !important;
+}
+
+.text-red-light {
+  color: color.$redLight !important;
+}
+
+.text-gray-dark {
+  color: color.$grayDark !important;
+}
+
+.text-gray-light {
+  color: color.$grayLight !important;
+}
+
+// Min height for card.
+//
+// .global-card-balance-1,
+// .global-card-info-1 {
+//   min-height: 415px !important;
+// }
+
+// .global-card-frock-price-1 {
+//   min-height: 265px !important;
+// }
+
+// .global-card-frock-price-2,
+// .global-card-frock-price-3 {
+//   min-height: 178px !important;
+// }
+//
+// Small devices (landscape phones, 576px and up)
+@include media-breakpoint-up(sm) {
+  // .global-card-balance-1,
+  // .global-card-info-1 {
+  //   min-height: 415px !important;
+  // }
+
+  // .global-card-frock-price-1 {
+  //   min-height: 210px !important;
+  // }
+
+  // .global-card-frock-price-2,
+  // .global-card-frock-price-3 {
+  //   min-height: 154px !important;
+  // }
+}
+//
+// Medium devices (tablets, 768px and up)
+@include media-breakpoint-up(md) {
+  // .global-card-balance-1,
+  // .global-card-info-1 {
+  //   min-height: 415px !important;
+  // }
+
+  // .global-card-frock-price-1 {
+  //   min-height: 210px !important;
+  // }
+
+  // .global-card-frock-price-2,
+  // .global-card-frock-price-3 {
+  //   min-height: 134px !important;
+  // }
+}
+//
+// Large devices (desktops, 992px and up)
+@include media-breakpoint-up(lg) {
+  .global-card-balance-1,
+  .global-card-info-1 {
+    min-height: 520px !important;
+  }
+
+  .global-card-frock-price-1 {
+    min-height: 283px !important;
+  }
+
+  .global-card-frock-price-2 {
+    min-height: 140px !important;
+  }
+
+  .global-card-balance-2,
+  .global-card-frock-price-3,
+  .global-card-info-2 {
+    min-height: 213px !important;
+  }
+}
+//
+// Extra large devices (large desktops, 1200px and up)
+@include media-breakpoint-up(xl) {
+  .global-card-balance-1,
+  .global-card-info-1 {
+    min-height: 444px !important;
+  }
+
+  .global-card-frock-price-1 {
+    min-height: 245px !important;
+  }
+
+  //.global-card-frock-price-2 {
+  //  min-height: 242px !important;
+  //}
+
+  .global-card-balance-2,
+  .global-card-frock-price-3,
+  .global-card-info-2 {
+    min-height: 175px !important;
+  }
+}
+
+@media (max-width: 425px) {
+  .px-mobile-0 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 1281px) {
+  .container {
+    max-width: $maxWidth;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: $maxWidth;
+  }
+}
