@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
@@ -171,7 +172,13 @@ export default function CardCoinRaised({
         />
         {startTime !== null && isAfterStartTime && (
           <p className={styles.bottomBar}>
-            Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC
+            Maximum Contribution:{' '}
+            {communitySale
+              ? Number(maxContribution) <= 800
+                ? renderNumberFormatter(maxContribution)
+                : '800'
+              : renderNumberFormatter(maxContribution)}{' '}
+            $USDC
           </p>
         )}
       </div>
