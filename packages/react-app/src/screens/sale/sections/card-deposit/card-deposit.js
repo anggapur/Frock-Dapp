@@ -83,7 +83,15 @@ export default function CardDeposit({
   };
 
   const handleMaxChange = field => {
-    if (maxContribution !== '0') {
+    if (maxContribution !== '0' && communitySale) {
+      let newMaxContribution = 0;
+      if (Number(maxContribution) >= 800) newMaxContribution = 800;
+      const newMaxValue =
+        Number(newMaxContribution) - Number(totalContribution);
+      formik.setFieldValue(field, newMaxValue);
+    }
+
+    if (maxContribution !== '0' && !communitySale) {
       const newMaxValue = Number(maxContribution) - Number(totalContribution);
       formik.setFieldValue(field, newMaxValue);
     }
@@ -182,7 +190,13 @@ export default function CardDeposit({
       return (
         <>
           <p>
-            Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC
+            Maximum Contribution:{' '}
+            {communitySale
+              ? Number(maxContribution) <= 800
+                ? renderNumberFormatter(maxContribution)
+                : '800'
+              : renderNumberFormatter(maxContribution)}{' '}
+            $USDC
           </p>
           <Form onSubmit={formik.handleSubmit}>
             <InputGroup
