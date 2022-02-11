@@ -283,16 +283,26 @@ export default function CardDeposit({
         {communitySale ? '$aFROCK' : '$bFROCK'}
       </h2>
       <RoundButton
-        onClick={isRedeemEnabled ? handleRedeem : () => null}
-        variant={isRedeemEnabled ? 'primary' : 'disabled'}
+        onClick={
+          isRedeemEnabled && Number(nrtBalance) !== 0
+            ? handleRedeem
+            : () => null
+        }
+        variant={
+          isRedeemEnabled && Number(nrtBalance) !== 0 ? 'primary' : 'disabled'
+        }
         className={styles.button}
         isRounded
       >
         {provider
           ? isRedeemEnabled
-            ? communitySale
-              ? 'Redeem $aFROCK for $FROCK'
-              : 'Redeem $bFROCK for $FROCK'
+            ? Number(nrtBalance) !== 0
+              ? communitySale
+                ? 'Redeem $aFROCK for $FROCK'
+                : 'Redeem $bFROCK for $FROCK'
+              : `You have no ${
+                  communitySale ? '$aFROCK' : '$bFROCK'
+                } in your wallet`
             : 'Redeeming not possible yet'
           : 'Please connect your wallet'}
       </RoundButton>
