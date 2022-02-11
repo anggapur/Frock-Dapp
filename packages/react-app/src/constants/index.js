@@ -18,17 +18,17 @@ export const AFROCK_TOKEN_DATA = {
   address: '0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07',
   symbol: 'aFROCK',
   decimals: 9,
-  image: darkFrockSmall,
+  image: 'https://fractionalrocket.money/afrock-logo.png',
 };
 export const BFROCK_TOKEN_DATA = {
   address: '0x202CCe504e04bEd6fC0521238dDf04Bc9E8E15aB',
   symbol: 'bFROCK',
   decimals: 9,
-  image: darkFrockSmall,
+  image: 'https://fractionalrocket.money/bfrock-logo.png',
 };
 export const FROCK_TOKEN_DATA = {
   address: '0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d',
   symbol: 'FROCK',
   decimals: 9,
-  image: frockSmall,
+  image: 'https://fractionalrocket.money/frock-logo.png',
 };

@@ -24,6 +24,8 @@ export default function CardDeposit({
   communitySale = false,
   startTime,
   endTime,
+  isRedeemEnabled,
+  isClaimEnabled,
   totalContribution,
   maxContribution,
   handleDeposit,
@@ -35,12 +37,10 @@ export default function CardDeposit({
   const provider = useProvider();
   const startTimeUtc = moment.unix(startTime).utc();
   const endTimeUtc = moment.unix(endTime).utc();
-  const protocolLaunchDate = moment('22 February 2022');
   const isBeforeStartTime = moment(new Date()).isSameOrBefore(startTimeUtc);
   const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
   const isBeforeEndTime = moment(new Date()).isSameOrBefore(endTimeUtc);
   const isAfterEndTime = moment(new Date()).isSameOrAfter(endTimeUtc);
-  const isAfterLaunch = moment(new Date()).isSameOrAfter(protocolLaunchDate);
   const [selected, setSelected] = useState('deposit');
 
   useEffect(() => {
@@ -247,8 +247,8 @@ export default function CardDeposit({
       </h3>
       <h2>{renderNumberFormatter(nrtBalance)} $bFROCK</h2>
       <RoundButton
-        onClick={handleClaim}
-        variant="primary"
+        onClick={isClaimEnabled ? handleClaim : () => null}
+        variant={isClaimEnabled ? 'primary' : 'disabled'}
         className={styles.button}
         isRounded
       >
@@ -265,16 +265,18 @@ export default function CardDeposit({
         {communitySale ? '$aFROCK' : '$bFROCK'}
       </h2>
       <RoundButton
-        onClick={isAfterLaunch ? handleRedeem : () => null}
-        variant={isAfterLaunch ? 'primary' : 'disabled'}
+        onClick={isRedeemEnabled ? handleRedeem : () => null}
+        variant={isRedeemEnabled ? 'primary' : 'disabled'}
         className={styles.button}
         isRounded
       >
-        {provider && isAfterLaunch
-          ? communitySale
-            ? 'Redeem $aFROCK for $FROCK'
-            : 'Redeem $bFROCK for $FROCK'
-          : 'Redeeming not possible yet'}
+        {provider
+          ? isRedeemEnabled
+            ? communitySale
+              ? 'Redeem $aFROCK for $FROCK'
+              : 'Redeem $bFROCK for $FROCK'
+            : 'Redeeming not possible yet'
+          : 'Please connect your wallet'}
       </RoundButton>
     </>
   );
@@ -323,7 +325,7 @@ export default function CardDeposit({
             <h2>Withdraw</h2>
           </div>
         )}
-        {communitySale === false && !isBeforeEndTime && (
+        {communitySale === false && isAfterEndTime && (
           <div
             className={selected === 'claim' ? styles.selected : ''}
             onClick={() => setSelected('claim')}

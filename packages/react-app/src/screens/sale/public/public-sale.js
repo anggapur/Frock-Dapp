@@ -40,7 +40,9 @@ export default function PublicSale() {
   const [totalContribution, setTotalContribution] = useState('0');
   const [maxContribution, setMaxContribution] = useState('0');
   const [startTime, setStartTime] = useState(1645286400);
-  const [endTime, setEndTime] = useState(1645372800);
+  const [endTime, setEndTime] = useState(1645459200);
+  const [isRedeemEnabled, setIsRedeemEnabled] = useState(false);
+  const [isClaimEnabled, setIsClaimEnabled] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
@@ -87,6 +89,9 @@ export default function PublicSale() {
         await handleGetPrices();
         await handleGetTotalContribution();
 
+        await handleGetIsRedeemEnabled();
+        await handleGetIsClaimEnabled();
+
         await handleGetStartTime();
         await handleGetEndTime();
 
@@ -114,6 +119,16 @@ export default function PublicSale() {
   const handleGetFrock = async () => {
     const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
     setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
+  };
+
+  const handleGetIsRedeemEnabled = async () => {
+    const isRedeemEnabledResult = await fairLaunch.redeemEnabled();
+    setIsRedeemEnabled(isRedeemEnabledResult);
+  };
+
+  const handleGetIsClaimEnabled = async () => {
+    const isClaimEnabledResult = await fairLaunch.claimEnabled();
+    setIsClaimEnabled(isClaimEnabledResult);
   };
 
   const handleGetPrices = async () => {
@@ -278,6 +293,8 @@ export default function PublicSale() {
             <CardDeposit
               startTime={startTime}
               endTime={endTime}
+              isRedeemEnabled={isRedeemEnabled}
+              isClaimEnabled={isClaimEnabled}
               totalContribution={totalContribution}
               maxContribution={maxContribution}
               handleDeposit={handleDeposit}

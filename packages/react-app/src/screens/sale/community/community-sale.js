@@ -38,8 +38,8 @@ export default function CommunitySale() {
   const [totalContribution, setTotalContribution] = useState('0');
   const [currentCap, setCurrentCap] = useState('0');
   const [startTime, setStartTime] = useState(1644681600);
-  const [endTime, setEndTime] = useState(1644854400);
-
+  const [endTime, setEndTime] = useState(1644768000);
+  const [isRedeemEnabled, setIsRedeemEnabled] = useState(false);
   const [globalMaximumContribution, setGlobalMaximulContribution] =
     useState('0');
   const [totalRaised, setTotalRaised] = useState('0');
@@ -90,6 +90,8 @@ export default function CommunitySale() {
         await handleGetStartTime();
         await handleGetEndTime();
 
+        await handleGetIsRedeemEnabled();
+
         await handleGetCurrentCap();
 
         await handleGetMaxContribution();
@@ -117,6 +119,11 @@ export default function CommunitySale() {
   const handleGetFrock = async () => {
     const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
     setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
+  };
+
+  const handleGetIsRedeemEnabled = async () => {
+    const isRedeemEnabledResult = await communityOffering.redeemEnabled();
+    setIsRedeemEnabled(isRedeemEnabledResult);
   };
 
   const handleGetTotalContribution = async () => {
@@ -279,6 +286,7 @@ export default function CommunitySale() {
               communitySale
               startTime={startTime}
               endTime={endTime}
+              isRedeemEnabled={isRedeemEnabled}
               totalContribution={totalContribution}
               maxContribution={currentCap}
               handleDeposit={handleDeposit}
