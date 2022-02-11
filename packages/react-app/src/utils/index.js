@@ -35,7 +35,7 @@ export const handleKFormatter = num =>
     : Math.sign(num) * Math.abs(num);
 
 export const renderNumberFormatter = num => {
-  if (num !== '0.0') {
+  if (num !== '0.0' && num !== '0') {
     return (
       <NumberFormat
         value={num}

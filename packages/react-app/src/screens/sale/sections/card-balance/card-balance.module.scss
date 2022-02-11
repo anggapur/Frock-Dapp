@@ -2,8 +2,7 @@
 
 .wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   padding-top: 15px;
   padding-bottom: 15px;
   margin-top: 30px;
@@ -17,19 +16,28 @@
   h2 {
     font-weight: 600;
     font-size: 16px;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     color: color.$grayDark;
   }
 
-  > div {
+  > div > div {
     display: flex;
     align-items: center;
 
     img {
-      margin-right: 10px;
+      margin-right: 5px;
+      height: 26px;
+    }
+
+    span,
+    p {
+      font-weight: 600;
+      font-size: 14px;
+      color: #212925;
     }
 
     p {
+      margin-top: -5px;
       margin-bottom: 0;
     }
   }
