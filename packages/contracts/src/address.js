@@ -2,6 +2,7 @@ import CommunityOffering from "../deployments/localhost/CommunityOffering.json";
 import CommunityOfferingNRT from "../deployments/localhost/CommunityOfferingNRT.json";
 import FairPriceLaunchNRT from "../deployments/localhost/FairLaunchNRT.json";
 import FairPriceLaunch from "../deployments/localhost/FairPriceLaunch.json";
+import FrockProxy from "../deployments/localhost/FrockProxy.json";
 import FrockTokenV1 from "../deployments/localhost/FrockTokenV1.json";
 import USDC from "../deployments/localhost/USDC.json";
 
@@ -10,7 +11,7 @@ export const COMMUNITY_OFFERING_NRT_ADDR = CommunityOfferingNRT.address;
 export const FAIR_PRICE_ADDR = FairPriceLaunch.address;
 export const FAIR_PRICE_NRT_ADDR = FairPriceLaunchNRT.address;
 export const USDC_ADDR = USDC.address;
-export const FROCK_ADDR = FrockTokenV1.address;
+export const FROCK_ADDR = FrockProxy.address;
 
 export const CommunityOfferingABI = CommunityOffering.abi;
 export const CommunityOfferingNRTABI = CommunityOfferingNRT.abi;

@@ -19,20 +19,20 @@ import FaqSection from './sections/faq-section/faq-section';
 export default function Home() {
   const [calculator, setCalculator] = useState({
     ftmPrice: 2,
-    dailyVolume: 50000,
+    dailyVolume: 10000,
     precentClaimPeriod: 100,
     precentReflection: 7,
     precentTreasury: 14,
     frocPrice: 0.12,
-    yourEntryPrice: 0.094,
-    precentYourPortfolio: 1,
+    yourEntryPrice: 0.08,
+    precentYourPortfolio: 0.5,
     precentCompound: 67,
     precentReturn: 33,
     precentMarketingWallet: 0,
-    days: 31,
+    days: 365,
     strongPrice: 500,
     strongReturn: 0.085,
-    nodesCount: 2,
+    nodesCount: 4,
   });
   const [ftmPriceFromApi, setFtmPriceFromApi] = useState(0);
   const [strongPriceFromApi, setStrongPriceFromApi] = useState(0);
@@ -93,6 +93,7 @@ export default function Home() {
     calculator.precentReturn,
   ]);
 
+  const [amountInvested, setAmountInvested] = useState(0);
   const [show, setShow] = useState(true);
 
   return (
@@ -115,11 +116,12 @@ export default function Home() {
             setCalc={setCalculator}
             ftmPriceFromApi={ftmPriceFromApi}
             strongPriceFromApi={strongPriceFromApi}
+            handleSetAmountInvested={value => setAmountInvested(value)}
           />
         </Col>
       </Row>
-      <Row>
-        <Col lg={4} className="px-mobile-0">
+      <Row className="pb-2">
+        <Col lg={3} className="px-mobile-0 mb-lg-0 mb-4">
           <CardBalance
             calc={calculator}
             volumeUsed={volumeUsed}
@@ -127,10 +129,16 @@ export default function Home() {
             returnFromTreasury={returnFromTreasury}
           />
         </Col>
-        <Col lg={5} className="px-mobile-0">
-          <CardFrockPrice calc={calculator} volumeUsed={volumeUsed} />
+        <Col lg={4} className="px-mobile-0">
+          <CardFrockPrice
+            calc={calculator}
+            volumeUsed={volumeUsed}
+            yearReturn={yearReturn}
+            returnFromTreasury={returnFromTreasury}
+            amountInvested={amountInvested}
+          />
         </Col>
-        <Col lg={3} className="px-mobile-0">
+        <Col lg={5} className="px-mobile-0">
           <CardInfo
             calc={calculator}
             setCumulativeStrongTotalInYear={value =>
@@ -141,11 +149,11 @@ export default function Home() {
           />
         </Col>
       </Row>
-      <Row>
-        <Col xs={12} className="px-mobile-0">
-          <FaqSection />
-        </Col>
-      </Row>
+      {/* <Row>
+       <Col xs={12} className="px-mobile-0">
+         <FaqSection />
+       </Col>
+      </Row> */}
     </Container>
   );
 }

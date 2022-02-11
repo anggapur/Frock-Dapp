@@ -79,44 +79,42 @@ export default function CardInfo({
       } else {
         if (balance <= 10) {
           balance = getBalance(balance, nodes);
-        } else {
-          if (balance <= 20) {
-            balance = getBalance(balance, nodes, 10, costToClaim);
-          } else if (balance <= 30) {
-            balance = getBalance(balance, nodes, 20, costToClaim);
-          } else if (balance <= 40) {
-            balance = getBalance(balance, nodes, 30, costToClaim);
-          } else if (balance <= 50) {
-            balance = getBalance(balance, nodes, 40, costToClaim);
-          } else if (balance <= 60) {
-            balance = getBalance(balance, nodes, 50, costToClaim);
-          } else if (balance <= 70) {
-            balance = getBalance(balance, nodes, 60, costToClaim);
-          } else if (balance <= 80) {
-            balance = getBalance(balance, nodes, 70, costToClaim);
-          } else if (balance <= 90) {
-            balance = getBalance(balance, nodes, 80, costToClaim);
-          } else if (balance <= 100) {
-            balance = getBalance(balance, nodes, 90, costToClaim);
-          } else if (balance <= 110) {
-            balance = getBalance(balance, nodes, 100, costToClaim);
-          } else if (balance <= 120) {
-            balance = getBalance(balance, nodes, 110, costToClaim);
-          } else if (balance <= 130) {
-            balance = getBalance(balance, nodes, 120, costToClaim);
-          } else if (balance <= 140) {
-            balance = getBalance(balance, nodes, 130, costToClaim);
-          } else if (balance <= 150) {
-            balance = getBalance(balance, nodes, 140, costToClaim);
-          } else if (balance <= 160) {
-            balance = getBalance(balance, nodes, 150, costToClaim);
-          } else if (balance <= 170) {
-            balance = getBalance(balance, nodes, 160, costToClaim);
-          }
+        } else if (balance <= 20) {
+          balance = getBalance(balance, nodes, 10, costToClaim);
+        } else if (balance <= 30) {
+          balance = getBalance(balance, nodes, 20, costToClaim);
+        } else if (balance <= 40) {
+          balance = getBalance(balance, nodes, 30, costToClaim);
+        } else if (balance <= 50) {
+          balance = getBalance(balance, nodes, 40, costToClaim);
+        } else if (balance <= 60) {
+          balance = getBalance(balance, nodes, 50, costToClaim);
+        } else if (balance <= 70) {
+          balance = getBalance(balance, nodes, 60, costToClaim);
+        } else if (balance <= 80) {
+          balance = getBalance(balance, nodes, 70, costToClaim);
+        } else if (balance <= 90) {
+          balance = getBalance(balance, nodes, 80, costToClaim);
+        } else if (balance <= 100) {
+          balance = getBalance(balance, nodes, 90, costToClaim);
+        } else if (balance <= 110) {
+          balance = getBalance(balance, nodes, 100, costToClaim);
+        } else if (balance <= 120) {
+          balance = getBalance(balance, nodes, 110, costToClaim);
+        } else if (balance <= 130) {
+          balance = getBalance(balance, nodes, 120, costToClaim);
+        } else if (balance <= 140) {
+          balance = getBalance(balance, nodes, 130, costToClaim);
+        } else if (balance <= 150) {
+          balance = getBalance(balance, nodes, 140, costToClaim);
+        } else if (balance <= 160) {
+          balance = getBalance(balance, nodes, 150, costToClaim);
+        } else if (balance <= 170) {
+          balance = getBalance(balance, nodes, 160, costToClaim);
+        }
 
-          if (day > 3) {
-            nodes += parseInt(balance / 10);
-          }
+        if (day > 3) {
+          nodes += parseInt(balance / 10);
         }
 
         costToClaim =
@@ -180,7 +178,8 @@ export default function CardInfo({
   // get your return
   useEffect(() => {
     const _precentYourPortfolio = precentYourPortfolio / 100;
-    setYourReturns(Number(returnedValue * _precentYourPortfolio));
+    const _yourReturns = Number(returnedValue * _precentYourPortfolio);
+    setYourReturns(_yourReturns);
   }, [returnedValue, precentYourPortfolio]);
 
   // get APR new investor
@@ -202,68 +201,111 @@ export default function CardInfo({
         className="global-card-info-1 mt-4 mt-lg-0"
       >
         <Card.Header>Treasury</Card.Header>
-        <h5 className={styles.h5}>
-          Treasury value at {days > 1 ? `${days} days` : `${days} day`}{' '}
-          <Tooltip anchorLink="/" anchorText="Read more">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-            malesuada posuere dolor in tempus.
-          </Tooltip>
-        </h5>
-        <p className={styles.mb14}>
-          $ {treasury.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-        </p>
-
-        <h5 className={styles.h5}>
-          {days > 1 ? `${days} days` : `${days} day`} treasury <br />
-          returns{' '}
-          <Tooltip anchorLink="/" anchorText="Read more">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-            malesuada posuere dolor in tempus.
-          </Tooltip>
-        </h5>
-        <p className={styles.mb14}>
-          ${' '}
-          {lastDayTreasuryNetReturn.toLocaleString('en-US', {
-            maximumFractionDigits: 0,
-          })}
-        </p>
-
-        <h6 className={styles.h6}>
-          of which compounded{' '}
-          <Tooltip anchorLink="/" anchorText="Read more">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-            malesuada posuere dolor in tempus.
-          </Tooltip>
-        </h6>
-        <p className={styles.mb14}>
-          ${' '}
-          {compoundedValue.toLocaleString('en-US', {
-            maximumFractionDigits: 0,
-          })}
-        </p>
-
-        <h6 className={styles.h6}>
-          of which returned{' '}
-          <Tooltip anchorLink="/" anchorText="Read more">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-            malesuada posuere dolor in tempus.
-          </Tooltip>
-        </h6>
-        <p className={styles.mb14}>
-          ${' '}
-          {returnedValue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-        </p>
-
-        <h6 className={styles.h6}>
-          Your treasury returns{' '}
-          <Tooltip anchorLink="/" anchorText="Read more">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-            malesuada posuere dolor in tempus.
-          </Tooltip>
-        </h6>
-        <p>
-          $ {yourReturns.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-        </p>
+        <Row>
+          <Col xs={8} lg={7}>
+            <h5 className={styles.h5}>
+              Treasury value at {days > 1 ? `${days} days` : `${days} day`}{' '}
+              {/* <Tooltip anchorLink="/" anchorText="Read more">
+                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+                 malesuada posuere dolor in tempus.
+              </Tooltip> */}
+            </h5>
+          </Col>
+          <Col xs={4} lg={5}>
+            <p className={styles.mb14}>
+              $ {treasury.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={8} lg={7}>
+            <h5 className={styles.h5}>
+              {days > 1 ? `${days} days` : `${days} day`} treasury returns
+            </h5>
+          </Col>
+          <Col xs={4} lg={5}>
+            <p className={styles.mb14}>
+              ${' '}
+              {lastDayTreasuryNetReturn.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
+              })}
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={8} lg={7}>
+            <h6 className={styles.h6}>
+              of which compounded{' '}
+              {/* <Tooltip anchorLink="/" anchorText="Read more">
+                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+                 malesuada posuere dolor in tempus.
+              </Tooltip> */}
+            </h6>
+          </Col>
+          <Col xs={4} lg={5}>
+            <p className={styles.mb14}>
+              ${' '}
+              {compoundedValue.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
+              })}
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={8} lg={7}>
+            <h6 className={styles.h6}>
+              of which returned{' '}
+              {/* <Tooltip anchorLink="/" anchorText="Read more">
+                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+                 malesuada posuere dolor in tempus.
+              </Tooltip> */}
+            </h6>
+          </Col>
+          <Col xs={4} lg={5}>
+            <p className={styles.mb14}>
+              ${' '}
+              {returnedValue.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
+              })}
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <hr className={styles.hr} />
+          <Col xs={8} lg={7}>
+            <h6 className={styles.h6} style={{ color: '#7e7a7a' }}>
+              Ownership share
+            </h6>
+          </Col>
+          <Col xs={4} lg={5}>
+            <p className={styles.p}>
+              {precentYourPortfolio.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}{' '}
+              %
+            </p>
+          </Col>
+          <Col
+            xs={8}
+            lg={7}
+            style={{
+              float: 'left',
+              color: '#7e7a7a',
+              fontSize: '21px',
+              marginTop: '5px',
+            }}
+          >
+            Your treasury returns:
+          </Col>
+          <Col xs={4} lg={5}>
+            <h1 className="text-red-dark">
+              ${' '}
+              {yourReturns.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
+              })}
+            </h1>
+          </Col>
+        </Row>
 
         {/* <h6 className={styles.h6}>
           marketing / dev{' '}
@@ -277,27 +319,27 @@ export default function CardInfo({
         </p> */}
       </Card>
 
-      <Card
-        lineBottom="light"
-        className={clsx(styles.cardApr, 'global-card-info-2 mt-4')}
+      {/* <Card
+         lineBottom="light"
+         className={clsx(styles.cardApr, 'global-card-info-2 mt-4')}
       >
-        <Row>
-          <Col xs={6} lg={12}>
-            <h5 className={styles.h5}>
-              <strong>
-                APR new Investors{' '}
-                <Tooltip anchorLink="/" anchorText="Read more">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                  malesuada posuere dolor in tempus.
-                </Tooltip>
-              </strong>
-            </h5>
-          </Col>
-          <Col xs={6} lg={12}>
-            <h1 className={styles.h1}>{parseInt(aprNewInvestors * 100)}%</h1>
-          </Col>
-        </Row>
-      </Card>
+         <Row>
+             <Col xs={6} lg={12}>
+                 <h5 className={styles.h5}>
+                     <strong>
+                         APR new Investors{' '}
+                         <Tooltip anchorLink="/" anchorText="Read more">
+                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+                             malesuada posuere dolor in tempus.
+                         </Tooltip>
+                     </strong>
+                 </h5>
+             </Col>
+             <Col xs={6} lg={12}>
+                 <h1 className={styles.h1}>{parseInt(aprNewInvestors * 100)}%</h1>
+             </Col>
+         </Row>
+      </Card> */}
     </>
   );
 }
