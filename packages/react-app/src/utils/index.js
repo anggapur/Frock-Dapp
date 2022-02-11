@@ -13,6 +13,19 @@ export const converSecondsToHours = d => {
   return hDisplay + mDisplay;
 };
 
+export const getPercentageFromHour = (
+  currentHour,
+  maxHour,
+  canMoreThan100Percent = false,
+) => {
+  let percent = Math.round((Number(currentHour) / Number(maxHour)) * 100);
+  if (!canMoreThan100Percent && percent > 100) {
+    percent = 100;
+  }
+
+  return percent;
+};
+
 export const handleShortenAddress = address => {
   let result = '';
   for (let i = 0; i < address.length; i++) {
