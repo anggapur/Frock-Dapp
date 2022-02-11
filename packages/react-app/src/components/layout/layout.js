@@ -11,13 +11,7 @@ export default function Layout({ children }) {
 
   return (
     <>
-      <Toaster
-        toastOptions={{
-          style: {
-            textAlign: 'center',
-          },
-        }}
-      />
+      <Toaster />
       <Header />
       <main style={styles}>{children}</main>
     </>
