@@ -210,7 +210,7 @@ export default function CommunitySale() {
           <Col lg={8}>
             <h1>
               Fractional Rocket Community Sale -{' '}
-              {startTimeUtc.utc().format('DD MMM. h:mm A UTC')}
+              {startTimeUtc.utc().format('MMM. Do, h:mm a UTC')}
             </h1>
           </Col>
           <Col lg={4}>
