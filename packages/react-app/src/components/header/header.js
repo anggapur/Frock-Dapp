@@ -20,7 +20,6 @@ import RoundButton from '../button/button';
 import CompanyLogo from '../logo/company-logo';
 import { ToastError } from '../toast/toast';
 import './header.scss';
-import logoSmall from './logo-small.svg';
 
 function NotificationBar({ text }) {
   return (
