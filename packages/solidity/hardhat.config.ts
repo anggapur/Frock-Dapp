@@ -60,7 +60,7 @@ const config: HardhatUserConfig = {
     },
     fantom: {
       tags: ['test'],      
-      url : 'https://nd-248-371-542.p2pify.com/cbfc247834023d478a85c3565f4ffc06',
+      url : 'https://speedy-nodes-nyc.moralis.io/40036aec0d5bfd15ac6417d6/fantom/mainnet',
       accounts: [
         PRIVATE_KEY_0
       ],
@@ -86,7 +86,7 @@ const config: HardhatUserConfig = {
   },
   namedAccounts: {
     deployer: {
-      default: 0,
+      default: '0x8B43eb774baE835b20Ac8A222C5A91dCD339F376'
     },
     wrongAdmin: {
       default : '0x976EA74026E726554dB657fA54763abd0C3a0aa9'
@@ -99,7 +99,7 @@ const config: HardhatUserConfig = {
       default : '0x627306090abaB3A6e1400e9345bC60c78a8BEf57'
     },
     treasury: {
-      default : '0x477F33ead6d79d4A357c9788aDC3Bc5986866f55'
+      default : '0x0b7b7AE45bC137Ea0A36422eaC5Bc52e7657A225'
     },
     marketing: {
       default : '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65'
