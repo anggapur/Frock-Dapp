@@ -206,9 +206,9 @@ export default function Header() {
                 <Link to="/community-sale" className="nav-link">
                   Community Sale
                 </Link>
-                <Link to="/public-sale" className="nav-link">
-                  Public Sale
-                </Link>
+                {/*<Link to="/public-sale" className="nav-link">*/}
+                {/*  Public Sale*/}
+                {/*</Link>*/}
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
