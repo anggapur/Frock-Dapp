@@ -81,7 +81,7 @@ export default function CommunitySale() {
       if (provider && accounts) {
         await handleGetUSDC();
         await handleGetNRT();
-        await handleGetFrock();
+        // await handleGetFrock();
 
         await handleGetTotalContribution();
 
@@ -114,10 +114,10 @@ export default function CommunitySale() {
     setNRTBalance(formatUnits(nrtBalanceResult, FROCK_DECIMALS));
   };
 
-  const handleGetFrock = async () => {
-    const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
-    setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
-  };
+  // const handleGetFrock = async () => {
+  //   const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
+  //   setFrockBalance(formatUnits(frockBalanceResult, FROCK_DECIMALS));
+  // };
 
   const handleGetIsRedeemEnabled = async () => {
     const isRedeemEnabledResult = await communityOffering.redeemEnabled();
