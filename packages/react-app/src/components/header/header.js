@@ -52,7 +52,7 @@ export default function Header() {
   const calculateTimeLeft = () => {
     const now = new Date();
     const difference =
-      Date.UTC(2022, 1, 12, 16) -
+      Date.UTC(2022, 1, 19, 16) -
       Date.UTC(
         now.getUTCFullYear(),
         now.getUTCMonth(),
@@ -167,24 +167,28 @@ export default function Header() {
         <NotificationBar
           text={
             Object.keys(timeLeft).length !== 1
-              ? `Countdown to Community Sale: ${
+              ? `Community Sale sold out! Countdown to Public Sale: ${
                   timeLeft.days > 1
-                    ? `${timeLeft.days} days`
-                    : `${timeLeft.days} day`
-                }, ${
+                    ? `${timeLeft.days} days,`
+                    : `${timeLeft.days !== 0 ? `${timeLeft.days} day,` : ''}`
+                } ${
                   timeLeft.hours > 1
-                    ? `${timeLeft.hours} hours`
-                    : `${timeLeft.hours} hour`
-                }, ${
+                    ? `${timeLeft.hours} hours,`
+                    : `${timeLeft.hours !== 0 ? `${timeLeft.hours} hour,` : ''}`
+                } ${
                   timeLeft.minutes > 1
-                    ? `${timeLeft.minutes} minutes`
-                    : `${timeLeft.minutes} minute`
-                }, ${
+                    ? `${timeLeft.minutes} minutes,`
+                    : `${
+                        timeLeft.minutes !== 0
+                          ? `${timeLeft.minutes} minute,`
+                          : ''
+                      }`
+                } ${
                   timeLeft.seconds > 1
                     ? `${timeLeft.seconds} seconds`
                     : `${timeLeft.seconds} second`
                 }`
-              : `The Community Sale ${
+              : `The Public Sale ${
                   !timeLeft.isAfterTwoDays ? 'is Active Now!' : 'has finished.'
                 }`
           }
