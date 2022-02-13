@@ -159,6 +159,7 @@ export default function CardCoinRaised({
               <h4>Total raised so far</h4>
               <h2>${renderNumberFormatter(totalRaised)}</h2>
               <h3>
+                $
                 {Number(totalLimit).toLocaleString('en-US', {
                   maximumFractionDigits: 0,
                 })}{' '}
