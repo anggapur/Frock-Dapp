@@ -220,13 +220,7 @@ function ProgressBar({ elapsed, precent }) {
             width: `${precent}%`,
           }}
         />
-        <p
-          style={{
-            mixBlendMode: `${precent === 100 ? 'normal' : 'difference'}`,
-          }}
-        >
-          {elapsed} elapsed
-        </p>
+        <p>{elapsed} elapsed</p>
       </div>
     </div>
   );
