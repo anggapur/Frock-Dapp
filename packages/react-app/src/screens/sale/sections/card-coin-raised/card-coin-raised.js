@@ -20,6 +20,7 @@ import shadowCircle from './shadow-circle.svg';
 
 export default function CardCoinRaised({
   communitySale = false,
+  isSaleFinished = false,
   startTime,
   endTime,
   totalLimit,
@@ -173,6 +174,8 @@ export default function CardCoinRaised({
             Math.floor(Number(duration) / 3600),
             24,
           )}
+          type={communitySale ? 'Community Sale' : 'Public Sale'}
+          isFinish={isSaleFinished}
         />
         {startTime !== null && isAfterStartTime && (
           <p className={styles.bottomBar}>
@@ -206,7 +209,7 @@ export default function CardCoinRaised({
   );
 }
 
-function ProgressBar({ elapsed, precent }) {
+function ProgressBar({ elapsed, precent, type, isFinish = false }) {
   return (
     <div className={styles.progressWrapper}>
       <div className={styles.progressBar}>
@@ -224,7 +227,7 @@ function ProgressBar({ elapsed, precent }) {
             mixBlendMode: `${precent === 100 ? 'normal' : 'difference'}`,
           }}
         >
-          {elapsed} elapsed
+          {!isFinish ? `${elapsed} elapsed` : `${type} finished`}
         </p>
       </div>
     </div>

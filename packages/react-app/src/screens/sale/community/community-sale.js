@@ -248,7 +248,12 @@ export default function CommunitySale() {
           </Col>
           <Col lg={4}>
             {startTime !== null && isAfterStartTime && (
-              <CountdownUI countdown={timeLeft} className="float-lg-end" />
+              <CountdownUI
+                countdown={timeLeft}
+                className="float-lg-end"
+                type="Community Sale"
+                isFinish
+              />
             )}
           </Col>
         </Row>
@@ -271,6 +276,7 @@ export default function CommunitySale() {
               totalLimit={globalMaximumContribution}
               totalRaised={totalRaised}
               maxContribution={currentCap}
+              isSaleFinished
             />
           </Col>
           <Col lg={5}>
