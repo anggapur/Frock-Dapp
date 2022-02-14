@@ -271,6 +271,7 @@ export default function CommunitySale() {
               totalLimit={globalMaximumContribution}
               totalRaised={totalRaised}
               maxContribution={currentCap}
+              isSaleFinished
             />
           </Col>
           <Col lg={5}>
