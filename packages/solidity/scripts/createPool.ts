@@ -33,7 +33,7 @@ async function main() {
 
     const pairAddress = await spookyFactory.getPair(frock.address, (await spookyRouter.WETH()));
     console.log(`Pair Address: ${pairAddress}`)
-    console.log(`Balance Frock of Pair : ${await frock.balanceOf(pairAddress)}`)
+    console.log(`Balance Frock of Pair : ${ethers.utils.formatUnits(await frock.balanceOf(pairAddress))}`)
 }
 
 main()

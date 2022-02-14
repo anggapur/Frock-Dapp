@@ -21,11 +21,11 @@ async function main() {
     const totalExcludedFromSupply = reward[4];      
     const rewardSource = reward[5];  
 
-    console.log(`rewardAmount: ${ethers.utils.formatUnits(rewardAmount)} ETH`);
-    console.log(`totalClaimed: ${totalClaimed} ETH`);
+    console.log(`rewardAmount: ${ethers.utils.formatUnits(rewardAmount)} FTM`);
+    console.log(`totalClaimed: ${ethers.utils.formatUnits(totalClaimed)} FTM`);
     console.log(`issuedAt: ${issuedAt}`);
     console.log(`snapshotId: ${snapshotId}`);
-    console.log(`totalExcludedFromSupply: ${totalExcludedFromSupply}`);
+    console.log(`totalExcludedFromSupply: ${ethers.utils.formatUnits(totalExcludedFromSupply, 9)}`);
     console.log(`rewardSource: ${rewardSource}`);
 }
 
