@@ -1,0 +1,62 @@
+@use '../../../../styles/color';
+
+.card-wrapper {
+  margin-bottom: 26px;
+
+  h3 {
+    font-weight: 700;
+    font-size: 20px;
+    color: #a19a9a;
+  }
+
+  h1 {
+    font-weight: 600;
+    font-size: 35px;
+    color: color.$redDark;
+  }
+
+  h6,
+  p {
+    font-size: 16px;
+  }
+
+  h6 {
+    font-weight: 600;
+    color: color.$grayDark;
+  }
+
+  p {
+    margin-bottom: 0;
+    font-weight: 700;
+    color: #282828;
+
+    &:not(:last-child) {
+      margin-bottom: 25px;
+    }
+  }
+}
+
+.card-on-bottom {
+  h6,
+  p {
+    font-size: 16px;
+  }
+
+  h6 {
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: color.$grayDark;
+  }
+
+  p {
+    font-weight: 500;
+    color: #a92534;
+    margin-bottom: 0;
+
+    &.bigger {
+      color: #3d3d3d;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+}
