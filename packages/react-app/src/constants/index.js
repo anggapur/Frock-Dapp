@@ -36,3 +36,4 @@ export const FROCK_TOKEN_DATA = {
   image: 'https://fractionalrocket.money/frock-logo.png',
 };
 export const LAST_TREASURY_DIVIDEND_DISTRIBUTION = 1644883200000;
+export const TOTAL_TREASURY_VALUE_IN_STRONG = 80;

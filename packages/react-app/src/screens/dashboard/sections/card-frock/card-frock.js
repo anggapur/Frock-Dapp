@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
+import { GetStrongPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants';
 import styles from './card-frock.module.scss';
 
 export default function CardFrock() {
+  const [strongPrice, setStrongPrice] = useState(0);
+
+  useEffect(() => {
+    GetStrongPrice()
+      .then(price => setStrongPrice(price))
+      // eslint-disable-next-line no-console
+      .catch(console.error);
+  }, []);
+
   return (
     <>
       <Card
@@ -51,8 +62,15 @@ export default function CardFrock() {
         <Col xl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
             <h6>Total treasury value</h6>
-            <p className={styles.bigger}>80 $STRONG</p>
-            <p>$ 32,000.00</p>
+            <p className={styles.bigger}>
+              {TOTAL_TREASURY_VALUE_IN_STRONG} $STRONG
+            </p>
+            <p>
+              ${' '}
+              {new Intl.NumberFormat('en-US', {
+                maximumFractionDigits: 2,
+              }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
+            </p>
           </Card>
         </Col>
       </Row>
