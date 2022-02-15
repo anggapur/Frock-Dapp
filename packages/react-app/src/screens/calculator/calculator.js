@@ -12,7 +12,6 @@ import CalculatorCard from './sections/calculator/calculator';
 import CardBalance from './sections/card-balance/card-balance';
 import CardFrockPrice from './sections/card-frock-price/card-frock-price';
 import CardInfo from './sections/card-info/card-info';
-import FaqSection from './sections/faq-section/faq-section';
 
 export default function Calculator() {
   const [calculator, setCalculator] = useState({
@@ -135,11 +134,6 @@ export default function Calculator() {
           />
         </Col>
       </Row>
-      {/* <Row>
-       <Col xs={12} className="px-mobile-0">
-         <FaqSection />
-       </Col>
-      </Row> */}
     </Container>
   );
 }
