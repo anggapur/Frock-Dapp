@@ -163,4 +163,8 @@ contract TokenBasic is
     function snapshot() public onlyRole(SNAPSHOTER) returns (uint256) {
         return super._snapshot();
     }
+
+    function lastSnapshotId() public view returns (uint256) {
+        return super._getCurrentSnapshotId();
+    }
 }
