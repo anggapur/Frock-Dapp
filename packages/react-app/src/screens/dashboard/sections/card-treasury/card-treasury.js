@@ -1,8 +1,11 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
+import moment from 'moment';
+
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants';
 import styles from './card-treasury.module.scss';
 
 function Column({ children }) {
@@ -18,7 +21,11 @@ export default function CardTreasury() {
           <h6>Last treasury dividend distribution</h6>
         </Column>
         <Column>
-          <p className={styles.strong}>15/02/2022</p>
+          <p className={styles.strong}>
+            {moment
+              .unix(LAST_TREASURY_DIVIDEND_DISTRIBUTION)
+              .format('DD/MM/YYYY')}
+          </p>
         </Column>
       </Row>
       <hr />
