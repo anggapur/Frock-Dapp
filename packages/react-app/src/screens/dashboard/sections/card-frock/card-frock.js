@@ -75,10 +75,10 @@ export default function CardFrock() {
 
       <Row className={styles['card-on-bottom']}>
         <Col
-          xl={6}
+          xxl={6}
           lg={12}
           xs={6}
-          className="d-flex align-items-stretch mb-xl-0 mb-lg-4"
+          className="d-flex align-items-stretch mb-xxl-0 mb-lg-4"
         >
           <Card ellipse="top-right">
             <h6>Total building trade dividends</h6>
@@ -91,7 +91,7 @@ export default function CardFrock() {
             </p>
           </Card>
         </Col>
-        <Col xl={6} lg={12} xs={6} className="d-flex align-items-stretch">
+        <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
             <h6>Total treasury value</h6>
             <p className={styles.bigger}>
