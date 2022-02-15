@@ -84,7 +84,7 @@ export default function CardDeposit({
 
   const handleMaxChange = field => {
     if (maxContribution !== '0' && communitySale) {
-      let newMaxContribution = 0;
+      let newMaxContribution = Number(maxContribution);
       if (Number(maxContribution) >= 800) newMaxContribution = 800;
       const newMaxValue =
         Number(newMaxContribution) - Number(totalContribution);
