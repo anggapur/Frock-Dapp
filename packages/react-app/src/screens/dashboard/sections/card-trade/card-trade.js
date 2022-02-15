@@ -6,11 +6,7 @@ import Card from '../../../../components/card/card';
 import styles from './card-trade.module.scss';
 
 function Column({ children }) {
-  return (
-    <Col xs={6} lg={12} xl={6}>
-      {children}
-    </Col>
-  );
+  return <Col xs={6}>{children}</Col>;
 }
 
 export default function CardTrade() {
