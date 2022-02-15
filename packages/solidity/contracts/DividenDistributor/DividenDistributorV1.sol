@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.5;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -9,16 +9,15 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "../EIP/SafeTokenRecoverUpgradeable.sol";
 import "../Extensions/IERC20SnapshotUpgradeable.sol";
 import "./IUniswapV2Router02.sol";
+import "./IDividenDistributor.sol";
 
-import "hardhat/console.sol";
-
-
-contract DividenDistributorV1 is    
+contract DividenDistributorV1 is  
+    IDividenDistributor,
     Initializable,
     UUPSUpgradeable,
     AccessControlUpgradeable,
     SafeTokenRecoverUpgradeable,
-    PausableUpgradeable
+    PausableUpgradeable    
 {
     struct Reward {
         uint256 rewardAmount;        
@@ -149,7 +148,7 @@ contract DividenDistributorV1 is
         );
     }
 
-    function claimReward(uint256 rewardId) public {
+    function claimReward(uint256 rewardId) public override {
         require(_rewardExists(rewardId), "DD: REWARD_NOT_EXISTS");
         require(!rewards[rewardId].isExcludedFromReward[_msgSender()], "DD: NOT_ALLOWED_TO_CLAIM");
         require(!rewardClaimed[rewardId][_msgSender()], "DD: REWARD_HAS_CLAIMED");        
@@ -165,12 +164,6 @@ contract DividenDistributorV1 is
         require(holderBalance > 0, "DD: NOT_A_HOLDER");
         
         uint256 rewardAmount = reward.rewardAmount * holderBalance / supply;
-
-
-        console.log("reward.rewardAmount :: ", reward.rewardAmount);
-        console.log("holderBalance :: ", holderBalance);
-        console.log("supply ::", supply);
-        console.log("rewardAmount :: ", rewardAmount);
 
         rewardClaimed[rewardId][holder] = true;
         reward.totalClaimed += rewardAmount;
@@ -231,6 +224,12 @@ contract DividenDistributorV1 is
         }
 
         emit  ExcludedFromReward(holder, state);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControlUpgradeable) returns (bool) {
+        return interfaceId == type(IAccessControlUpgradeable).interfaceId 
+        || interfaceId == type(IDividenDistributor).interfaceId
+        || super.supportsInterface(interfaceId);        
     }
     
     // Function to receive Ether. msg.data must be empty
