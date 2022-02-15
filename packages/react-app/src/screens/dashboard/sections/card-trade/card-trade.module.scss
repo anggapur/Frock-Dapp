@@ -1,0 +1,48 @@
+@use '../../../../styles/color';
+
+.wrapper {
+  h6 {
+    font-weight: 600;
+    color: color.$grayDark;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: color.$grayDark;
+    font-weight: 500;
+
+    &.strong {
+      font-weight: 600;
+      color: #000;
+    }
+  }
+
+  hr {
+    margin: 14px -24px 17px;
+    border: 1px solid #e3d6d6;
+    opacity: 0.3;
+
+    @media (min-width: 769px) {
+      margin-right: -30px;
+      margin-left: -30px;
+    }
+  }
+
+  button {
+    margin-bottom: 95px;
+
+    @media (min-width: 769px) {
+      margin-bottom: 85px;
+    }
+  }
+
+  .footer {
+    h6 {
+      color: color.$redDark;
+    }
+
+    p {
+      color: #000;
+    }
+  }
+}
