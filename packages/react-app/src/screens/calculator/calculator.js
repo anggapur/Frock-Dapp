@@ -7,14 +7,14 @@ import {
   GROWTH_IN_PRICE,
   LINK_VOLUME_PER_PRICE,
 } from '../../constants';
-import './home.scss';
-import Calculator from './sections/calculator/calculator';
+import './calculator.scss';
+import CalculatorCard from './sections/calculator/calculator';
 import CardBalance from './sections/card-balance/card-balance';
 import CardFrockPrice from './sections/card-frock-price/card-frock-price';
 import CardInfo from './sections/card-info/card-info';
 import FaqSection from './sections/faq-section/faq-section';
 
-export default function Home() {
+export default function Calculator() {
   const [calculator, setCalculator] = useState({
     ftmPrice: 2,
     dailyVolume: 10000,
@@ -94,10 +94,10 @@ export default function Home() {
   const [amountInvested, setAmountInvested] = useState(0);
 
   return (
-    <Container className="home overflow-hidden">
+    <Container className="calculator overflow-hidden">
       <Row>
         <Col className="px-mobile-0 mb-4">
-          <Calculator
+          <CalculatorCard
             calc={calculator}
             setCalc={setCalculator}
             ftmPriceFromApi={ftmPriceFromApi}
