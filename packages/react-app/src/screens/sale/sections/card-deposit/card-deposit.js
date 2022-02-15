@@ -16,6 +16,7 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { useProvider } from '../../../../hooks/ethers/provider';
+import { useStore } from '../../../../hooks/useStore';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-deposit.module.scss';
@@ -28,12 +29,14 @@ export default function CardDeposit({
   isClaimEnabled,
   totalContribution,
   maxContribution,
+  isApprovedDeposit,
+  handleApproveDeposit,
   handleDeposit,
   handleWithdraw,
   handleRedeem,
   handleClaim,
-  nrtBalance,
 }) {
+  const store = useStore();
   const provider = useProvider();
   const startTimeUtc = moment.unix(startTime).utc();
   const endTimeUtc = moment.unix(endTime).utc();
@@ -58,7 +61,7 @@ export default function CardDeposit({
   const formik = useFormik({
     initialValues,
     validationSchema: CommunityOfferingSchema(selected),
-    onSubmit: async data => {
+    onSubmit: async (data, { resetForm }) => {
       if (selected === 'deposit') {
         await handleDeposit(data.depositAmount);
       }
@@ -66,6 +69,8 @@ export default function CardDeposit({
       if (selected === 'withdraw') {
         await handleWithdraw(data.withdrawAmount);
       }
+
+      resetForm();
     },
   });
 
@@ -92,8 +97,19 @@ export default function CardDeposit({
     }
 
     if (maxContribution !== '0' && !communitySale) {
-      const newMaxValue = Number(maxContribution) - Number(totalContribution);
-      formik.setFieldValue(field, newMaxValue);
+      let maxValue = 0;
+      if (Number(maxContribution) >= Number(store.usdcBalance)) {
+        maxValue = Number(store.usdcBalance);
+      } else {
+        maxValue = Number(maxContribution);
+      }
+      formik.setFieldValue(field, maxValue);
+    }
+
+    if (selected === 'withdraw') {
+      if (!communitySale) {
+        formik.setFieldValue(field, Number(totalContribution));
+      }
     }
     return null;
   };
@@ -158,7 +174,15 @@ export default function CardDeposit({
               </div>
             ) : null}
             <RoundButton
-              variant="primary"
+              variant={isApprovedDeposit ? 'disabled' : 'primary'}
+              onClick={() => handleApproveDeposit(formik.values.depositAmount)}
+              className={styles.button}
+              isRounded
+            >
+              Approve USDC
+            </RoundButton>
+            <RoundButton
+              variant={isApprovedDeposit ? 'primary' : 'disabled'}
               className={styles.button}
               type="submit"
               isRounded
@@ -195,7 +219,7 @@ export default function CardDeposit({
               ? Number(maxContribution) <= 800
                 ? renderNumberFormatter(maxContribution)
                 : '800'
-              : renderNumberFormatter(maxContribution)}{' '}
+              : renderNumberFormatter(totalContribution)}{' '}
             $USDC
           </p>
           <Form onSubmit={formik.handleSubmit}>
@@ -277,7 +301,7 @@ export default function CardDeposit({
           malesuada posuere dolor in tempus.
         </Tooltip>
       </h3>
-      <h2>{renderNumberFormatter(nrtBalance)} $bFROCK</h2>
+      <h2>{renderNumberFormatter(store.nrtBalance)} $bFROCK</h2>
       <RoundButton
         onClick={isClaimEnabled ? handleClaim : () => null}
         variant={isClaimEnabled ? 'primary' : 'disabled'}
@@ -293,24 +317,26 @@ export default function CardDeposit({
     <>
       <h3>You have </h3>
       <h2>
-        {renderNumberFormatter(nrtBalance)}{' '}
+        {renderNumberFormatter(store.nrtBalance)}{' '}
         {communitySale ? '$aFROCK' : '$bFROCK'}
       </h2>
       <RoundButton
         onClick={
-          isRedeemEnabled && Number(nrtBalance) !== 0
+          isRedeemEnabled && Number(store.nrtBalance) !== 0
             ? handleRedeem
             : () => null
         }
         variant={
-          isRedeemEnabled && Number(nrtBalance) !== 0 ? 'primary' : 'disabled'
+          isRedeemEnabled && Number(store.nrtBalance) !== 0
+            ? 'primary'
+            : 'disabled'
         }
         className={styles.button}
         isRounded
       >
         {provider
           ? isRedeemEnabled
-            ? Number(nrtBalance) !== 0
+            ? Number(store.nrtBalance) !== 0
               ? communitySale
                 ? 'Redeem $aFROCK for $FROCK'
                 : 'Redeem $bFROCK for $FROCK'
