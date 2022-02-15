@@ -22,9 +22,7 @@ export default function CardTreasury() {
         </Column>
         <Column>
           <p className={styles.strong}>
-            {moment
-              .unix(LAST_TREASURY_DIVIDEND_DISTRIBUTION)
-              .format('DD/MM/YYYY')}
+            {moment(LAST_TREASURY_DIVIDEND_DISTRIBUTION).format('L')}
           </p>
         </Column>
       </Row>
