@@ -12,10 +12,15 @@
     margin-bottom: 0;
     color: color.$grayDark;
     font-weight: 500;
+    line-height: 1.3;
 
     &.strong {
       font-weight: 600;
       color: #000;
+    }
+
+    + p {
+      margin-top: 5px;
     }
   }
 
