@@ -36,14 +36,19 @@ export default function CardFrock() {
       </Card>
 
       <Row className={styles['card-on-bottom']}>
-        <Col xl={6} lg={12} xs={6} className="mb-xl-0 mb-lg-4">
+        <Col
+          xl={6}
+          lg={12}
+          xs={6}
+          className="d-flex align-items-stretch mb-xl-0 mb-lg-4"
+        >
           <Card ellipse="top-right">
             <h6>Total building trade dividends</h6>
             <p className={styles.bigger}>350 $FROCK</p>
             <p>$ 138.15</p>
           </Card>
         </Col>
-        <Col xl={6} lg={12} xs={6}>
+        <Col xl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
             <h6>Total treasury value</h6>
             <p className={styles.bigger}>80 $STRONG</p>

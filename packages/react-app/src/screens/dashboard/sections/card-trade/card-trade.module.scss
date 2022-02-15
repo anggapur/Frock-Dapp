@@ -1,6 +1,8 @@
 @use '../../../../styles/color';
 
 .wrapper {
+  width: 100%;
+
   h6 {
     font-weight: 600;
     color: color.$grayDark;
