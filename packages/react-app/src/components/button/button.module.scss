@@ -42,6 +42,10 @@
     border: 1px solid color.$redDark;
     background-color: #fff;
     color: color.$redDark;
+
+    &:hover {
+      background: darken(#fff, 5%);
+    }
   }
 }
 

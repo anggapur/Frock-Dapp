@@ -204,7 +204,7 @@ export default function Header() {
               className="justify-content-end"
             >
               <Nav>
-                <Link to="/" className="nav-link">
+                <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
                 <Link to="/community-sale" className="nav-link">
@@ -213,6 +213,9 @@ export default function Header() {
                 {/* <Link to="/public-sale" className="nav-link"> */}
                 {/*  Public Sale */}
                 {/* </Link> */}
+                <Link to="/dashboard" className="nav-link">
+                  Dashboard
+                </Link>
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
