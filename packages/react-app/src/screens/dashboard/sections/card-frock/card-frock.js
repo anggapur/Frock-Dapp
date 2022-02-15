@@ -4,7 +4,10 @@ import { Col, Row } from 'react-bootstrap';
 import { GetStrongPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
-import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants';
+import {
+  FROCK_SUPPLY,
+  TOTAL_TREASURY_VALUE_IN_STRONG,
+} from '../../../../constants';
 import styles from './card-frock.module.scss';
 
 export default function CardFrock() {
@@ -41,7 +44,12 @@ export default function CardFrock() {
             <h6>$FROCK market cap</h6>
             <p>$ 3,947,383</p>
             <h6>Total supply</h6>
-            <p>1,000,000 $FROCK</p>
+            <p>
+              {new Intl.NumberFormat('en-US', {
+                maximumFractionDigits: 0,
+              }).format(FROCK_SUPPLY)}{' '}
+              $FROCK
+            </p>
           </Col>
         </Row>
       </Card>
