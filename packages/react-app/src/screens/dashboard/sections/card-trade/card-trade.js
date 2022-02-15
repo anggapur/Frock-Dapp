@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
+import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import styles from './card-trade.module.scss';
@@ -10,6 +11,15 @@ function Column({ children }) {
 }
 
 export default function CardTrade() {
+  const [fantomPrice, setFantomPrice] = useState(0);
+
+  useEffect(() => {
+    GetFantomPrice()
+      .then(price => setFantomPrice(price))
+      // eslint-disable-next-line no-console
+      .catch(console.error);
+  }, []);
+
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
       <Card.Header>Trade dividends</Card.Header>
@@ -63,7 +73,12 @@ export default function CardTrade() {
             <h6>trade dividens</h6>
           </Column>
           <Column>
-            <p>$ 250.21</p>
+            <p>
+              ${' '}
+              {new Intl.NumberFormat('en-US', {
+                maximumFractionDigits: 2,
+              }).format(fantomPrice * 127)}
+            </p>
           </Column>
         </Row>
       </Card.Footer>
