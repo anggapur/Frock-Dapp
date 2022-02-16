@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import moment from 'moment';
-
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
@@ -41,7 +39,11 @@ export default function CardTreasury() {
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
-            {moment(LAST_TREASURY_DIVIDEND_DISTRIBUTION).format('L')}
+            {new Intl.DateTimeFormat(undefined, {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            }).format(LAST_TREASURY_DIVIDEND_DISTRIBUTION)}
           </p>
         </Column>
       </Row>
