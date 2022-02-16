@@ -1,7 +1,8 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import frockDarkLogo from '../../../../assets/frock-dark-logo-small.svg';
+import bfrockLogo from '../../../../assets/bfrock-logo-small.svg';
+import afrockLogo from '../../../../assets/frock-dark-logo-small.svg';
 import frockLogo from '../../../../assets/frock-logo-small.svg';
 import usdcLogo from '../../../../assets/usdc-logo-small.svg';
 import Card from '../../../../components/card/card';
@@ -25,7 +26,7 @@ export default function CardBalance({ communitySale = false }) {
         </Col>
         <Col xl={4} lg={12} xs={4} className={styles['col-xxs-12']}>
           <img
-            src={frockDarkLogo}
+            src={communitySale ? afrockLogo : bfrockLogo}
             alt={`${communitySale ? 'aFROCK' : 'bFROCK'} logo`}
           />
           <div>

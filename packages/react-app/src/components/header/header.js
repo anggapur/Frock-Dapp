@@ -207,9 +207,9 @@ export default function Header() {
                 <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
-                {/* <Link to="/community-sale" className="nav-link">
+                <Link to="/community-sale" className="nav-link">
                   Community Sale
-                </Link> */}
+                </Link>
                 <Link to="/public-sale" className="nav-link">
                   Public Sale
                 </Link>

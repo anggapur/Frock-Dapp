@@ -440,9 +440,8 @@ export default function CardDeposit({
           <>
             <h3>
               Your total Contribution{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
+              <Tooltip>
+                To prevent price manipulation, you can withdraw a maximum of $ 1,000 per hour.
               </Tooltip>
             </h3>
             <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
