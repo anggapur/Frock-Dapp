@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import React, { Col, Container, Row } from 'react-bootstrap';
-import Countdown from 'react-countdown';
 
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
@@ -24,6 +23,7 @@ import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
 import { useProvider } from '../../../hooks/ethers/provider';
 import { useStore } from '../../../hooks/useStore';
+import { timePad } from '../../../utils';
 import {
   handleFairClaimErr,
   handleFairDepositErr,
@@ -254,14 +254,6 @@ export default function PublicSale() {
     }
   };
 
-  const renderCountdown = () => {
-    const countdownTime = moment(startTime).add(2, 'days').valueOf();
-    if (moment(startTime).isSame(new Date())) {
-      return <Countdown daysInHours date={countdownTime} />;
-    }
-    return '00:00:00';
-  };
-
   const handleClaim = async () => {
     try {
       const tx = await fairLaunch.claimRedeemable();
@@ -270,6 +262,42 @@ export default function PublicSale() {
       ToastError('There is something wrong. Please try again!');
     }
   };
+
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const difference =
+      Date.UTC(2022, 1, 21, 16) -
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds(),
+      );
+
+    if (difference <= 0) {
+      return null;
+    }
+
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    return `${timePad(hours)}:${timePad(minutes)}:${timePad(seconds)}`;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   return (
     <div className="position-relative">
@@ -283,25 +311,29 @@ export default function PublicSale() {
           <Col lg={8}>
             <h1>
               Fractional Rocket Public Sale -{' '}
-              {startTimeUtc.utc().format('DD MMM. h:mm A UTC')}
+              {startTimeUtc.utc().format('MMM. Do, h:mm a UTC')}
             </h1>
           </Col>
           <Col lg={4}>
             {startTime !== null && isAfterStartTime && (
               <CountdownUI
-                countdown={renderCountdown()}
+                countdown={timeLeft}
                 className="float-lg-end"
+                type="Public Sale"
+                isFinish={!timeLeft}
               />
             )}
           </Col>
         </Row>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate mi
-          mattis vitae lobortis pharetra tincidunt vivamus dignissim rhoncus.
-          Mi, rhoncus est sapien sed enim. Proin rhoncus augue id viverra nulla
-          ac porttitor. Donec purus amet nunc eget morbi. Vulputate mi mattis
-          vitae lobortis pharetra tincidunt vivamus dignissim rhoncus. Mi,
-          rhoncus est sapien sed enim
+          Please read all details here:&nbsp;
+          <a
+            href="https://medium.com/@fr0ck/fractional-rocket-public-sale-in-depth-c4fe57606611"
+            className="text-red-dark text-decoration-underline"
+            target="_blank"
+          >
+            Fractional Rocket Public Sale — in depth.
+          </a>
         </p>
         <Row>
           <Col lg={7}>
