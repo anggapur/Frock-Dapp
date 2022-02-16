@@ -29,7 +29,7 @@ export default function CardDeposit({
   isClaimEnabled,
   totalContribution,
   maxContribution,
-  isApprovedDeposit,
+  totalApproved,
   handleApproveDeposit,
   handleDeposit,
   handleWithdraw,
@@ -174,7 +174,12 @@ export default function CardDeposit({
               </div>
             ) : null}
             <RoundButton
-              variant={isApprovedDeposit ? 'disabled' : 'primary'}
+              variant={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(maxContribution)
+                  ? 'disabled'
+                  : 'primary'
+              }
               onClick={() => handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
               isRounded
@@ -182,7 +187,12 @@ export default function CardDeposit({
               Approve USDC
             </RoundButton>
             <RoundButton
-              variant={isApprovedDeposit ? 'primary' : 'disabled'}
+              variant={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(maxContribution)
+                  ? 'primary'
+                  : 'disabled'
+              }
               className={styles.button}
               type="submit"
               isRounded
