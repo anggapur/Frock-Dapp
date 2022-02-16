@@ -20,7 +20,7 @@ export default function App() {
           <Route path="calculator" element={<Calculator />} />
           {/* <Route path="public-sale" element={<PublicSale />} /> */}
           <Route path="community-sale" element={<CommunitySale />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          // <Route path="dashboard" element={<Dashboard />} />
         </Routes>
       </Suspense>
     </Layout>
