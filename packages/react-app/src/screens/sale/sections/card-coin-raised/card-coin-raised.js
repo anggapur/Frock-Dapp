@@ -192,13 +192,13 @@ export default function CardCoinRaised({
       </div>
       {!communitySale && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
-          <Col lg={6} className={styles.priceBorder}>
+          <Col xl={6} className={styles.priceBorder}>
             <div className={styles.price}>
               <h4>Starting $bFROCK Price</h4>
               <p>{renderNumberFormatter(prices.startPrice)} $</p>
             </div>
           </Col>
-          <Col lg={6}>
+          <Col xl={6}>
             <div className={styles.price}>
               <h4>Current $bFROCK Price:</h4>
               <p>{renderNumberFormatter(prices.currentPrice)} $</p>
