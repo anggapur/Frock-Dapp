@@ -9,8 +9,17 @@ import Card from '../../../../components/card/card';
 import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants';
 import styles from './card-treasury.module.scss';
 
-function Column({ children }) {
-  return <Col xs={6}>{children}</Col>;
+function Column({ children, isDescription = false, ...rest }) {
+  return (
+    <Col
+      xl={isDescription ? 7 : 5}
+      lg={isDescription ? 8 : 4}
+      xs={isDescription ? 7 : 5}
+      {...rest}
+    >
+      {children}
+    </Col>
+  );
 }
 
 export default function CardTreasury() {
@@ -27,10 +36,10 @@ export default function CardTreasury() {
     <Card ellipse="top-left" className={styles.wrapper}>
       <Card.Header>Treasury dividends</Card.Header>
       <Row>
-        <Column>
-          <h6>Last treasury dividend distribution</h6>
+        <Column isDescription>
+          <h6>Last dividend distribution</h6>
         </Column>
-        <Column>
+        <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
             {moment(LAST_TREASURY_DIVIDEND_DISTRIBUTION).format('L')}
           </p>
@@ -38,10 +47,10 @@ export default function CardTreasury() {
       </Row>
       <hr />
       <Row>
-        <Column>
+        <Column isDescription>
           <h6>Your claimable treasury dividends</h6>
         </Column>
-        <Column>
+        <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>$FTM 13.50</p>
           <p>$ 30.20</p>
         </Column>
@@ -51,10 +60,10 @@ export default function CardTreasury() {
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>
-          <Column>
+          <Column isDescription>
             <h6>Your total claimed treasury dividends</h6>
           </Column>
-          <Column>
+          <Column className="px-xl-2 px-lg-0">
             <p className={styles.strong}>$FTM 27.00</p>
             <p>
               ${' '}
