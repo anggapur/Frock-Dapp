@@ -25,7 +25,7 @@ export default function CardTrade() {
       <Card.Header>Trade dividends</Card.Header>
       <Row>
         <Column>
-          <h6>Your building trade dividens</h6>
+          <h6>Your building trade dividends</h6>
         </Column>
         <Column>
           <p className={styles.strong}>$FTM 30.50</p>
@@ -35,7 +35,7 @@ export default function CardTrade() {
       <hr />
       <Row>
         <Column>
-          <h6>Your claimable trade dividens</h6>
+          <h6>Your claimable trade dividends</h6>
         </Column>
         <Column>
           <p className={styles.strong}>$FTM 130.50</p>
@@ -48,7 +48,7 @@ export default function CardTrade() {
       <Card.Footer className={styles.footer}>
         <Row>
           <Column>
-            <h6>Your total claimed trade dividens</h6>
+            <h6>Your total claimed trade dividends</h6>
           </Column>
           <Column>
             <p className={styles.strong}>$FTM 127.00</p>

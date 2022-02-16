@@ -39,7 +39,7 @@ export default function CardTreasury() {
       <hr />
       <Row>
         <Column>
-          <h6>Your claimable treasury dividens</h6>
+          <h6>Your claimable treasury dividends</h6>
         </Column>
         <Column>
           <p className={styles.strong}>$FTM 13.50</p>
@@ -52,7 +52,7 @@ export default function CardTreasury() {
       <Card.Footer className={styles.footer}>
         <Row>
           <Column>
-            <h6>Your total claimed treasury dividens</h6>
+            <h6>Your total claimed treasury dividends</h6>
           </Column>
           <Column>
             <p className={styles.strong}>$FTM 27.00</p>
