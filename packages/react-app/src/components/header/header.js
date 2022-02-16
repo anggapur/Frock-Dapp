@@ -213,9 +213,9 @@ export default function Header() {
                 {/* <Link to="/public-sale" className="nav-link"> */}
                 {/*  Public Sale */}
                 {/* </Link> */}
-                // <Link to="/dashboard" className="nav-link">
-                //   Dashboard
-                // </Link>
+                {/* <Link to="/dashboard" className="nav-link"> */}
+                {/*   Dashboard */}
+                {/* </Link> */}
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
