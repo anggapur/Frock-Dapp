@@ -283,7 +283,7 @@ export default function PublicSale() {
           <Col lg={8}>
             <h1>
               Fractional Rocket Public Sale -{' '}
-              {startTimeUtc.utc().format('DD MMM. h:mm A UTC')}
+              {startTimeUtc.utc().format('MMM. Do, h:mm a UTC')}
             </h1>
           </Col>
           <Col lg={4}>
@@ -296,12 +296,14 @@ export default function PublicSale() {
           </Col>
         </Row>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate mi
-          mattis vitae lobortis pharetra tincidunt vivamus dignissim rhoncus.
-          Mi, rhoncus est sapien sed enim. Proin rhoncus augue id viverra nulla
-          ac porttitor. Donec purus amet nunc eget morbi. Vulputate mi mattis
-          vitae lobortis pharetra tincidunt vivamus dignissim rhoncus. Mi,
-          rhoncus est sapien sed enim
+        Please read all details here:&nbsp;
+          <a
+              href="https://medium.com/@fr0ck/fractional-rocket-public-sale-in-depth-c4fe57606611"
+              className="text-red-dark text-decoration-underline"
+              target="_blank"
+          >
+            Fractional Rocket Public Sale — in depth.
+          </a>
         </p>
         <Row>
           <Col lg={7}>
