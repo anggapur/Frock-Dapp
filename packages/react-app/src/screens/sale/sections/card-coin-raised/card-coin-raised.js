@@ -193,16 +193,44 @@ export default function CardCoinRaised({
       {!communitySale && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
           <Col xl={6} className={styles.priceBorder}>
-            <div className={styles.price}>
-              <h4>Starting $bFROCK Price</h4>
-              <p>$ {renderNumberFormatter(prices.startPrice)}</p>
-            </div>
+            <Row>
+              <Col xs={8}>
+                <h4>Starting $bFROCK Price:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>$ {renderNumberFormatter(prices.startPrice)}</p>
+              </Col>
+            </Row>
           </Col>
           <Col xl={6}>
-            <div className={styles.price}>
-              <h4>Current $bFROCK Price:</h4>
-              <p>$ {renderNumberFormatter(prices.currentPrice)}</p>
-            </div>
+            <Row>
+              <Col xs={8}>
+                <h4>Current $bFROCK Price:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>$ {renderNumberFormatter(prices.currentPrice)}</p>
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={6} className={styles.priceBorder}>
+            <Row>
+              <Col xs={8}>
+                <h4>Total Investors during Public Sale:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>$ {renderNumberFormatter(3136)}</p>
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={6}>
+            <Row>
+              <Col xs={8}>
+                <h4>Your balance at current Price:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>$ {renderNumberFormatter(6425.24)} $bFROCK</p>
+              </Col>
+            </Row>
           </Col>
         </Row>
       )}

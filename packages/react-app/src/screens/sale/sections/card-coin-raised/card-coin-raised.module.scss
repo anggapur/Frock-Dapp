@@ -252,11 +252,12 @@ $paddingXMobile: 24px;
       font-weight: 600;
     }
 
-    .price {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    > div {
       margin-bottom: 20px;
+
+      p {
+        text-align: right;
+      }
 
       &.priceLast {
         margin-bottom: -10px;
