@@ -14,6 +14,7 @@ import arrowUpIconGray from '../../../../assets/arrow-up-icon-gray.svg';
 import arrowUpIconRed from '../../../../assets/arrow-up-icon-red.svg';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { useProvider } from '../../../../hooks/ethers/provider';
 import { useStore } from '../../../../hooks/useStore';
@@ -35,6 +36,7 @@ export default function CardDeposit({
   handleWithdraw,
   handleRedeem,
   handleClaim,
+  isApproveUsdcLoading,
 }) {
   const store = useStore();
   const provider = useProvider();
@@ -45,6 +47,7 @@ export default function CardDeposit({
   const isBeforeEndTime = moment(new Date()).isSameOrBefore(endTimeUtc);
   const isAfterEndTime = moment(new Date()).isSameOrAfter(endTimeUtc);
   const [selected, setSelected] = useState('deposit');
+  const [buttonLoading, setButtonLoading] = useState(null);
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
@@ -62,15 +65,24 @@ export default function CardDeposit({
     initialValues,
     validationSchema: CommunityOfferingSchema(selected),
     onSubmit: async (data, { resetForm }) => {
-      if (selected === 'deposit') {
-        await handleDeposit(data.depositAmount);
+      setButtonLoading(selected);
+
+      try {
+        if (selected === 'deposit') {
+          await handleDeposit(data.depositAmount);
+        }
+
+        if (selected === 'withdraw') {
+          await handleWithdraw(data.withdrawAmount);
+        }
+
+        resetForm();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
       }
 
-      if (selected === 'withdraw') {
-        await handleWithdraw(data.withdrawAmount);
-      }
-
-      resetForm();
+      setButtonLoading(null);
     },
   });
 
@@ -114,30 +126,47 @@ export default function CardDeposit({
     return null;
   };
 
+  const _handleApproveDeposit = async depositAmount => {
+    setButtonLoading('approve usdc');
+    try {
+      await handleApproveDeposit(depositAmount);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+    setButtonLoading(null);
+  };
+
   const renderDeposit = () => {
     if (isAfterStartTime && isBeforeEndTime) {
       return (
         <>
           <p>
             Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC{' '}
-            <span style={{ display: 'inline-flex' }}>
-              <Tooltip>
-                <ul className="ps-3">
-                  <li>First 6 hours max total per person investment: $100</li>
-                  <li>Second 6 hours max total per person investment: $200 </li>
-                  <li>Third 6 hours max total per person investment: $400</li>
-                  <li>Fourth 6 hours max total per person investment: $800</li>
-                </ul>
-                Example: <br />
-                If 80 investors invest $100 (and the others do not take part)
-                $2,000 remains of the $ 10,000 hard cap. <br />
-                Once the first 6 hour period finishes, 20 people can top-up with
-                $100 to increase their investment to $200. <br />
-                If after the second period of 6 hours, the maximum of is still
-                not reached, people can top-up with $200 (making their total
-                $400)
-              </Tooltip>
-            </span>
+            {communitySale && (
+              <span style={{ display: 'inline-flex' }}>
+                <Tooltip>
+                  <ul className="ps-3">
+                    <li>First 6 hours max total per person investment: $100</li>
+                    <li>
+                      Second 6 hours max total per person investment: $200
+                    </li>
+                    <li>Third 6 hours max total per person investment: $400</li>
+                    <li>
+                      Fourth 6 hours max total per person investment: $800
+                    </li>
+                  </ul>
+                  Example: <br />
+                  If 80 investors invest $100 (and the others do not take part)
+                  $2,000 remains of the $ 10,000 hard cap. <br />
+                  Once the first 6 hour period finishes, 20 people can top-up
+                  with $100 to increase their investment to $200. <br />
+                  If after the second period of 6 hours, the maximum of is still
+                  not reached, people can top-up with $200 (making their total
+                  $400)
+                </Tooltip>
+              </span>
+            )}
           </p>
           <Form onSubmit={formik.handleSubmit}>
             <InputGroup
@@ -180,11 +209,15 @@ export default function CardDeposit({
                   ? 'disabled'
                   : 'primary'
               }
-              onClick={() => handleApproveDeposit(formik.values.depositAmount)}
+              onClick={() => _handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
+              disabled={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(maxContribution)
+              }
               isRounded
             >
-              Approve USDC
+              {renderButtonText('Approve USDC')}
             </RoundButton>
             <RoundButton
               variant={
@@ -195,9 +228,14 @@ export default function CardDeposit({
               }
               className={styles.button}
               type="submit"
+              disabled={
+                Number(totalApproved) <= 0 ||
+                Number(totalApproved) > Number(maxContribution) ||
+                buttonLoading === 'deposit'
+              }
               isRounded
             >
-              Deposit
+              {renderButtonText('Deposit')}
             </RoundButton>
           </Form>
         </>
@@ -209,6 +247,7 @@ export default function CardDeposit({
         variant="disabled"
         className={clsx(styles.button, 'disabled')}
         onClick={() => null}
+        disabled
         isRounded
       >
         {isBeforeStartTime && communitySale && 'Community sale not started yet'}
@@ -217,6 +256,18 @@ export default function CardDeposit({
         {isAfterEndTime && !communitySale && 'Public sale finished'}
       </RoundButton>
     );
+  };
+
+  const renderButtonText = name => {
+    const loadingName = String(name).toLocaleLowerCase();
+    if (
+      buttonLoading === loadingName ||
+      (loadingName === 'approve usdc' && isApproveUsdcLoading)
+    ) {
+      return <Loading variant="light" size="34" style={{ flex: 1 }} />;
+    }
+
+    return name;
   };
 
   const renderWithdraw = () => {
@@ -271,7 +322,7 @@ export default function CardDeposit({
               className={styles.button}
               isRounded
             >
-              Withdraw
+              {renderButtonText('Withdraw')}
             </RoundButton>
           </Form>
         </>
@@ -441,7 +492,8 @@ export default function CardDeposit({
             <h3>
               Your total Contribution{' '}
               <Tooltip>
-                To prevent price manipulation, you can withdraw a maximum of $ 1,000 per hour.
+                To prevent price manipulation, you can withdraw a maximum of $
+                1,000 per hour.
               </Tooltip>
             </h3>
             <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>

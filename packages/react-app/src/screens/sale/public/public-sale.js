@@ -22,6 +22,7 @@ import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
 import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
 import { useProvider } from '../../../hooks/ethers/provider';
+import { useFirework } from '../../../hooks/useFirework';
 import { useStore } from '../../../hooks/useStore';
 import { timePad } from '../../../utils';
 import {
@@ -53,8 +54,10 @@ export default function PublicSale() {
   const [isRedeemEnabled, setIsRedeemEnabled] = useState(false);
   const [isClaimEnabled, setIsClaimEnabled] = useState(false);
   const [refetch, setRefetch] = useState(false);
+  const [isApproveUsdcLoading, setIsApproveUsdcLoading] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
+  const firework = useFirework();
 
   const startTimeUtc = moment.unix(startTime).utc();
   const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
@@ -206,11 +209,23 @@ export default function PublicSale() {
   const handleApproveDeposit = async _depositAmount => {
     const parsedDepositAmount = parseUnits(String(2500), USDC_DECIMALS);
     try {
-      await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
+      const tx = await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
+      setIsApproveUsdcLoading(true);
+      await tx.wait();
+      await handleRefetch(true);
     } catch (error) {
       ToastError('Cannot approve your USDC. Please try again!');
     }
   };
+
+  useEffect(() => {
+    if (
+      Number(totalApproved) > 0 &&
+      Number(totalApproved) <= Number(maxContribution)
+    ) {
+      setIsApproveUsdcLoading(false);
+    }
+  }, [totalApproved, maxContribution]);
 
   const handleDeposit = async depositAmount => {
     if (!accounts) return;
@@ -223,6 +238,7 @@ export default function PublicSale() {
       await tx.wait();
       await handleRefetch(true);
       ToastSuccess('Your transaction has been processed!');
+      firework.setActive(true);
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairDepositErr(errorMsg));
@@ -367,6 +383,7 @@ export default function PublicSale() {
               handleWithdraw={handleWithdraw}
               handleRedeem={handleRedeem}
               handleClaim={handleClaim}
+              isApproveUsdcLoading={isApproveUsdcLoading}
             />
             {/* <CommunityList /> */}
           </Col>

@@ -83,13 +83,26 @@ export default function CardFrock() {
           <Card ellipse="top-right">
             <h6>Total building trade dividends</h6>
             <Row>
-              <Col xxl={12} lg={6} xs={6} className="d-flex align-items-stretch">
+              <Col
+                xxl={12}
+                xl={6}
+                lg={7}
+                xs={12}
+                className="d-flex align-items-stretch"
+              >
                 <p className={styles.bigger}>350 $FROCK</p>
               </Col>
-              <Col xxl={12} lg={6} xs={6} className="d-flex align-items-stretch">
+              <Col
+                xxl={12}
+                xl={6}
+                lg={5}
+                xs={12}
+                className="d-flex align-items-stretch"
+              >
                 <p>
                   ${' '}
                   {new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(frockPrice * 350)}
                 </p>
@@ -101,15 +114,28 @@ export default function CardFrock() {
           <Card ellipse="top-right">
             <h6>Total treasury value</h6>
             <Row>
-              <Col xxl={12} lg={6} xs={6} className="d-flex align-items-stretch">
+              <Col
+                xxl={12}
+                xl={6}
+                lg={7}
+                xs={12}
+                className="d-flex align-items-stretch"
+              >
                 <p className={styles.bigger}>
                   {TOTAL_TREASURY_VALUE_IN_STRONG} $STRONG
                 </p>
               </Col>
-              <Col xxl={12} lg={6} xs={6} className="d-flex align-items-stretch">
+              <Col
+                xxl={12}
+                xl={6}
+                lg={5}
+                xs={12}
+                className="d-flex align-items-stretch"
+              >
                 <p>
                   ${' '}
                   {new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
                 </p>

@@ -1,7 +1,7 @@
 @use '../../../../styles/color';
 
-$paddingX: 30px;
-$paddingY: 35px;
+$paddingY: 26px;
+$paddingX: 24px;
 $paddingYMobile: 26px;
 $paddingXMobile: 24px;
 
@@ -16,7 +16,7 @@ $paddingXMobile: 24px;
   border-top-left-radius: 17px;
   border-top-right-radius: 17px;
   color: color.$white;
-  box-shadow: 0px 4px 4px 0px #00000026;
+  box-shadow: 0px 0px 4px 0px #00000026;
 
   &.communitySale {
     margin-bottom: (-$paddingYMobile);
@@ -252,11 +252,12 @@ $paddingXMobile: 24px;
       font-weight: 600;
     }
 
-    .price {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    > div {
       margin-bottom: 20px;
+
+      p {
+        text-align: right;
+      }
 
       &.priceLast {
         margin-bottom: -10px;
