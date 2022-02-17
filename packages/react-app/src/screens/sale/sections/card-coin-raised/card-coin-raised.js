@@ -232,7 +232,7 @@ export default function CardCoinRaised({
                 <h4>Your balance at current Price:</h4>
               </Col>
               <Col xs={4}>
-                <p>$ {renderNumberFormatter(6425.24)} $bFROCK</p>
+                <p>{renderNumberFormatter(6425.24)} $bFROCK</p>
               </Col>
             </Row>
           </Col>
