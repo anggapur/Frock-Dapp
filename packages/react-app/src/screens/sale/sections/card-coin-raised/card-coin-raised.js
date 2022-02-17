@@ -215,10 +215,14 @@ export default function CardCoinRaised({
           <Col xl={6} className={styles.priceBorder}>
             <Row>
               <Col xs={8}>
-                <h4>Total Investors during Public Sale:</h4>
+                <h4>Total # investors in Public Sale:</h4>
               </Col>
               <Col xs={4}>
-                <p>$ {renderNumberFormatter(3136)}</p>
+                <p>
+                  {Number(3136).toLocaleString('en-US', {
+                    maximumFractionDigits: 0,
+                  })}
+                </p>
               </Col>
             </Row>
           </Col>
