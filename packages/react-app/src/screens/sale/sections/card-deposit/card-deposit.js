@@ -120,24 +120,30 @@ export default function CardDeposit({
         <>
           <p>
             Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC{' '}
-            <span style={{ display: 'inline-flex' }}>
-              <Tooltip>
-                <ul className="ps-3">
-                  <li>First 6 hours max total per person investment: $100</li>
-                  <li>Second 6 hours max total per person investment: $200 </li>
-                  <li>Third 6 hours max total per person investment: $400</li>
-                  <li>Fourth 6 hours max total per person investment: $800</li>
-                </ul>
-                Example: <br />
-                If 80 investors invest $100 (and the others do not take part)
-                $2,000 remains of the $ 10,000 hard cap. <br />
-                Once the first 6 hour period finishes, 20 people can top-up with
-                $100 to increase their investment to $200. <br />
-                If after the second period of 6 hours, the maximum of is still
-                not reached, people can top-up with $200 (making their total
-                $400)
-              </Tooltip>
-            </span>
+            {communitySale && (
+              <span style={{ display: 'inline-flex' }}>
+                <Tooltip>
+                  <ul className="ps-3">
+                    <li>First 6 hours max total per person investment: $100</li>
+                    <li>
+                      Second 6 hours max total per person investment: $200
+                    </li>
+                    <li>Third 6 hours max total per person investment: $400</li>
+                    <li>
+                      Fourth 6 hours max total per person investment: $800
+                    </li>
+                  </ul>
+                  Example: <br />
+                  If 80 investors invest $100 (and the others do not take part)
+                  $2,000 remains of the $ 10,000 hard cap. <br />
+                  Once the first 6 hour period finishes, 20 people can top-up
+                  with $100 to increase their investment to $200. <br />
+                  If after the second period of 6 hours, the maximum of is still
+                  not reached, people can top-up with $200 (making their total
+                  $400)
+                </Tooltip>
+              </span>
+            )}
           </p>
           <Form onSubmit={formik.handleSubmit}>
             <InputGroup
@@ -441,7 +447,8 @@ export default function CardDeposit({
             <h3>
               Your total Contribution{' '}
               <Tooltip>
-                To prevent price manipulation, you can withdraw a maximum of $ 1,000 per hour.
+                To prevent price manipulation, you can withdraw a maximum of $
+                1,000 per hour.
               </Tooltip>
             </h3>
             <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
