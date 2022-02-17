@@ -88,14 +88,7 @@ contract DividenDistributorV1 is
     function swapAndShareReward() external onlyRole(REWARDER_ROLE) {
         require(mainToken != address(0), "DD : MAIN_TOKEN_NOT_SETTED");
         uint256 mainTokenBalance = getTokenBalance();
-
-        // Minimum 1_000 FROCK or last rewardshare is already passed 2 hours ago
-        require(
-            mainTokenBalance >= 1000 * (10 ** 9)
-            || lastRewardShare <= block.timestamp - (2 * 3600),
-            "DD: REQUIREMENT_NOT_PASSED"
-        );
-
+        
         lastRewardShare = block.timestamp;
 
         uint256 ethBalanceBefore = getBalance();
