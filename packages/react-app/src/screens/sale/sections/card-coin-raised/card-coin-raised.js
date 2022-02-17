@@ -195,13 +195,13 @@ export default function CardCoinRaised({
           <Col xl={6} className={styles.priceBorder}>
             <div className={styles.price}>
               <h4>Starting $bFROCK Price</h4>
-              <p>{renderNumberFormatter(prices.startPrice)} $</p>
+              <p>$ {renderNumberFormatter(prices.startPrice)}</p>
             </div>
           </Col>
           <Col xl={6}>
             <div className={styles.price}>
               <h4>Current $bFROCK Price:</h4>
-              <p>{renderNumberFormatter(prices.currentPrice)} $</p>
+              <p>$ {renderNumberFormatter(prices.currentPrice)}</p>
             </div>
           </Col>
         </Row>
