@@ -36,6 +36,7 @@ export default function CardDeposit({
   handleWithdraw,
   handleRedeem,
   handleClaim,
+  isApproveUsdcLoading,
 }) {
   const store = useStore();
   const provider = useProvider();
@@ -125,6 +126,17 @@ export default function CardDeposit({
     return null;
   };
 
+  const _handleApproveDeposit = async depositAmount => {
+    setButtonLoading('approve usdc');
+    try {
+      await handleApproveDeposit(depositAmount);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+    setButtonLoading(null);
+  };
+
   const renderDeposit = () => {
     if (isAfterStartTime && isBeforeEndTime) {
       return (
@@ -197,7 +209,7 @@ export default function CardDeposit({
                   ? 'disabled'
                   : 'primary'
               }
-              onClick={() => handleApproveDeposit(formik.values.depositAmount)}
+              onClick={() => _handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
               disabled={
                 Number(totalApproved) > 0 &&
@@ -246,7 +258,11 @@ export default function CardDeposit({
   };
 
   const renderButtonText = name => {
-    if (buttonLoading === String(name).toLocaleLowerCase()) {
+    const loadingName = String(name).toLocaleLowerCase();
+    if (
+      buttonLoading === loadingName ||
+      (loadingName === 'approve usdc' && isApproveUsdcLoading)
+    ) {
       return <Loading variant="light" size="34" style={{ flex: 1 }} />;
     }
 
