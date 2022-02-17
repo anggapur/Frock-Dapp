@@ -29,6 +29,7 @@ import {
   handleFairClaimErr,
   handleFairDepositErr,
   handleFairRedeemErr,
+  handleFairWithdrawErr,
 } from '../../../utils/error';
 import '../sale.scss';
 import CardBalance from '../sections/card-balance/card-balance';
@@ -43,11 +44,14 @@ export default function PublicSale() {
   const [prices, setPrices] = useState({
     startPrice: '0',
     currentPrice: '0',
+    finalPrice: '0',
   });
   const [totalApproved, setIsTotalApproved] = useState('0');
+  const [investedPerPerson, setInvestedPerPerson] = useState('0');
   const [maxGlobalInvest, setMaxGlobalInvest] = useState('0');
   const [totalGlobalInvested, setTotalGlobalInvested] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
+  const [totalInvestors, setTotalInvestors] = useState('0');
   const [maxContribution, setMaxContribution] = useState('0');
   const [startTime, setStartTime] = useState(1645286400);
   const [endTime, setEndTime] = useState(1645459200);
@@ -100,8 +104,11 @@ export default function PublicSale() {
         await handleGetTotalInvested();
         await handleGetPrices();
         await handleGetTotalContribution();
+        await handleGetTotalInvestors();
 
         await handleCheckApproved();
+
+        await handleGetInvestedPerPerson();
 
         await handleGetIsRedeemEnabled();
         await handleGetIsClaimEnabled();
@@ -154,11 +161,18 @@ export default function PublicSale() {
   const handleGetPrices = async () => {
     const getStartPriceResult = await fairLaunch.startingPrice();
     const getCurrentPriceResult = await fairLaunch.currentPrice();
+    const getFinalPrice = await fairLaunch.finalPrice();
 
     setPrices({
       startPrice: formatUnits(getStartPriceResult, USDC_DECIMALS),
       currentPrice: formatUnits(getCurrentPriceResult, USDC_DECIMALS),
+      finalPrice: formatUnits(getFinalPrice, USDC_DECIMALS),
     });
+  };
+
+  const handleGetTotalInvestors = async () => {
+    const totalInvestorsResult = await fairLaunch.totalInvestors();
+    setTotalInvestors(totalInvestorsResult);
   };
 
   const handleGetGlobalMaxInvest = async () => {
@@ -188,6 +202,15 @@ export default function PublicSale() {
   const handleGetMaxContribution = async () => {
     const maxContributionResult = await fairLaunch.maxInvestAllowed();
     setMaxContribution(formatUnits(maxContributionResult, USDC_DECIMALS));
+  };
+
+  const handleGetInvestedPerPerson = async () => {
+    const totalContributionResult = await fairLaunch.investorInfoMap(
+      accounts[0],
+    );
+    setInvestedPerPerson(
+      formatUnits(totalContributionResult.totalInvested, USDC_DECIMALS),
+    );
   };
 
   const handleGetTotalInvested = async () => {
@@ -259,7 +282,7 @@ export default function PublicSale() {
       ToastSuccess('Your transaction has been processed!');
     } catch (error) {
       const errorMsg = error.data.message;
-      ToastError(handleFairClaimErr(errorMsg));
+      ToastError(handleFairWithdrawErr(errorMsg));
     }
   };
 
@@ -280,7 +303,8 @@ export default function PublicSale() {
       const tx = await fairLaunch.claimRedeemable();
       await tx.wait();
     } catch (error) {
-      ToastError('There is something wrong. Please try again!');
+      const errorMsg = error.data.message;
+      ToastError(handleFairClaimErr(errorMsg));
     }
   };
 
@@ -365,7 +389,9 @@ export default function PublicSale() {
               totalLimit={maxGlobalInvest}
               totalRaised={totalGlobalInvested}
               maxContribution={maxContribution}
+              totalInvestors={totalInvestors}
               prices={prices}
+              investedPerPerson={investedPerPerson}
             />
           </Col>
           <Col lg={5}>
@@ -384,6 +410,8 @@ export default function PublicSale() {
               handleRedeem={handleRedeem}
               handleClaim={handleClaim}
               isApproveUsdcLoading={isApproveUsdcLoading}
+              prices={prices}
+              investedPerPerson={investedPerPerson}
             />
             {/* <CommunityList /> */}
           </Col>

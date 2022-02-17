@@ -126,6 +126,66 @@ export const handleFairDepositErr = err => {
   return errorMessage;
 };
 
+export const handleFairWithdrawErr = err => {
+  let errorMessage = 'There is something wrong. Please try again!';
+  const isExceeds = err.includes('transfer amount exceeds balance');
+  const isNotEnabled = err.includes('Sale is not enabled yet');
+  const isNotStarted = err.includes('Sale has not started yet');
+  const isAmountTooSmall = err.includes('Invest amount too small');
+  const isMore = err.includes('Cannot Remove more than invested');
+  const isMaximum = err.includes(
+    'Maximum Investments reached, deposits/withdrawal are disabled',
+  );
+  const isEnded = err.includes('Sale has ended');
+  const isMaxIndividual = err.includes(
+    'Cannot remove more than the maximum by period',
+  );
+  const isFailed = err.includes('transfer failed');
+  const isMaxWithdraw = err.includes('Max withdraw reached for this hour');
+
+  if (isExceeds) {
+    errorMessage = 'Transfer amount exceeds balance';
+  }
+
+  if (isFailed) {
+    errorMessage = 'Transfer is Failed, please try again!';
+  }
+
+  if (isNotEnabled) {
+    errorMessage = 'Public Sale has not been enabled yet';
+  }
+
+  if (isNotStarted) {
+    errorMessage = 'Public Sale not started yet';
+  }
+
+  if (isAmountTooSmall) {
+    errorMessage = 'Invest amount is too small';
+  }
+
+  if (isMaximum) {
+    errorMessage = 'Maximum investment value reached.';
+  }
+
+  if (isMore) {
+    errorMessage = 'Cannot remove more than invested';
+  }
+
+  if (isEnded) {
+    errorMessage = 'Public Sale has ended';
+  }
+
+  if (isMaxIndividual) {
+    errorMessage = 'Cannot remove more than the maximum by period';
+  }
+
+  if (isMaxWithdraw) {
+    errorMessage = 'Maximum withdraw reached for this hour';
+  }
+
+  return errorMessage;
+};
+
 export const handleFairClaimErr = err => {
   let errorMessage = 'There is something wrong. Please try again!';
   const isClaimed = err.includes('tokens already claimed');

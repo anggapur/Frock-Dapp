@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
+import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import _ from 'lodash';
 import moment from 'moment';
@@ -9,10 +10,10 @@ import 'moment-timezone';
 
 import timeSymbol from '../../../../assets/time-symbol.svg';
 import Card from '../../../../components/card/card';
+import { FROCK_DECIMALS } from '../../../../constants';
 import {
   converSecondsToHours,
   getPercentageFromHour,
-  handleKFormatter,
   renderNumberFormatter,
 } from '../../../../utils';
 import styles from './card-coin-raised.module.scss';
@@ -25,8 +26,10 @@ export default function CardCoinRaised({
   endTime,
   totalLimit,
   maxContribution,
+  totalInvestors,
   totalRaised,
   prices,
+  investedPerPerson,
 }) {
   const getPercentage = (Number(totalRaised) / Number(totalLimit)) * 100;
   const [precent, setPrecent] = useState(getPercentage);
@@ -43,10 +46,18 @@ export default function CardCoinRaised({
       ? moment(currentTimeUtc).diff(startTimeUtc, 'seconds')
       : 0;
   const endDuration = moment(endTimeUtc).diff(startTimeUtc, 'seconds');
-  const [progressBarPrecent, setProgressBarPrecent] = useState(0);
+  const [_progressBarPrecent, setProgressBarPrecent] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
 
   const circleRef = useRef();
+
+  const calculateFrock =
+    investedPerPerson !== '0' &&
+    prices.finalPrice !== '0' &&
+    formatUnits(
+      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
+      FROCK_DECIMALS,
+    );
 
   useEffect(() => {
     if (
@@ -219,7 +230,7 @@ export default function CardCoinRaised({
               </Col>
               <Col xs={4}>
                 <p>
-                  {Number(3136).toLocaleString('en-US', {
+                  {Number(totalInvestors).toLocaleString('en-US', {
                     maximumFractionDigits: 0,
                   })}
                 </p>
@@ -232,7 +243,7 @@ export default function CardCoinRaised({
                 <h4>Your balance at current Price:</h4>
               </Col>
               <Col xs={4}>
-                <p>{renderNumberFormatter(6425.24)} $bFROCK</p>
+                <p>{renderNumberFormatter(calculateFrock)} $bFROCK</p>
               </Col>
             </Row>
           </Col>

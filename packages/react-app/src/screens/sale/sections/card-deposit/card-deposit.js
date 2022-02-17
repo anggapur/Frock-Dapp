@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
 
+import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import moment from 'moment';
@@ -16,6 +17,7 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
+import { FROCK_DECIMALS } from '../../../../constants';
 import { useProvider } from '../../../../hooks/ethers/provider';
 import { useStore } from '../../../../hooks/useStore';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
@@ -37,6 +39,8 @@ export default function CardDeposit({
   handleRedeem,
   handleClaim,
   isApproveUsdcLoading,
+  prices,
+  investedPerPerson,
 }) {
   const store = useStore();
   const provider = useProvider();
@@ -48,6 +52,14 @@ export default function CardDeposit({
   const isAfterEndTime = moment(new Date()).isSameOrAfter(endTimeUtc);
   const [selected, setSelected] = useState('deposit');
   const [buttonLoading, setButtonLoading] = useState(null);
+
+  const calculateFrock =
+    investedPerPerson !== '0' &&
+    prices.finalPrice !== '0' &&
+    formatUnits(
+      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
+      FROCK_DECIMALS,
+    );
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
@@ -187,6 +199,7 @@ export default function CardDeposit({
                 onBlur={formik.handleBlur}
                 value={formik.values.depositAmount}
                 className={styles.input}
+                disabled={Number(totalApproved) <= 0}
                 placeholder="Contribution Amount"
               />
               <InputGroup.Text
@@ -362,7 +375,7 @@ export default function CardDeposit({
           malesuada posuere dolor in tempus.
         </Tooltip>
       </h3>
-      <h2>{renderNumberFormatter(store.nrtBalance)} $bFROCK</h2>
+      <h2>{renderNumberFormatter(calculateFrock)} $bFROCK</h2>
       <RoundButton
         onClick={isClaimEnabled ? handleClaim : () => null}
         variant={isClaimEnabled ? 'primary' : 'disabled'}
