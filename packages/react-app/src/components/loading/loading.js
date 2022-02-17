@@ -8,7 +8,7 @@ import LogoRedJson from '../../assets/animations/logo-red.json';
 import LogoWhiteJson from '../../assets/animations/logo-white.json';
 import styles from './loading.module.scss';
 
-export default function Loading({ variant, text, size = 43 }) {
+export default function Loading({ variant, text, size = 43, style }) {
   const logoRef = createRef();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function Loading({ variant, text, size = 43 }) {
 
   return (
     <div className={clsx(styles.wrapper, styles[variant])} role="status">
-      <div ref={logoRef} style={{ height: `${size}px` }} />
+      <div ref={logoRef} style={{ height: `${size}px`, ...style }} />
       {text && <p>{text}</p>}
     </div>
   );
