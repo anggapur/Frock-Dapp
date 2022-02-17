@@ -247,6 +247,7 @@ export default function CardDeposit({
         variant="disabled"
         className={clsx(styles.button, 'disabled')}
         onClick={() => null}
+        disabled
         isRounded
       >
         {isBeforeStartTime && communitySale && 'Community sale not started yet'}
