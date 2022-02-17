@@ -26,7 +26,8 @@ contract DividenDistributorV1 is
         uint256 snapshotId;  
         uint256 totalExcludedFromSupply;      
         uint8 rewardSource;  
-        mapping(address => bool) isExcludedFromReward;      
+        mapping(address => bool) isExcludedFromReward;   
+        mapping(address => bool) rewardClaimed;
     }
 
     mapping(uint256 => Reward) public rewards;
@@ -38,8 +39,7 @@ contract DividenDistributorV1 is
     address public mainToken;       
     bool private inSwap;
     bytes32 public constant REWARDER_ROLE = keccak256("REWARDER");
-
-    mapping(uint256 => mapping(address => bool)) rewardClaimed; // RewardId => Holder => State
+    
     mapping(address => bool) public isExcludedFromReward;    
     mapping(address => mapping(uint8 => uint256)) public holderToTotalClaimed; // Holder Address => Reward Source => Total Amount FTM Claimed
 
@@ -85,7 +85,7 @@ contract DividenDistributorV1 is
         );
     } // solhint-disable-line no-empty-blocks    
 
-    function swapAndShareReward() public onlyRole(REWARDER_ROLE) {
+    function swapAndShareReward() external onlyRole(REWARDER_ROLE) {
         require(mainToken != address(0), "DD : MAIN_TOKEN_NOT_SETTED");
         uint256 mainTokenBalance = getTokenBalance();
 
@@ -108,7 +108,7 @@ contract DividenDistributorV1 is
         _createReward(ethBalanceAfter - ethBalanceBefore, 0);
     }    
     
-    function shareReward() public payable onlyRole(REWARDER_ROLE) {
+    function shareReward() external payable onlyRole(REWARDER_ROLE) {
         require(msg.value > 0, "DD: NO_ETH_SENT");
         _createReward(msg.value, 1);
     }
@@ -149,10 +149,10 @@ contract DividenDistributorV1 is
         );
     }
 
-    function claimReward(uint256 rewardId) public override {
+    function claimReward(uint256 rewardId) external override {
         require(_rewardExists(rewardId), "DD: REWARD_NOT_EXISTS");
         require(!rewards[rewardId].isExcludedFromReward[_msgSender()], "DD: NOT_ALLOWED_TO_CLAIM");
-        require(!rewardClaimed[rewardId][_msgSender()], "DD: REWARD_HAS_CLAIMED");        
+        require(!rewards[rewardId].rewardClaimed[_msgSender()], "DD: REWARD_HAS_CLAIMED");        
             
         uint256 rewardAmount = _claim(rewardId, _msgSender());
         _safeTransferETH(_msgSender(), rewardAmount);
@@ -163,7 +163,7 @@ contract DividenDistributorV1 is
     /**
      * @dev to claim multiple reward at once
      */
-    function batchClaimReward(uint256[] calldata rewardIds) public {
+    function batchClaimReward(uint256[] calldata rewardIds) external {
         uint256 totalRewardAmount;
 
         for (uint256 i = 0; i < rewardIds.length; i++) {
@@ -171,7 +171,7 @@ contract DividenDistributorV1 is
             
             if(_rewardExists(rewardId) && 
                 !rewards[rewardId].isExcludedFromReward[_msgSender()] && 
-                !rewardClaimed[rewardId][_msgSender()]
+                !rewards[rewardId].rewardClaimed[_msgSender()]
             ) {
                  uint256 rewardAmount = _claim(rewardId, _msgSender());
                  totalRewardAmount += rewardAmount;
@@ -195,7 +195,7 @@ contract DividenDistributorV1 is
 
         require(holderBalance > 0, "DD: NOT_A_HOLDER");
 
-        rewardClaimed[rewardId][holder] = true;
+        reward.rewardClaimed[holder] = true;
         reward.totalClaimed += rewardAmount;
         holderToTotalClaimed[holder][reward.rewardSource] += rewardAmount;  
 
@@ -234,7 +234,7 @@ contract DividenDistributorV1 is
     /**
      * @dev set main token (frock token) address
      */
-    function setMainToken(address tokenAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setMainToken(address tokenAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
         mainToken = tokenAddress;
         emit UpdateMainToken(tokenAddress);
     }
@@ -247,7 +247,7 @@ contract DividenDistributorV1 is
     /**
      * @dev to Exclude address from reward distribution
      */
-    function excludedFromReward(address holder, bool state) public  onlyRole(DEFAULT_ADMIN_ROLE) {
+    function excludedFromReward(address holder, bool state) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(isExcludedFromReward[holder] != state, "Cannot set to same state");
         _excludedFromReward(holder, state);
     }
@@ -282,7 +282,7 @@ contract DividenDistributorV1 is
      * @dev get total amount of building trade dividen
      * @dev only calculate for reward that coming from swapAndShareReward function
      */
-    function buildingTradeDividendOfHolder(address holder) public view returns (uint256) {
+    function buildingTradeDividendOfHolder(address holder) external view returns (uint256) {
         if(!isExcludedFromReward[holder]) {
             uint256 snapshotId = IERC20SnapshotUpgradeable(mainToken).lastSnapshotId();
             uint256 holderBalance = IERC20SnapshotUpgradeable(mainToken).balanceOfAt(holder, snapshotId);
@@ -305,7 +305,7 @@ contract DividenDistributorV1 is
         for(uint i = 0; i < rewardLength; i++) {
             Reward storage reward = rewards[i];
             if(reward.rewardSource == rewardSource) {
-                if(!rewardClaimed[i][holder] && !reward.isExcludedFromReward[holder]) {                    
+                if(!reward.rewardClaimed[holder] && !reward.isExcludedFromReward[holder]) {                    
                     tempRewardIds[tempLength] = i;
                     tempLength++;
                 }   
@@ -325,7 +325,7 @@ contract DividenDistributorV1 is
      * @param holder is holder's address 
      * @param rewardSource 0 => Reward that coming from swapAndShareReward, 1 => Reward that coming from  shareReward
      */
-    function getTotalUnclaimedReward(address holder, uint8 rewardSource) public view returns (uint256 totalUnclaimedReward) {
+    function getTotalUnclaimedReward(address holder, uint8 rewardSource) external view returns (uint256 totalUnclaimedReward) {
         uint256[] memory rewardIdsUnclaimed = getRewardIdsUnclaimed(holder, rewardSource);
         for(uint i = 0 ; i < rewardIdsUnclaimed.length; i++) {
             uint256 rewardId = rewardIdsUnclaimed[i];

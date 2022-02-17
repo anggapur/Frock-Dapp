@@ -59,19 +59,20 @@ contract TokenBasic is
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         // Minting
-        ERC20CappedUpgradeable._mint(_msgSender(), cap);
-                     
-		excludeFromFees(msg.sender, true);
+        _mint(_msgSender(), cap);
+                     		
+        // Exclude From Fee
+        isExcludedFromFees[msg.sender] = true;
+
     }
-    
 		
-    function excludeFromFees(address account, bool excluded) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function excludeFromFees(address account, bool excluded) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(isExcludedFromFees[account] != excluded, "Account is already the value of 'excluded'");
         isExcludedFromFees[account] = excluded;
         emit ExcludeFromFees(account, excluded);
     }
 
-    function setBlacklist(address account, bool blacklisted) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setBlacklist(address account, bool blacklisted) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(isBlacklisted[account] != blacklisted, "Account is already the value of 'blacklisted'");
         isBlacklisted[account] = blacklisted;
         emit Blacklisted(account, blacklisted);
@@ -160,11 +161,11 @@ contract TokenBasic is
             AccessControlUpgradeable.supportsInterface(interfaceId);
     }
 
-    function snapshot() public onlyRole(SNAPSHOTER) returns (uint256) {
+    function snapshot() external onlyRole(SNAPSHOTER) returns (uint256) {
         return super._snapshot();
     }
 
-    function lastSnapshotId() public view returns (uint256) {
+    function lastSnapshotId() external view returns (uint256) {
         return super._getCurrentSnapshotId();
     }
 }
