@@ -14,6 +14,7 @@ import arrowUpIconGray from '../../../../assets/arrow-up-icon-gray.svg';
 import arrowUpIconRed from '../../../../assets/arrow-up-icon-red.svg';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { useProvider } from '../../../../hooks/ethers/provider';
 import { useStore } from '../../../../hooks/useStore';
@@ -45,6 +46,7 @@ export default function CardDeposit({
   const isBeforeEndTime = moment(new Date()).isSameOrBefore(endTimeUtc);
   const isAfterEndTime = moment(new Date()).isSameOrAfter(endTimeUtc);
   const [selected, setSelected] = useState('deposit');
+  const [buttonLoading, setButtonLoading] = useState(null);
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
@@ -62,15 +64,24 @@ export default function CardDeposit({
     initialValues,
     validationSchema: CommunityOfferingSchema(selected),
     onSubmit: async (data, { resetForm }) => {
-      if (selected === 'deposit') {
-        await handleDeposit(data.depositAmount);
+      setButtonLoading(selected);
+
+      try {
+        if (selected === 'deposit') {
+          await handleDeposit(data.depositAmount);
+        }
+
+        if (selected === 'withdraw') {
+          await handleWithdraw(data.withdrawAmount);
+        }
+
+        resetForm();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
       }
 
-      if (selected === 'withdraw') {
-        await handleWithdraw(data.withdrawAmount);
-      }
-
-      resetForm();
+      setButtonLoading(null);
     },
   });
 
@@ -188,9 +199,13 @@ export default function CardDeposit({
               }
               onClick={() => handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
+              disabled={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(maxContribution)
+              }
               isRounded
             >
-              Approve USDC
+              {renderButtonText('Approve USDC')}
             </RoundButton>
             <RoundButton
               variant={
@@ -201,9 +216,14 @@ export default function CardDeposit({
               }
               className={styles.button}
               type="submit"
+              disabled={
+                Number(totalApproved) <= 0 ||
+                Number(totalApproved) > Number(maxContribution) ||
+                buttonLoading === 'deposit'
+              }
               isRounded
             >
-              Deposit
+              {renderButtonText('Deposit')}
             </RoundButton>
           </Form>
         </>
@@ -223,6 +243,14 @@ export default function CardDeposit({
         {isAfterEndTime && !communitySale && 'Public sale finished'}
       </RoundButton>
     );
+  };
+
+  const renderButtonText = name => {
+    if (buttonLoading === String(name).toLocaleLowerCase()) {
+      return <Loading variant="light" size="34" style={{ flex: 1 }} />;
+    }
+
+    return name;
   };
 
   const renderWithdraw = () => {
@@ -277,7 +305,7 @@ export default function CardDeposit({
               className={styles.button}
               isRounded
             >
-              Withdraw
+              {renderButtonText('Withdraw')}
             </RoundButton>
           </Form>
         </>
