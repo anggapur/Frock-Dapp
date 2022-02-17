@@ -102,6 +102,7 @@ export default function CardFrock() {
                 <p>
                   ${' '}
                   {new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(frockPrice * 350)}
                 </p>
@@ -134,6 +135,7 @@ export default function CardFrock() {
                 <p>
                   ${' '}
                   {new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
                 </p>
