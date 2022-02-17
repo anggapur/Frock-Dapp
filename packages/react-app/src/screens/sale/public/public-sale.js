@@ -43,7 +43,7 @@ export default function PublicSale() {
     startPrice: '0',
     currentPrice: '0',
   });
-  const [isApprovedDeposit, setIsApprovedDeposit] = useState(false);
+  const [totalApproved, setIsTotalApproved] = useState('0');
   const [maxGlobalInvest, setMaxGlobalInvest] = useState('0');
   const [totalGlobalInvested, setTotalGlobalInvested] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
@@ -97,6 +97,8 @@ export default function PublicSale() {
         await handleGetTotalInvested();
         await handleGetPrices();
         await handleGetTotalContribution();
+
+        await handleCheckApproved();
 
         await handleGetIsRedeemEnabled();
         await handleGetIsClaimEnabled();
@@ -192,16 +194,20 @@ export default function PublicSale() {
     );
   };
 
-  const handleApproveDeposit = async depositAmount => {
-    const parsedDepositAmount = parseUnits(
-      String(depositAmount),
-      USDC_DECIMALS,
+  const handleCheckApproved = async () => {
+    if (!accounts) return;
+    const checkAllowance = await usdCoin.allowance(
+      accounts[0],
+      FAIR_PRICE_ADDR,
     );
+    setIsTotalApproved(formatUnits(checkAllowance, USDC_DECIMALS));
+  };
+
+  const handleApproveDeposit = async _depositAmount => {
+    const parsedDepositAmount = parseUnits(String(2500), USDC_DECIMALS);
     try {
       await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
-      await setIsApprovedDeposit(true);
     } catch (error) {
-      setIsApprovedDeposit(false);
       ToastError('Cannot approve your USDC. Please try again!');
     }
   };
@@ -216,7 +222,6 @@ export default function PublicSale() {
       const tx = await fairLaunch.invest(parsedDepositAmount);
       await tx.wait();
       await handleRefetch(true);
-      await setIsApprovedDeposit(false);
       ToastSuccess('Your transaction has been processed!');
     } catch (error) {
       const errorMsg = error.data.message;
@@ -232,7 +237,7 @@ export default function PublicSale() {
     );
 
     try {
-      const tx = await fairLaunch.claimRedeemable(parsedWithdrawAmount);
+      const tx = await fairLaunch.removeInvestment(parsedWithdrawAmount);
       await tx.wait();
       await handleRefetch(true);
       ToastSuccess('Your transaction has been processed!');
@@ -356,8 +361,8 @@ export default function PublicSale() {
               isClaimEnabled={isClaimEnabled}
               totalContribution={totalContribution}
               maxContribution={maxContribution}
-              isApprovedDeposit={isApprovedDeposit}
               handleApproveDeposit={handleApproveDeposit}
+              totalApproved={totalApproved}
               handleDeposit={handleDeposit}
               handleWithdraw={handleWithdraw}
               handleRedeem={handleRedeem}
