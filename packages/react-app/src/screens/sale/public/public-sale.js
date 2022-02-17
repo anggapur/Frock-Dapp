@@ -22,6 +22,7 @@ import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
 import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
 import { useProvider } from '../../../hooks/ethers/provider';
+import { useFirework } from '../../../hooks/useFirework';
 import { useStore } from '../../../hooks/useStore';
 import { timePad } from '../../../utils';
 import {
@@ -56,6 +57,7 @@ export default function PublicSale() {
   const [isApproveUsdcLoading, setIsApproveUsdcLoading] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
+  const firework = useFirework();
 
   const startTimeUtc = moment.unix(startTime).utc();
   const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
@@ -236,6 +238,7 @@ export default function PublicSale() {
       await tx.wait();
       await handleRefetch(true);
       ToastSuccess('Your transaction has been processed!');
+      firework.setActive(true);
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairDepositErr(errorMsg));
