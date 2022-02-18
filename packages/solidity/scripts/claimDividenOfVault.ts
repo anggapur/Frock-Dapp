@@ -13,6 +13,8 @@ async function main() {
     const vault = await ethers.getContract<Vault>('Vault')
     const frockDecimals = await frock.decimals()
 
+    console.log("Start Time : ", await vault.startLock())
+
     // Parameters    
     const rewardId = 0;
     const user = await ethers.getNamedSigner('user1'); // Need to change

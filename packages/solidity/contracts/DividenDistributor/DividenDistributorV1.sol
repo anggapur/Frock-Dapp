@@ -26,7 +26,8 @@ contract DividenDistributorV1 is
         uint256 snapshotId;  
         uint256 totalExcludedFromSupply;      
         uint8 rewardSource;  
-        mapping(address => bool) isExcludedFromReward;      
+        mapping(address => bool) isExcludedFromReward;   
+        mapping(address => bool) rewardClaimed;
     }
 
     mapping(uint256 => Reward) public rewards;
@@ -38,9 +39,9 @@ contract DividenDistributorV1 is
     address public mainToken;       
     bool private inSwap;
     bytes32 public constant REWARDER_ROLE = keccak256("REWARDER");
-
-    mapping(uint256 => mapping(address => bool)) rewardClaimed; // RewardId => Holder => State
+    
     mapping(address => bool) public isExcludedFromReward;    
+    mapping(address => mapping(uint8 => uint256)) public holderToTotalClaimed; // Holder Address => Reward Source => Total Amount FTM Claimed
 
     event UpdateMainToken(address newMainToken);   
     event NewReward(uint256 rewardId, uint256 rewardAmount, uint256 snapshotId, uint8 rewardSource);
@@ -84,17 +85,10 @@ contract DividenDistributorV1 is
         );
     } // solhint-disable-line no-empty-blocks    
 
-    function swapAndShareReward() public onlyRole(REWARDER_ROLE) {
+    function swapAndShareReward() external onlyRole(REWARDER_ROLE) {
         require(mainToken != address(0), "DD : MAIN_TOKEN_NOT_SETTED");
         uint256 mainTokenBalance = getTokenBalance();
-
-        // Minimum 1_000 FROCK or last rewardshare is already passed 2 hours ago
-        require(
-            mainTokenBalance >= 1000 * (10 ** 9)
-            || lastRewardShare <= block.timestamp - (2 * 3600),
-            "DD: REQUIREMENT_NOT_PASSED"
-        );
-
+        
         lastRewardShare = block.timestamp;
 
         uint256 ethBalanceBefore = getBalance();
@@ -107,7 +101,7 @@ contract DividenDistributorV1 is
         _createReward(ethBalanceAfter - ethBalanceBefore, 0);
     }    
     
-    function shareReward() public payable onlyRole(REWARDER_ROLE) {
+    function shareReward() external payable onlyRole(REWARDER_ROLE) {
         require(msg.value > 0, "DD: NO_ETH_SENT");
         _createReward(msg.value, 1);
     }
@@ -148,44 +142,92 @@ contract DividenDistributorV1 is
         );
     }
 
-    function claimReward(uint256 rewardId) public override {
+    function claimReward(uint256 rewardId) external override {
         require(_rewardExists(rewardId), "DD: REWARD_NOT_EXISTS");
         require(!rewards[rewardId].isExcludedFromReward[_msgSender()], "DD: NOT_ALLOWED_TO_CLAIM");
-        require(!rewardClaimed[rewardId][_msgSender()], "DD: REWARD_HAS_CLAIMED");        
+        require(!rewards[rewardId].rewardClaimed[_msgSender()], "DD: REWARD_HAS_CLAIMED");        
             
-        _claim(rewardId, _msgSender());
+        uint256 rewardAmount = _claim(rewardId, _msgSender());
+        _safeTransferETH(_msgSender(), rewardAmount);
+        
+        emit ClaimReward(rewardId, rewardAmount, _msgSender());
     }
 
-    function _claim(uint256 rewardId, address holder) internal {        
-        Reward storage reward = rewards[rewardId];
-        uint256 holderBalance = IERC20SnapshotUpgradeable(mainToken).balanceOfAt(holder, reward.snapshotId);
-        uint256 supply = IERC20SnapshotUpgradeable(mainToken).totalSupplyAt(reward.snapshotId) - reward.totalExcludedFromSupply;
+    /**
+     * @dev to claim multiple reward at once
+     */
+    function batchClaimReward(uint256[] calldata rewardIds) external {
+        uint256 totalRewardAmount = 0;
+
+        for (uint256 i = 0; i < rewardIds.length; i++) {
+            uint256 rewardId = rewardIds[i];
+            
+            if(_rewardExists(rewardId) && 
+                !rewards[rewardId].isExcludedFromReward[_msgSender()] && 
+                !rewards[rewardId].rewardClaimed[_msgSender()]
+            ) {
+                 uint256 rewardAmount = _claim(rewardId, _msgSender());
+                 totalRewardAmount += rewardAmount;
+                emit ClaimReward(rewardId, rewardAmount, _msgSender());
+            }            
+        }
+
+        if(totalRewardAmount > 0) {
+            _safeTransferETH(_msgSender(), totalRewardAmount);
+        }
+    }
+
+    function _claim(uint256 rewardId, address holder) internal returns (uint256){
+        Reward storage reward = rewards[rewardId];    
+        (uint256 holderBalance,,uint256 rewardAmount) = _calculateRewardAmount(
+            reward.snapshotId,
+            reward.totalExcludedFromSupply,
+            reward.rewardAmount,
+            holder
+        );
 
         require(holderBalance > 0, "DD: NOT_A_HOLDER");
-        
-        uint256 rewardAmount = reward.rewardAmount * holderBalance / supply;
 
-        rewardClaimed[rewardId][holder] = true;
+        reward.rewardClaimed[holder] = true;
         reward.totalClaimed += rewardAmount;
-        
-        _safeTransferETH(holder, rewardAmount);
-        
-        emit ClaimReward(rewardId, rewardAmount, holder);
+        holderToTotalClaimed[holder][reward.rewardSource] += rewardAmount;  
+
+        return rewardAmount;
+    }
+
+    function _calculateRewardAmount(
+        uint256 snapshotId,
+        uint256 totalExcludedFromSupply,
+        uint256 rewardAmount,
+        address holder
+    ) internal view returns (uint256 holderBalance, uint256 supply, uint256 calculateRewardAmount) {
+        holderBalance = IERC20SnapshotUpgradeable(mainToken).balanceOfAt(holder, snapshotId);
+        supply = IERC20SnapshotUpgradeable(mainToken).totalSupplyAt(snapshotId) - totalExcludedFromSupply;        
+        calculateRewardAmount = rewardAmount * holderBalance / supply;
     }
 
     function _rewardExists(uint256 rewardId) internal view returns (bool) {
         return rewards[rewardId].issuedAt > 0;
     }
 
+    /**
+     * @dev get total amount of frock that owned by this contract
+     */
     function getTokenBalance() public view returns(uint256 tokenAmount) {
         return IERC20Upgradeable(mainToken).balanceOf(address(this));
     }
 
+    /**
+     * @dev get total amount of FTM that owned by this contract
+     */
     function getBalance() public view returns(uint256 balance) {
         return address(this).balance;
     }
 
-    function setMainToken(address tokenAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    /**
+     * @dev set main token (frock token) address
+     */
+    function setMainToken(address tokenAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
         mainToken = tokenAddress;
         emit UpdateMainToken(tokenAddress);
     }
@@ -195,7 +237,10 @@ contract DividenDistributorV1 is
         require(success, 'DD: ETH_TRANSFER_FAILED');
     }
 
-    function excludedFromReward(address holder, bool state) public  onlyRole(DEFAULT_ADMIN_ROLE) {
+    /**
+     * @dev to Exclude address from reward distribution
+     */
+    function excludedFromReward(address holder, bool state) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(isExcludedFromReward[holder] != state, "Cannot set to same state");
         _excludedFromReward(holder, state);
     }
@@ -224,6 +269,70 @@ contract DividenDistributorV1 is
         }
 
         emit  ExcludedFromReward(holder, state);
+    }
+
+    /**
+     * @dev get total amount of building trade dividen
+     * @dev only calculate for reward that coming from swapAndShareReward function
+     */
+    function buildingTradeDividendOfHolder(address holder) external view returns (uint256) {
+        if(!isExcludedFromReward[holder]) {
+            uint256 snapshotId = IERC20SnapshotUpgradeable(mainToken).lastSnapshotId();
+            uint256 holderBalance = IERC20SnapshotUpgradeable(mainToken).balanceOfAt(holder, snapshotId);
+            uint256 supply = IERC20SnapshotUpgradeable(mainToken).totalSupplyAt(snapshotId);
+            uint256 currentContractBalance = getTokenBalance();
+            return currentContractBalance * holderBalance / supply;
+        }
+        return 0;
+    }
+
+    /**
+     * @dev Get list if reward id that not yet claimed by holder
+     * @param holder is holder's address 
+     * @param rewardSource 0 => Reward that coming from swapAndShareReward, 1 => Reward that coming from  shareReward
+     */
+    function getRewardIdsUnclaimed(address holder, uint8 rewardSource) public view returns (uint256[] memory) {
+        uint256[] memory tempRewardIds = new uint256[](rewardLength);
+
+        uint256 tempLength = 0;
+        for(uint i = 0; i < rewardLength; i++) {
+            // Reward memory reward = rewards[i];
+            uint8 rewardSourceType = rewards[i].rewardSource;            
+            if(rewardSourceType == rewardSource) {
+                bool isRewardClaimed = rewards[i].rewardClaimed[holder];
+                bool isHolderExcludedFromReward = rewards[i].isExcludedFromReward[holder];
+                if(!isRewardClaimed && !isHolderExcludedFromReward) {                    
+                    tempRewardIds[tempLength] = i;
+                    tempLength++;
+                }   
+            }
+        }      
+
+        uint256[] memory rewardIds = new uint256[](tempLength);
+        for(uint j = 0; j < tempLength; j++ ){
+            rewardIds[j] = tempRewardIds[j];
+        }
+
+        return rewardIds;
+    }
+
+     /**
+     * @dev Get total amount of reward that not yet claimed by holder
+     * @param holder is holder's address 
+     * @param rewardSource 0 => Reward that coming from swapAndShareReward, 1 => Reward that coming from  shareReward
+     */
+    function getTotalUnclaimedReward(address holder, uint8 rewardSource) external view returns (uint256 totalUnclaimedReward) {
+        uint256[] memory rewardIdsUnclaimed = getRewardIdsUnclaimed(holder, rewardSource);
+        for(uint i = 0 ; i < rewardIdsUnclaimed.length; i++) {
+            uint256 rewardId = rewardIdsUnclaimed[i];            
+            (,,uint256 rewardAmount) = _calculateRewardAmount(
+                rewards[rewardId].snapshotId,
+                rewards[rewardId].totalExcludedFromSupply,
+                rewards[rewardId].rewardAmount,
+                holder
+            );
+            totalUnclaimedReward += rewardAmount;
+        }
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControlUpgradeable) returns (bool) {
