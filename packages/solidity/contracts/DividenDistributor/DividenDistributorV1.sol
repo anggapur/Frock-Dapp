@@ -157,7 +157,7 @@ contract DividenDistributorV1 is
      * @dev to claim multiple reward at once
      */
     function batchClaimReward(uint256[] calldata rewardIds) external {
-        uint256 totalRewardAmount;
+        uint256 totalRewardAmount = 0;
 
         for (uint256 i = 0; i < rewardIds.length; i++) {
             uint256 rewardId = rewardIds[i];
@@ -296,9 +296,12 @@ contract DividenDistributorV1 is
 
         uint256 tempLength = 0;
         for(uint i = 0; i < rewardLength; i++) {
-            Reward storage reward = rewards[i];
-            if(reward.rewardSource == rewardSource) {
-                if(!reward.rewardClaimed[holder] && !reward.isExcludedFromReward[holder]) {                    
+            // Reward memory reward = rewards[i];
+            uint8 rewardSourceType = rewards[i].rewardSource;            
+            if(rewardSourceType == rewardSource) {
+                bool isRewardClaimed = rewards[i].rewardClaimed[holder];
+                bool isHolderExcludedFromReward = rewards[i].isExcludedFromReward[holder];
+                if(!isRewardClaimed && !isHolderExcludedFromReward) {                    
                     tempRewardIds[tempLength] = i;
                     tempLength++;
                 }   
@@ -321,12 +324,11 @@ contract DividenDistributorV1 is
     function getTotalUnclaimedReward(address holder, uint8 rewardSource) external view returns (uint256 totalUnclaimedReward) {
         uint256[] memory rewardIdsUnclaimed = getRewardIdsUnclaimed(holder, rewardSource);
         for(uint i = 0 ; i < rewardIdsUnclaimed.length; i++) {
-            uint256 rewardId = rewardIdsUnclaimed[i];
-            Reward storage reward = rewards[rewardId]; 
+            uint256 rewardId = rewardIdsUnclaimed[i];            
             (,,uint256 rewardAmount) = _calculateRewardAmount(
-                reward.snapshotId,
-                reward.totalExcludedFromSupply,
-                reward.rewardAmount,
+                rewards[rewardId].snapshotId,
+                rewards[rewardId].totalExcludedFromSupply,
+                rewards[rewardId].rewardAmount,
                 holder
             );
             totalUnclaimedReward += rewardAmount;
