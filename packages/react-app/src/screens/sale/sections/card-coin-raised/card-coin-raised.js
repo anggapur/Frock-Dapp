@@ -56,8 +56,9 @@ export default function CardCoinRaised({
   const calculateFrock =
     investedPerPerson !== '0' &&
     prices.finalPrice !== '0' &&
-    !Number.isNaN(calculation) &&
-    formatUnits(calculation.toString(), FROCK_DECIMALS);
+    !Number.isNaN(calculation)
+      ? formatUnits(calculation.toString(), FROCK_DECIMALS)
+      : 0;
 
   useEffect(() => {
     if (

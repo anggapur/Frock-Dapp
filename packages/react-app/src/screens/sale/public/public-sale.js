@@ -310,6 +310,7 @@ export default function PublicSale() {
     try {
       const tx = await fairLaunch.claimRedeemable();
       await tx.wait();
+      await handleRefetch(true);
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairClaimErr(errorMsg));
