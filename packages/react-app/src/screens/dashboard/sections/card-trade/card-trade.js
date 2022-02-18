@@ -19,7 +19,7 @@ function Column({ children, isDescription = false, ...rest }) {
   );
 }
 
-export default function CardTrade() {
+export default function CardTrade({ buildTradeDividend, handleClaim }) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
   useEffect(() => {
@@ -51,7 +51,12 @@ export default function CardTrade() {
           <p>$ 300.20</p>
         </Column>
       </Row>
-      <RoundButton variant="primary" className="mt-4 w-100" isRounded>
+      <RoundButton
+        variant="primary"
+        className="mt-4 w-100"
+        isRounded
+        onClick={() => handleClaim(0)}
+      >
         Claim
       </RoundButton>
       <Card.Footer className={styles.footer}>
