@@ -51,13 +51,13 @@ export default function CardCoinRaised({
 
   const circleRef = useRef();
 
+  const calculation = (investedPerPerson * 10 ** 9) / prices.finalPrice;
+
   const calculateFrock =
     investedPerPerson !== '0' &&
     prices.finalPrice !== '0' &&
-    formatUnits(
-      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
-      FROCK_DECIMALS,
-    );
+    !Number.isNaN(calculation) &&
+    formatUnits(calculation.toString(), FROCK_DECIMALS);
 
   useEffect(() => {
     if (

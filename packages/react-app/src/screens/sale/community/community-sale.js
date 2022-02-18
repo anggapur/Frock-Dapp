@@ -276,6 +276,11 @@ export default function CommunitySale() {
               totalLimit={globalMaximumContribution}
               totalRaised={totalRaised}
               maxContribution={currentCap}
+              prices={{
+                startPrice: '0',
+                currentPrice: '0',
+                finalPrice: '0',
+              }}
               isSaleFinished
             />
           </Col>
@@ -296,6 +301,11 @@ export default function CommunitySale() {
               handleDeposit={handleDeposit}
               handleRedeem={handleRedeem}
               nrtBalance={nrtBalance}
+              prices={{
+                startPrice: '0',
+                currentPrice: '0',
+                finalPrice: '0',
+              }}
             />
             {/* <CommunityList /> */}
           </Col>

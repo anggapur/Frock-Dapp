@@ -38,6 +38,7 @@ export default function CardDeposit({
   handleWithdraw,
   handleRedeem,
   handleClaim,
+  hasClaimed,
   isApproveUsdcLoading,
   prices,
   investedPerPerson,
@@ -53,13 +54,13 @@ export default function CardDeposit({
   const [selected, setSelected] = useState('deposit');
   const [buttonLoading, setButtonLoading] = useState(null);
 
+  const calculation = (investedPerPerson * 10 ** 9) / prices.finalPrice;
+
   const calculateFrock =
     investedPerPerson !== '0' &&
     prices.finalPrice !== '0' &&
-    formatUnits(
-      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
-      FROCK_DECIMALS,
-    );
+    !Number.isNaN(calculation) &&
+    formatUnits(calculation.toString(), FROCK_DECIMALS);
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
@@ -218,7 +219,7 @@ export default function CardDeposit({
             <RoundButton
               variant={
                 Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(maxContribution)
+                Number(totalApproved) <= Number(9999)
                   ? 'disabled'
                   : 'primary'
               }
@@ -226,7 +227,7 @@ export default function CardDeposit({
               className={styles.button}
               disabled={
                 Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(maxContribution)
+                Number(totalApproved) <= Number(9999)
               }
               isRounded
             >
@@ -235,7 +236,7 @@ export default function CardDeposit({
             <RoundButton
               variant={
                 Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(maxContribution)
+                Number(totalApproved) <= Number(9999)
                   ? 'primary'
                   : 'disabled'
               }
@@ -243,7 +244,7 @@ export default function CardDeposit({
               type="submit"
               disabled={
                 Number(totalApproved) <= 0 ||
-                Number(totalApproved) > Number(maxContribution) ||
+                Number(totalApproved) > Number(9999) ||
                 buttonLoading === 'deposit'
               }
               isRounded
@@ -375,10 +376,12 @@ export default function CardDeposit({
           malesuada posuere dolor in tempus.
         </Tooltip>
       </h3>
-      <h2>{renderNumberFormatter(calculateFrock)} $bFROCK</h2>
+      <h2>
+        {hasClaimed ? '0' : renderNumberFormatter(calculateFrock)} $bFROCK
+      </h2>
       <RoundButton
-        onClick={isClaimEnabled ? handleClaim : () => null}
-        variant={isClaimEnabled ? 'primary' : 'disabled'}
+        onClick={isClaimEnabled && !hasClaimed ? handleClaim : () => null}
+        variant={isClaimEnabled && !hasClaimed ? 'primary' : 'disabled'}
         className={styles.button}
         isRounded
       >

@@ -59,6 +59,7 @@ export default function PublicSale() {
   const [isClaimEnabled, setIsClaimEnabled] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isApproveUsdcLoading, setIsApproveUsdcLoading] = useState(false);
+  const [hasClaimed, setHasClaimed] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
   const firework = useFirework();
@@ -86,19 +87,19 @@ export default function PublicSale() {
     accounts ? accounts[0] : 0,
   );
 
-  const frockContract = useContract(
-    FrockABI,
-    provider,
-    FROCK_ADDR,
-    accounts ? accounts[0] : 0,
-  );
+  // const frockContract = useContract(
+  //   FrockABI,
+  //   provider,
+  //   FROCK_ADDR,
+  //   accounts ? accounts[0] : 0,
+  // );
 
   useEffect(() => {
     (async () => {
       if (provider && accounts) {
         await handleGetUSDC();
         await handleGetNRT();
-        await handleGetFrock();
+        // await handleGetFrock();
 
         await handleGetGlobalMaxInvest();
         await handleGetTotalInvested();
@@ -112,6 +113,8 @@ export default function PublicSale() {
 
         await handleGetIsRedeemEnabled();
         await handleGetIsClaimEnabled();
+
+        await handleGetHasClaimed();
 
         await handleGetStartTime();
         await handleGetEndTime();
@@ -141,12 +144,12 @@ export default function PublicSale() {
     });
   };
 
-  const handleGetFrock = async () => {
-    const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
-    setFrockBalance({
-      frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
-    });
-  };
+  // const handleGetFrock = async () => {
+  //   const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
+  //   setFrockBalance({
+  //     frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
+  //   });
+  // };
 
   const handleGetIsRedeemEnabled = async () => {
     const isRedeemEnabledResult = await fairLaunch.redeemEnabled();
@@ -211,6 +214,11 @@ export default function PublicSale() {
     setInvestedPerPerson(
       formatUnits(totalContributionResult.totalInvested, USDC_DECIMALS),
     );
+  };
+
+  const handleGetHasClaimed = async () => {
+    const hasClaimedResult = await fairLaunch.investorInfoMap(accounts[0]);
+    setHasClaimed(hasClaimedResult.hasClaimed);
   };
 
   const handleGetTotalInvested = async () => {
@@ -409,6 +417,7 @@ export default function PublicSale() {
               handleWithdraw={handleWithdraw}
               handleRedeem={handleRedeem}
               handleClaim={handleClaim}
+              hasClaimed={hasClaimed}
               isApproveUsdcLoading={isApproveUsdcLoading}
               prices={prices}
               investedPerPerson={investedPerPerson}
