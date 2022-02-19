@@ -136,8 +136,16 @@ export default function Header() {
     }
 
     if (provider === undefined) {
-      await loadWeb3Modal();
-      await handleAddOrChangeNetwork();
+      try {
+        lottie.play('logo-on-button');
+        await loadWeb3Modal();
+        await handleAddOrChangeNetwork();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      } finally {
+        lottie.stop('logo-on-button');
+      }
     }
   };
 
