@@ -5,6 +5,7 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 
 import arrowDownIconGray from '../../../../assets/arrow-down-icon-gray.svg';
@@ -18,6 +19,7 @@ import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { FROCK_DECIMALS } from '../../../../constants';
+import { useWeb3Accounts } from '../../../../hooks/ethers/account';
 import { useProvider } from '../../../../hooks/ethers/provider';
 import { useStore } from '../../../../hooks/useStore';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
@@ -47,6 +49,7 @@ export default function CardDeposit({
 }) {
   const store = useStore();
   const provider = useProvider();
+  const accounts = useWeb3Accounts();
   const startTimeUtc = moment.unix(startTime).utc();
   const endTimeUtc = moment.unix(endTime).utc();
   const isBeforeStartTime = moment(new Date()).isSameOrBefore(startTimeUtc);
@@ -222,18 +225,20 @@ export default function CardDeposit({
             ) : null}
             <RoundButton
               variant={
-                !provider &&
-                Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(9999)
+                accounts === undefined ||
+                isEmpty(accounts) ||
+                (Number(totalApproved) > 0 &&
+                  Number(totalApproved) <= Number(9999))
                   ? 'disabled'
                   : 'primary'
               }
               onClick={() => _handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
               disabled={
-                !provider &&
-                Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(9999)
+                accounts === undefined ||
+                isEmpty(accounts) ||
+                (Number(totalApproved) > 0 &&
+                  Number(totalApproved) <= Number(9999))
               }
               isRounded
             >
