@@ -336,7 +336,7 @@ export default function PublicSale() {
       return null;
     }
 
-    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const hours = Math.floor(difference / (1000 * 60 * 60));
     const minutes = Math.floor((difference / 1000 / 60) % 60);
     const seconds = Math.floor((difference / 1000) % 60);
 
