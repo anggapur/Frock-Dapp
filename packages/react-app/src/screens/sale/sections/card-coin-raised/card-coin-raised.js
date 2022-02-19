@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
+import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import _ from 'lodash';
 import moment from 'moment';
@@ -9,10 +10,10 @@ import 'moment-timezone';
 
 import timeSymbol from '../../../../assets/time-symbol.svg';
 import Card from '../../../../components/card/card';
+import { FROCK_DECIMALS } from '../../../../constants';
 import {
   converSecondsToHours,
   getPercentageFromHour,
-  handleKFormatter,
   renderNumberFormatter,
 } from '../../../../utils';
 import styles from './card-coin-raised.module.scss';
@@ -20,12 +21,15 @@ import shadowCircle from './shadow-circle.svg';
 
 export default function CardCoinRaised({
   communitySale = false,
+  isSaleFinished = false,
   startTime,
   endTime,
   totalLimit,
   maxContribution,
+  totalInvestors,
   totalRaised,
   prices,
+  investedPerPerson,
 }) {
   const getPercentage = (Number(totalRaised) / Number(totalLimit)) * 100;
   const [precent, setPrecent] = useState(getPercentage);
@@ -42,10 +46,18 @@ export default function CardCoinRaised({
       ? moment(currentTimeUtc).diff(startTimeUtc, 'seconds')
       : 0;
   const endDuration = moment(endTimeUtc).diff(startTimeUtc, 'seconds');
-  const [progressBarPrecent, setProgressBarPrecent] = useState(0);
+  const [_progressBarPrecent, setProgressBarPrecent] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
 
   const circleRef = useRef();
+
+  const calculateFrock =
+    investedPerPerson !== '0' &&
+    prices.finalPrice !== '0' &&
+    formatUnits(
+      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
+      FROCK_DECIMALS,
+    );
 
   useEffect(() => {
     if (
@@ -159,6 +171,7 @@ export default function CardCoinRaised({
               <h4>Total raised so far</h4>
               <h2>${renderNumberFormatter(totalRaised)}</h2>
               <h3>
+                $
                 {Number(totalLimit).toLocaleString('en-US', {
                   maximumFractionDigits: 0,
                 })}{' '}
@@ -173,6 +186,8 @@ export default function CardCoinRaised({
             Math.floor(Number(duration) / 3600),
             24,
           )}
+          type={communitySale ? 'Community Sale' : 'Public Sale'}
+          isFinish={isSaleFinished}
         />
         {startTime !== null && isAfterStartTime && (
           <p className={styles.bottomBar}>
@@ -188,17 +203,49 @@ export default function CardCoinRaised({
       </div>
       {!communitySale && (
         <Row className={clsx(styles.priceWrapper, 'gx-5')}>
-          <Col lg={6} className={styles.priceBorder}>
-            <div className={styles.price}>
-              <h4>Starting $bFROCK Price</h4>
-              <p>{renderNumberFormatter(prices.startPrice)} $</p>
-            </div>
+          <Col xl={6} className={styles.priceBorder}>
+            <Row>
+              <Col xs={8}>
+                <h4>Starting $bFROCK Price:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>$ {renderNumberFormatter(prices.startPrice)}</p>
+              </Col>
+            </Row>
           </Col>
-          <Col lg={6}>
-            <div className={styles.price}>
-              <h4>Current $bFROCK Price:</h4>
-              <p>{renderNumberFormatter(prices.currentPrice)} $</p>
-            </div>
+          <Col xl={6}>
+            <Row>
+              <Col xs={8}>
+                <h4>Current $bFROCK Price:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>$ {renderNumberFormatter(prices.currentPrice)}</p>
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={6} className={styles.priceBorder}>
+            <Row>
+              <Col xs={8}>
+                <h4>Total # investors in Public Sale:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>
+                  {Number(totalInvestors).toLocaleString('en-US', {
+                    maximumFractionDigits: 0,
+                  })}
+                </p>
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={6}>
+            <Row>
+              <Col xs={8}>
+                <h4>Your balance at current Price:</h4>
+              </Col>
+              <Col xs={4}>
+                <p>{renderNumberFormatter(calculateFrock)} $bFROCK</p>
+              </Col>
+            </Row>
           </Col>
         </Row>
       )}
@@ -206,7 +253,7 @@ export default function CardCoinRaised({
   );
 }
 
-function ProgressBar({ elapsed, precent }) {
+function ProgressBar({ elapsed, precent, type, isFinish = false }) {
   return (
     <div className={styles.progressWrapper}>
       <div className={styles.progressBar}>
@@ -224,7 +271,7 @@ function ProgressBar({ elapsed, precent }) {
             mixBlendMode: `${precent === 100 ? 'normal' : 'difference'}`,
           }}
         >
-          {elapsed} elapsed
+          {!isFinish ? `${elapsed} elapsed` : `${type} finished`}
         </p>
       </div>
     </div>

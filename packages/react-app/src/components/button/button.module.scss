@@ -23,6 +23,11 @@
     background: #7e7a7a !important;
     color: #fff;
   }
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+  }
 }
 
 .primary {
@@ -42,6 +47,10 @@
     border: 1px solid color.$redDark;
     background-color: #fff;
     color: color.$redDark;
+
+    &:hover {
+      background: darken(#fff, 5%);
+    }
   }
 }
 
