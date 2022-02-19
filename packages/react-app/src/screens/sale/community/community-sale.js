@@ -43,6 +43,7 @@ export default function CommunitySale() {
     useState('0');
   const [totalRaised, setTotalRaised] = useState('0');
   const [refetch, setRefetch] = useState(false);
+  const [isRedeemLoading, setIsRedeemLoading] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
@@ -182,6 +183,7 @@ export default function CommunitySale() {
 
   const handleRedeem = async () => {
     try {
+      setIsRedeemLoading(true);
       const tx = await communityOffering.redeem();
       await tx.wait();
       await handleRefetch(true);
@@ -189,6 +191,8 @@ export default function CommunitySale() {
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleCommunityRedeemErr(errorMsg));
+    } finally {
+      setIsRedeemLoading(false);
     }
   };
 
@@ -306,6 +310,7 @@ export default function CommunitySale() {
                 currentPrice: '0',
                 finalPrice: '0',
               }}
+              isRedeemLoading={isRedeemLoading}
             />
             {/* <CommunityList /> */}
           </Col>
