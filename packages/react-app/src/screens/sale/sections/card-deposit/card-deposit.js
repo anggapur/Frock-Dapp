@@ -40,6 +40,8 @@ export default function CardDeposit({
   handleClaim,
   hasClaimed,
   isApproveUsdcLoading,
+  isClaimBFrockLoading,
+  isRedeemLoading,
   prices,
   investedPerPerson,
 }) {
@@ -278,7 +280,9 @@ export default function CardDeposit({
     const loadingName = String(name).toLocaleLowerCase();
     if (
       buttonLoading === loadingName ||
-      (loadingName === 'approve usdc' && isApproveUsdcLoading)
+      (loadingName === 'approve usdc' && isApproveUsdcLoading) ||
+      (loadingName === 'claim $bfrock' && isClaimBFrockLoading) ||
+      (loadingName === 'redeem $bfrock for $frock' && isRedeemLoading)
     ) {
       return <Loading variant="light" size="34" style={{ flex: 1 }} />;
     }
@@ -350,6 +354,7 @@ export default function CardDeposit({
         variant="disabled"
         className={clsx(styles.button, 'disabled')}
         onClick={() => null}
+        disabled
         isRounded
       >
         {isBeforeStartTime && communitySale && 'Community sale not started yet'}
@@ -362,22 +367,10 @@ export default function CardDeposit({
 
   const renderClaim = () => (
     <>
-      <h3>
-        Your total Contribution{' '}
-        <Tooltip anchorLink="/" anchorText="Read more">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-          malesuada posuere dolor in tempus.
-        </Tooltip>
-      </h3>
+      <h3>Your total Contribution</h3>
       <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
       <br />
-      <h3>
-        Your claimable $bFROCK{' '}
-        <Tooltip anchorLink="/" anchorText="Read more">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-          malesuada posuere dolor in tempus.
-        </Tooltip>
-      </h3>
+      <h3>Your claimable $bFROCK</h3>
       <h2>
         {hasClaimed ? '0' : renderNumberFormatter(calculateFrock)} $bFROCK
       </h2>
@@ -385,9 +378,10 @@ export default function CardDeposit({
         onClick={isClaimEnabled && !hasClaimed ? handleClaim : () => null}
         variant={isClaimEnabled && !hasClaimed ? 'primary' : 'disabled'}
         className={styles.button}
+        disabled={!isClaimEnabled || hasClaimed}
         isRounded
       >
-        Claim $bFROCK
+        {renderButtonText('Claim $bFROCK')}
       </RoundButton>
     </>
   );
@@ -411,6 +405,7 @@ export default function CardDeposit({
             : 'disabled'
         }
         className={styles.button}
+        disabled={!isRedeemEnabled || Number(store.nrtBalance) === 0}
         isRounded
       >
         {provider
@@ -418,11 +413,11 @@ export default function CardDeposit({
             ? Number(store.nrtBalance) !== 0
               ? communitySale
                 ? 'Redeem $aFROCK for $FROCK'
-                : 'Redeem $bFROCK for $FROCK'
+                : renderButtonText('Redeem $bFROCK for $FROCK')
               : `You have no ${
                   communitySale ? '$aFROCK' : '$bFROCK'
                 } in your wallet`
-            : 'Redeeming not possible yet'
+            : 'Redeeming not yet possible'
           : 'Please connect your wallet'}
       </RoundButton>
     </>
