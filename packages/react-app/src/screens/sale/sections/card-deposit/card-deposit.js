@@ -417,7 +417,7 @@ export default function CardDeposit({
               : `You have no ${
                   communitySale ? '$aFROCK' : '$bFROCK'
                 } in your wallet`
-            : 'Redeeming not possible yet'
+            : 'Redeeming not yet possible'
           : 'Please connect your wallet'}
       </RoundButton>
     </>
