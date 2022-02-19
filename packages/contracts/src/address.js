@@ -1,8 +1,8 @@
 import CommunityOffering from "../deployments/fantom/CommunityOffering.json";
 import CommunityOfferingNRT from "../deployments/fantom/CommunityOfferingNRT.json";
+import FairPriceLaunchNRT from "../deployments/fantom/FairLaunchNRT.json";
+import FairPriceLaunch from "../deployments/fantom/FairPriceLaunch.json";
 import USDC from "../deployments/fantom/USDC.json";
-import FairPriceLaunchNRT from "../deployments/localhost/FairLaunchNRT.json";
-import FairPriceLaunch from "../deployments/localhost/FairPriceLaunch.json";
 import FrockProxy from "../deployments/localhost/FrockProxy.json";
 import FrockTokenV1 from "../deployments/localhost/FrockTokenV1.json";
 

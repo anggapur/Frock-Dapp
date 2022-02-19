@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
 
+import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import moment from 'moment';
@@ -14,8 +15,11 @@ import arrowUpIconGray from '../../../../assets/arrow-up-icon-gray.svg';
 import arrowUpIconRed from '../../../../assets/arrow-up-icon-red.svg';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
+import { FROCK_DECIMALS } from '../../../../constants';
 import { useProvider } from '../../../../hooks/ethers/provider';
+import { useStore } from '../../../../hooks/useStore';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-deposit.module.scss';
@@ -28,12 +32,20 @@ export default function CardDeposit({
   isClaimEnabled,
   totalContribution,
   maxContribution,
+  totalApproved,
+  handleApproveDeposit,
   handleDeposit,
   handleWithdraw,
   handleRedeem,
   handleClaim,
-  nrtBalance,
+  hasClaimed,
+  isApproveUsdcLoading,
+  isClaimBFrockLoading,
+  isRedeemLoading,
+  prices,
+  investedPerPerson,
 }) {
+  const store = useStore();
   const provider = useProvider();
   const startTimeUtc = moment.unix(startTime).utc();
   const endTimeUtc = moment.unix(endTime).utc();
@@ -42,6 +54,17 @@ export default function CardDeposit({
   const isBeforeEndTime = moment(new Date()).isSameOrBefore(endTimeUtc);
   const isAfterEndTime = moment(new Date()).isSameOrAfter(endTimeUtc);
   const [selected, setSelected] = useState('deposit');
+  const [buttonLoading, setButtonLoading] = useState(null);
+
+  const calculation =
+    (investedPerPerson * 10 ** 9) / prices.finalPrice / 10 ** 9;
+
+  const calculateFrock =
+    investedPerPerson !== '0' &&
+    prices.finalPrice !== '0' &&
+    !Number.isNaN(calculation)
+      ? calculation.toString()
+      : '0';
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
@@ -58,14 +81,25 @@ export default function CardDeposit({
   const formik = useFormik({
     initialValues,
     validationSchema: CommunityOfferingSchema(selected),
-    onSubmit: async data => {
-      if (selected === 'deposit') {
-        await handleDeposit(data.depositAmount);
+    onSubmit: async (data, { resetForm }) => {
+      setButtonLoading(selected);
+
+      try {
+        if (selected === 'deposit') {
+          await handleDeposit(data.depositAmount);
+        }
+
+        if (selected === 'withdraw') {
+          await handleWithdraw(data.withdrawAmount);
+        }
+
+        resetForm();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
       }
 
-      if (selected === 'withdraw') {
-        await handleWithdraw(data.withdrawAmount);
-      }
+      setButtonLoading(null);
     },
   });
 
@@ -92,10 +126,32 @@ export default function CardDeposit({
     }
 
     if (maxContribution !== '0' && !communitySale) {
-      const newMaxValue = Number(maxContribution) - Number(totalContribution);
-      formik.setFieldValue(field, newMaxValue);
+      let maxValue = 0;
+      if (Number(maxContribution) >= Number(store.usdcBalance)) {
+        maxValue = Number(store.usdcBalance);
+      } else {
+        maxValue = Number(maxContribution);
+      }
+      formik.setFieldValue(field, maxValue);
+    }
+
+    if (selected === 'withdraw') {
+      if (!communitySale) {
+        formik.setFieldValue(field, Number(totalContribution));
+      }
     }
     return null;
+  };
+
+  const _handleApproveDeposit = async depositAmount => {
+    setButtonLoading('approve usdc');
+    try {
+      await handleApproveDeposit(depositAmount);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+    setButtonLoading(null);
   };
 
   const renderDeposit = () => {
@@ -104,24 +160,30 @@ export default function CardDeposit({
         <>
           <p>
             Maximum Contribution: {renderNumberFormatter(maxContribution)} $USDC{' '}
-            <span style={{ display: 'inline-flex' }}>
-              <Tooltip>
-                <ul className="ps-3">
-                  <li>First 6 hours max total per person investment: $100</li>
-                  <li>Second 6 hours max total per person investment: $200 </li>
-                  <li>Third 6 hours max total per person investment: $400</li>
-                  <li>Fourth 6 hours max total per person investment: $800</li>
-                </ul>
-                Example: <br />
-                If 80 investors invest $100 (and the others do not take part)
-                $2,000 remains of the $ 10,000 hard cap. <br />
-                Once the first 6 hour period finishes, 20 people can top-up with
-                $100 to increase their investment to $200. <br />
-                If after the second period of 6 hours, the maximum of is still
-                not reached, people can top-up with $200 (making their total
-                $400)
-              </Tooltip>
-            </span>
+            {communitySale && (
+              <span style={{ display: 'inline-flex' }}>
+                <Tooltip>
+                  <ul className="ps-3">
+                    <li>First 6 hours max total per person investment: $100</li>
+                    <li>
+                      Second 6 hours max total per person investment: $200
+                    </li>
+                    <li>Third 6 hours max total per person investment: $400</li>
+                    <li>
+                      Fourth 6 hours max total per person investment: $800
+                    </li>
+                  </ul>
+                  Example: <br />
+                  If 80 investors invest $100 (and the others do not take part)
+                  $2,000 remains of the $ 10,000 hard cap. <br />
+                  Once the first 6 hour period finishes, 20 people can top-up
+                  with $100 to increase their investment to $200. <br />
+                  If after the second period of 6 hours, the maximum of is still
+                  not reached, people can top-up with $200 (making their total
+                  $400)
+                </Tooltip>
+              </span>
+            )}
           </p>
           <Form onSubmit={formik.handleSubmit}>
             <InputGroup
@@ -142,6 +204,7 @@ export default function CardDeposit({
                 onBlur={formik.handleBlur}
                 value={formik.values.depositAmount}
                 className={styles.input}
+                disabled={Number(totalApproved) <= 0}
                 placeholder="Contribution Amount"
               />
               <InputGroup.Text
@@ -158,12 +221,39 @@ export default function CardDeposit({
               </div>
             ) : null}
             <RoundButton
-              variant="primary"
+              variant={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(9999)
+                  ? 'disabled'
+                  : 'primary'
+              }
+              onClick={() => _handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
-              type="submit"
+              disabled={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(9999)
+              }
               isRounded
             >
-              Deposit
+              {renderButtonText('Approve USDC')}
+            </RoundButton>
+            <RoundButton
+              variant={
+                Number(totalApproved) > 0 &&
+                Number(totalApproved) <= Number(9999)
+                  ? 'primary'
+                  : 'disabled'
+              }
+              className={styles.button}
+              type="submit"
+              disabled={
+                Number(totalApproved) <= 0 ||
+                Number(totalApproved) > Number(9999) ||
+                buttonLoading === 'deposit'
+              }
+              isRounded
+            >
+              {renderButtonText('Deposit')}
             </RoundButton>
           </Form>
         </>
@@ -175,6 +265,7 @@ export default function CardDeposit({
         variant="disabled"
         className={clsx(styles.button, 'disabled')}
         onClick={() => null}
+        disabled
         isRounded
       >
         {isBeforeStartTime && communitySale && 'Community sale not started yet'}
@@ -183,6 +274,20 @@ export default function CardDeposit({
         {isAfterEndTime && !communitySale && 'Public sale finished'}
       </RoundButton>
     );
+  };
+
+  const renderButtonText = name => {
+    const loadingName = String(name).toLocaleLowerCase();
+    if (
+      buttonLoading === loadingName ||
+      (loadingName === 'approve usdc' && isApproveUsdcLoading) ||
+      (loadingName === 'claim $bfrock' && isClaimBFrockLoading) ||
+      (loadingName === 'redeem $bfrock for $frock' && isRedeemLoading)
+    ) {
+      return <Loading variant="light" size="34" style={{ flex: 1 }} />;
+    }
+
+    return name;
   };
 
   const renderWithdraw = () => {
@@ -195,7 +300,7 @@ export default function CardDeposit({
               ? Number(maxContribution) <= 800
                 ? renderNumberFormatter(maxContribution)
                 : '800'
-              : renderNumberFormatter(maxContribution)}{' '}
+              : renderNumberFormatter(totalContribution)}{' '}
             $USDC
           </p>
           <Form onSubmit={formik.handleSubmit}>
@@ -237,7 +342,7 @@ export default function CardDeposit({
               className={styles.button}
               isRounded
             >
-              Withdraw
+              {renderButtonText('Withdraw')}
             </RoundButton>
           </Form>
         </>
@@ -249,6 +354,7 @@ export default function CardDeposit({
         variant="disabled"
         className={clsx(styles.button, 'disabled')}
         onClick={() => null}
+        disabled
         isRounded
       >
         {isBeforeStartTime && communitySale && 'Community sale not started yet'}
@@ -261,30 +367,21 @@ export default function CardDeposit({
 
   const renderClaim = () => (
     <>
-      <h3>
-        Your total Contribution{' '}
-        <Tooltip anchorLink="/" anchorText="Read more">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-          malesuada posuere dolor in tempus.
-        </Tooltip>
-      </h3>
+      <h3>Your total Contribution</h3>
       <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
       <br />
-      <h3>
-        Your claimable $bFROCK{' '}
-        <Tooltip anchorLink="/" anchorText="Read more">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-          malesuada posuere dolor in tempus.
-        </Tooltip>
-      </h3>
-      <h2>{renderNumberFormatter(nrtBalance)} $bFROCK</h2>
+      <h3>Your claimable $bFROCK</h3>
+      <h2>
+        {hasClaimed ? '0' : renderNumberFormatter(calculateFrock)} $bFROCK
+      </h2>
       <RoundButton
-        onClick={isClaimEnabled ? handleClaim : () => null}
-        variant={isClaimEnabled ? 'primary' : 'disabled'}
+        onClick={isClaimEnabled && !hasClaimed ? handleClaim : () => null}
+        variant={isClaimEnabled && !hasClaimed ? 'primary' : 'disabled'}
         className={styles.button}
+        disabled={!isClaimEnabled || hasClaimed}
         isRounded
       >
-        Claim $bFROCK
+        {renderButtonText('Claim $bFROCK')}
       </RoundButton>
     </>
   );
@@ -293,31 +390,34 @@ export default function CardDeposit({
     <>
       <h3>You have </h3>
       <h2>
-        {renderNumberFormatter(nrtBalance)}{' '}
+        {renderNumberFormatter(store.nrtBalance)}{' '}
         {communitySale ? '$aFROCK' : '$bFROCK'}
       </h2>
       <RoundButton
         onClick={
-          isRedeemEnabled && Number(nrtBalance) !== 0
+          isRedeemEnabled && Number(store.nrtBalance) !== 0
             ? handleRedeem
             : () => null
         }
         variant={
-          isRedeemEnabled && Number(nrtBalance) !== 0 ? 'primary' : 'disabled'
+          isRedeemEnabled && Number(store.nrtBalance) !== 0
+            ? 'primary'
+            : 'disabled'
         }
         className={styles.button}
+        disabled={!isRedeemEnabled || Number(store.nrtBalance) === 0}
         isRounded
       >
         {provider
           ? isRedeemEnabled
-            ? Number(nrtBalance) !== 0
+            ? Number(store.nrtBalance) !== 0
               ? communitySale
                 ? 'Redeem $aFROCK for $FROCK'
-                : 'Redeem $bFROCK for $FROCK'
+                : renderButtonText('Redeem $bFROCK for $FROCK')
               : `You have no ${
                   communitySale ? '$aFROCK' : '$bFROCK'
                 } in your wallet`
-            : 'Redeeming not possible yet'
+            : 'Redeeming not yet possible'
           : 'Please connect your wallet'}
       </RoundButton>
     </>
@@ -404,9 +504,9 @@ export default function CardDeposit({
           <>
             <h3>
               Your total Contribution{' '}
-              <Tooltip anchorLink="/" anchorText="Read more">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-                malesuada posuere dolor in tempus.
+              <Tooltip>
+                To prevent price manipulation, you can withdraw a maximum of $
+                1,000 per hour.
               </Tooltip>
             </h3>
             <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>

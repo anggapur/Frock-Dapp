@@ -1,5 +1,5 @@
-import { calculateDividen } from "./utils/calculations";
-import { SignerWithAddress } from "./utils/interfaces";
+import { calculateDividen } from "../utils/calculations";
+import { SignerWithAddress } from "../utils/interfaces";
 import {
   DividenDistributorProxy,
   DividenDistributorV1,
@@ -12,7 +12,7 @@ import { expect } from "chai";
 import { deployments, ethers, upgrades, network } from "hardhat";
 
 
-describe("Community Offering", async () => {  
+describe("Dividend Distributor 1", async () => {  
   let deployer: SignerWithAddress;  
   let user1: SignerWithAddress;  
   let user2: SignerWithAddress;  
@@ -402,6 +402,4 @@ describe("Community Offering", async () => {
     expect(ftmOfUser2After).to.be.lte(ftmOfUser2Before)  // Because he's not get any Reward and must pay on fee
     });
   })
-  
-
 });

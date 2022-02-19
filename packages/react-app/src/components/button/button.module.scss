@@ -23,6 +23,11 @@
     background: #7e7a7a !important;
     color: #fff;
   }
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+  }
 }
 
 .primary {

@@ -6,8 +6,17 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import styles from './card-trade.module.scss';
 
-function Column({ children }) {
-  return <Col xs={6}>{children}</Col>;
+function Column({ children, isDescription = false, ...rest }) {
+  return (
+    <Col
+      xl={isDescription ? 7 : 5}
+      lg={isDescription ? 8 : 4}
+      xs={isDescription ? 7 : 5}
+      {...rest}
+    >
+      {children}
+    </Col>
+  );
 }
 
 export default function CardTrade() {
@@ -24,20 +33,20 @@ export default function CardTrade() {
     <Card ellipse="top-left" className={styles.wrapper}>
       <Card.Header>Trade dividends</Card.Header>
       <Row>
-        <Column>
-          <h6>Your building trade dividens</h6>
+        <Column isDescription>
+          <h6>Your building trade dividends</h6>
         </Column>
-        <Column>
+        <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>$FTM 30.50</p>
           <p>$ 100.20</p>
         </Column>
       </Row>
       <hr />
       <Row>
-        <Column>
-          <h6>Your claimable trade dividens</h6>
+        <Column isDescription>
+          <h6>Your claimable trade dividends</h6>
         </Column>
-        <Column>
+        <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>$FTM 130.50</p>
           <p>$ 300.20</p>
         </Column>
@@ -47,10 +56,10 @@ export default function CardTrade() {
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>
-          <Column>
-            <h6>Your total claimed trade dividens</h6>
+          <Column isDescription>
+            <h6>Your total claimed trade dividends</h6>
           </Column>
-          <Column>
+          <Column className="ps-xl-2 px-lg-0">
             <p className={styles.strong}>$FTM 127.00</p>
             <p>
               ${' '}
