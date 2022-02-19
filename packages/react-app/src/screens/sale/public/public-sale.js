@@ -246,6 +246,8 @@ export default function PublicSale() {
       await handleRefetch(true);
     } catch (error) {
       ToastError('Cannot approve your USDC. Please try again!');
+    } finally {
+      setIsApproveUsdcLoading(false);
     }
   };
 
