@@ -91,11 +91,21 @@ export default function Header() {
   }, []);
 
   const logoButtonRef = createRef();
+  const logoButtonModalRef = createRef();
 
   useEffect(() => {
     lottie.loadAnimation({
       name: 'logo-on-button',
       container: logoButtonRef.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: false,
+      animationData: logoWhiteJson,
+    });
+
+    lottie.loadAnimation({
+      name: 'logo-on-button',
+      container: logoButtonModalRef.current,
       renderer: 'svg',
       loop: true,
       autoplay: false,
@@ -304,6 +314,14 @@ export default function Header() {
             onClick={handleConnectWallet}
             variant="primary"
           >
+            <div
+              ref={logoButtonModalRef}
+              style={{
+                height: '32px',
+                display: 'inline-block',
+                margin: '-5px 0px -5px -5px',
+              }}
+            />{' '}
             Connect Wallet
           </RoundButton>
         </Modal.Body>
