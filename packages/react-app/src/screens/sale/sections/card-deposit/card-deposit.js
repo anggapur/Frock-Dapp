@@ -41,6 +41,7 @@ export default function CardDeposit({
   hasClaimed,
   isApproveUsdcLoading,
   isClaimBFrockLoading,
+  isRedeemLoading,
   prices,
   investedPerPerson,
 }) {
@@ -279,7 +280,8 @@ export default function CardDeposit({
     if (
       buttonLoading === loadingName ||
       (loadingName === 'approve usdc' && isApproveUsdcLoading) ||
-      (loadingName === 'claim $bfrock' && isClaimBFrockLoading)
+      (loadingName === 'claim $bfrock' && isClaimBFrockLoading) ||
+      (loadingName === 'redeem $bfrock for $frock' && isRedeemLoading)
     ) {
       return <Loading variant="light" size="34" style={{ flex: 1 }} />;
     }
@@ -401,6 +403,7 @@ export default function CardDeposit({
             : 'disabled'
         }
         className={styles.button}
+        disabled={!isRedeemEnabled || Number(store.nrtBalance) === 0}
         isRounded
       >
         {provider
@@ -408,7 +411,7 @@ export default function CardDeposit({
             ? Number(store.nrtBalance) !== 0
               ? communitySale
                 ? 'Redeem $aFROCK for $FROCK'
-                : 'Redeem $bFROCK for $FROCK'
+                : renderButtonText('Redeem $bFROCK for $FROCK')
               : `You have no ${
                   communitySale ? '$aFROCK' : '$bFROCK'
                 } in your wallet`
