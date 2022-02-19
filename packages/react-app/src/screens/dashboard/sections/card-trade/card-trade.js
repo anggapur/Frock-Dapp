@@ -4,6 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-trade.module.scss';
 
 function Column({ children, isDescription = false, ...rest }) {
@@ -19,7 +20,12 @@ function Column({ children, isDescription = false, ...rest }) {
   );
 }
 
-export default function CardTrade({ buildTradeDividend, handleClaim }) {
+export default function CardTrade({
+  buildTradeDividend,
+  claimableDividend,
+  totalClaimed,
+  handleClaim,
+}) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
   useEffect(() => {
@@ -37,8 +43,13 @@ export default function CardTrade({ buildTradeDividend, handleClaim }) {
           <h6>Your building trade dividends</h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
-          <p className={styles.strong}>$FTM 30.50</p>
-          <p>$ 100.20</p>
+          <p className={styles.strong}>
+            FTM{' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(buildTradeDividend)).toString(),
+            )}
+          </p>
+          <p>$ {renderNumberFormatter(buildTradeDividend)}</p>
         </Column>
       </Row>
       <hr />
@@ -47,8 +58,13 @@ export default function CardTrade({ buildTradeDividend, handleClaim }) {
           <h6>Your claimable trade dividends</h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
-          <p className={styles.strong}>$FTM 130.50</p>
-          <p>$ 300.20</p>
+          <p className={styles.strong}>
+            FTM{' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(claimableDividend)).toString(),
+            )}
+          </p>
+          <p>$ {renderNumberFormatter(claimableDividend)}</p>
         </Column>
       </Row>
       <RoundButton
@@ -65,13 +81,13 @@ export default function CardTrade({ buildTradeDividend, handleClaim }) {
             <h6>Your total claimed trade dividends</h6>
           </Column>
           <Column className="ps-xl-2 px-lg-0">
-            <p className={styles.strong}>$FTM 127.00</p>
-            <p>
-              ${' '}
-              {new Intl.NumberFormat('en-US', {
-                maximumFractionDigits: 2,
-              }).format(fantomPrice * 127)}
+            <p className={styles.strong}>
+              FTM{' '}
+              {renderNumberFormatter(
+                (fantomPrice * Number(totalClaimed)).toString(),
+              )}
             </p>
+            <p>$ {renderNumberFormatter(totalClaimed)}</p>
           </Column>
         </Row>
       </Card.Footer>

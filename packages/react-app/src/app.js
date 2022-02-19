@@ -6,7 +6,9 @@ import SuspenseLoading from './components/suspense-loading/suspense-loading';
 
 const Calculator = lazy(() => import('./screens/calculator/calculator'));
 const PublicSale = lazy(() => import('./screens/sale/public/public-sale'));
-const CommunitySale = lazy(() =>  import('./screens/sale/community/community-sale'));
+const CommunitySale = lazy(() =>
+  import('./screens/sale/community/community-sale'),
+);
 const Dashboard = lazy(() => import('./screens/dashboard/dashboard'));
 
 export default function App() {
@@ -18,7 +20,7 @@ export default function App() {
           <Route path="calculator" element={<Calculator />} />
           <Route path="public-sale" element={<PublicSale />} />
           <Route path="community-sale" element={<CommunitySale />} />
-          {/* <Route path="dashboard" element={<Dashboard />} /> */}
+          <Route path="dashboard" element={<Dashboard />} />
         </Routes>
       </Suspense>
     </Layout>

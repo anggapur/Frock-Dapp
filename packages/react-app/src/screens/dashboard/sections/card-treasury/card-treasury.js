@@ -5,6 +5,7 @@ import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants';
+import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 
 function Column({ children, isDescription = false, ...rest }) {
@@ -20,7 +21,11 @@ function Column({ children, isDescription = false, ...rest }) {
   );
 }
 
-export default function CardTreasury() {
+export default function CardTreasury({
+  claimableDividend,
+  totalClaimed,
+  handleClaim,
+}) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
   useEffect(() => {
@@ -47,17 +52,26 @@ export default function CardTreasury() {
           </p>
         </Column>
       </Row>
-      <hr />
       <Row>
         <Column isDescription>
           <h6>Your claimable treasury dividends</h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
-          <p className={styles.strong}>$FTM 13.50</p>
-          <p>$ 30.20</p>
+          <p className={styles.strong}>
+            FTM{' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(claimableDividend)).toString(),
+            )}
+          </p>
+          <p>$ {renderNumberFormatter(claimableDividend)}</p>
         </Column>
       </Row>
-      <RoundButton variant="primary" className="mt-4 w-100" isRounded>
+      <RoundButton
+        variant="primary"
+        className="mt-4 w-100"
+        isRounded
+        onClick={() => handleClaim(1)}
+      >
         Claim
       </RoundButton>
       <Card.Footer className={styles.footer}>
@@ -66,13 +80,13 @@ export default function CardTreasury() {
             <h6>Your total claimed treasury dividends</h6>
           </Column>
           <Column className="px-xl-2 px-lg-0">
-            <p className={styles.strong}>$FTM 27.00</p>
-            <p>
-              ${' '}
-              {new Intl.NumberFormat('en-US', {
-                maximumFractionDigits: 2,
-              }).format(fantomPrice * 27)}
+            <p className={styles.strong}>
+              FTM{' '}
+              {renderNumberFormatter(
+                (fantomPrice * Number(totalClaimed)).toString(),
+              )}
             </p>
+            <p>$ {renderNumberFormatter(totalClaimed)}</p>
           </Column>
         </Row>
       </Card.Footer>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
+import { formatUnits } from '@ethersproject/units';
 import {
   DIVIDEN_ADDR,
   DividenABI,
@@ -9,6 +10,7 @@ import {
 } from '@project/contracts/src/address';
 import { isEmpty } from 'lodash';
 
+import { FROCK_DECIMALS } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useContract } from '../../hooks/ethers/contracts';
 import { useProvider } from '../../hooks/ethers/provider';
@@ -27,7 +29,7 @@ export default function Dashboard() {
     trade: '0',
     treasury: '0',
   });
-  const [totalClaim, setTotalClaim] = useState({
+  const [totalClaimed, setTotalClaimed] = useState({
     trade: '0',
     treasury: '0',
   });
@@ -76,7 +78,7 @@ export default function Dashboard() {
 
     const buildTradeDividenResult =
       await dividenDistributor.buildingTradeDividendOfHolder(accounts[0]);
-    setBuildTradeDividend(buildTradeDividenResult);
+    setBuildTradeDividend(formatUnits(buildTradeDividenResult, 18));
   };
 
   const handleClaimableDividend = async () => {
@@ -90,8 +92,8 @@ export default function Dashboard() {
       1,
     );
     setClaimableDividend({
-      trade: tradeDividend,
-      treasury: treasuryDividend,
+      trade: formatUnits(tradeDividend, 18),
+      treasury: formatUnits(treasuryDividend, 18),
     });
   };
 
@@ -103,16 +105,16 @@ export default function Dashboard() {
     );
     const treasuryTotalClaimed =
       await dividenDistributor.getTotalUnclaimedReward(accounts[0], 1);
-    setTotalClaim({
-      trade: tradeTotalClaimed,
-      treasury: treasuryTotalClaimed,
+    setTotalClaimed({
+      trade: formatUnits(tradeTotalClaimed, 18),
+      treasury: formatUnits(treasuryTotalClaimed, 18),
     });
   };
 
   const handleGetTokenBalance = async () => {
     if (!accounts) return;
     const tokenBalanceResult = await dividenDistributor.getTokenBalance();
-    setTokenBalance(tokenBalanceResult);
+    setTokenBalance(formatUnits(tokenBalanceResult, FROCK_DECIMALS));
   };
 
   const handleGetRewards = async () => {
@@ -156,14 +158,20 @@ export default function Dashboard() {
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTrade
             buildTradeDividend={buildTradeDividend}
+            claimableDividend={claimableDividend.trade}
+            totalClaimed={totalClaimed.trade}
             handleClaim={handleClaim}
           />
         </Col>
         <Col lg={4} className="mb-4">
-          <CardFrock />
+          <CardFrock tokenBalance={tokenBalance} />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
-          <CardTreasury handleClaim={handleClaim} />
+          <CardTreasury
+            claimableDividend={claimableDividend.treasury}
+            totalClaimed={totalClaimed.treasury}
+            handleClaim={handleClaim}
+          />
         </Col>
       </Row>
       <Row>

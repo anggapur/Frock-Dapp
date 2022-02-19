@@ -12,9 +12,10 @@ import {
   FROCK_SUPPLY,
   TOTAL_TREASURY_VALUE_IN_STRONG,
 } from '../../../../constants';
+import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
-export default function CardFrock() {
+export default function CardFrock({ tokenBalance }) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
   const [strongPrice, setStrongPrice] = useState(0);
@@ -90,7 +91,12 @@ export default function CardFrock() {
                 xs={12}
                 className="d-flex align-items-stretch"
               >
-                <p className={styles.bigger}>350 $FROCK</p>
+                <p className={styles.bigger}>
+                  {renderNumberFormatter(
+                    (Number(tokenBalance) * frockPrice).toString(),
+                  )}{' '}
+                  $FROCK
+                </p>
               </Col>
               <Col
                 xxl={12}
@@ -99,13 +105,7 @@ export default function CardFrock() {
                 xs={12}
                 className="d-flex align-items-stretch"
               >
-                <p>
-                  ${' '}
-                  {new Intl.NumberFormat('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(frockPrice * 350)}
-                </p>
+                <p>$ {renderNumberFormatter(tokenBalance)}</p>
               </Col>
             </Row>
           </Card>
