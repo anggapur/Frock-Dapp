@@ -222,6 +222,7 @@ export default function CardDeposit({
             ) : null}
             <RoundButton
               variant={
+                !provider &&
                 Number(totalApproved) > 0 &&
                 Number(totalApproved) <= Number(9999)
                   ? 'disabled'
@@ -230,6 +231,7 @@ export default function CardDeposit({
               onClick={() => _handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
               disabled={
+                !provider &&
                 Number(totalApproved) > 0 &&
                 Number(totalApproved) <= Number(9999)
               }
