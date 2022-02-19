@@ -219,8 +219,6 @@ export default function Header() {
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
-                    onMouseOver={() => lottie.play('logo-on-button')}
-                    onMouseOut={() => lottie.pause('logo-on-button')}
                     variant="primary"
                     isRounded
                   >
@@ -251,14 +249,8 @@ export default function Header() {
                     }
                     id="nav-dropdown"
                     align="end"
-                    onMouseOver={() => {
-                      lottie.play('logo-on-button');
-                      setIsShowDropdown(true);
-                    }}
-                    onMouseOut={() => {
-                      lottie.pause('logo-on-button');
-                      setIsShowDropdown(false);
-                    }}
+                    onMouseOver={() => setIsShowDropdown(true)}
+                    onMouseOut={() => setIsShowDropdown(false)}
                     onClick={() => setIsShowDropdown(!isShowDropdown)}
                     show={isShowDropdown}
                   >
