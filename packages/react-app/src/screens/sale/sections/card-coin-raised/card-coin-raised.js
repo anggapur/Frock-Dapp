@@ -58,7 +58,7 @@ export default function CardCoinRaised({
     prices.finalPrice !== '0' &&
     !Number.isNaN(calculation)
       ? formatUnits(calculation.toString(), FROCK_DECIMALS)
-      : 0;
+      : '0';
 
   useEffect(() => {
     if (
