@@ -238,7 +238,7 @@ export default function PublicSale() {
   };
 
   const handleApproveDeposit = async _depositAmount => {
-    const parsedDepositAmount = parseUnits(String(2500), USDC_DECIMALS);
+    const parsedDepositAmount = parseUnits(String(9999), USDC_DECIMALS);
     try {
       const tx = await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
       setIsApproveUsdcLoading(true);
