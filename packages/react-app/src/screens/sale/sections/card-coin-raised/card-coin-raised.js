@@ -184,7 +184,7 @@ export default function CardCoinRaised({
           elapsed={converSecondsToHours(duration)}
           precent={getPercentageFromHour(
             Math.floor(Number(duration) / 3600),
-            24,
+            communitySale ? 24 : 48,
           )}
           type={communitySale ? 'Community Sale' : 'Public Sale'}
           isFinish={isSaleFinished}
