@@ -59,6 +59,7 @@ export default function PublicSale() {
   const [isClaimEnabled, setIsClaimEnabled] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isApproveUsdcLoading, setIsApproveUsdcLoading] = useState(false);
+  const [isClaimBFrockLoading, setIsClaimBFrockLoading] = useState(false);
   const [hasClaimed, setHasClaimed] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
@@ -310,12 +311,15 @@ export default function PublicSale() {
 
   const handleClaim = async () => {
     try {
+      setIsClaimBFrockLoading(true);
       const tx = await fairLaunch.claimRedeemable();
       await tx.wait();
       await handleRefetch(true);
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairClaimErr(errorMsg));
+    } finally {
+      setIsClaimBFrockLoading(false);
     }
   };
 
@@ -422,6 +426,7 @@ export default function PublicSale() {
               handleClaim={handleClaim}
               hasClaimed={hasClaimed}
               isApproveUsdcLoading={isApproveUsdcLoading}
+              isClaimBFrockLoading={isClaimBFrockLoading}
               prices={prices}
               investedPerPerson={investedPerPerson}
             />
