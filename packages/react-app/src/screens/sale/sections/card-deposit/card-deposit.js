@@ -155,7 +155,7 @@ export default function CardDeposit({
   };
 
   const renderDeposit = () => {
-    if (isAfterStartTime && isBeforeEndTime) {
+    if (isBeforeEndTime) {
       return (
         <>
           <p>
@@ -291,7 +291,7 @@ export default function CardDeposit({
   };
 
   const renderWithdraw = () => {
-    if (isAfterStartTime && isBeforeEndTime) {
+    if (isBeforeEndTime) {
       return (
         <>
           <p>
