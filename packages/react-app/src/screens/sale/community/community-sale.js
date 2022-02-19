@@ -110,12 +110,16 @@ export default function CommunitySale() {
 
   const handleGetUSDC = async () => {
     const usdcBalanceResult = await usdCoin.balanceOf(accounts[0]);
-    setUsdcBalance(formatUnits(usdcBalanceResult, USDC_DECIMALS));
+    setUsdcBalance({
+      usdcBalance: formatUnits(usdcBalanceResult, USDC_DECIMALS),
+    });
   };
 
   const handleGetNRT = async () => {
     const nrtBalanceResult = await communityOfferingNRT.balanceOf(accounts[0]);
-    setNRTBalance(formatUnits(nrtBalanceResult, FROCK_DECIMALS));
+    setNRTBalance({
+      nrtBalance: formatUnits(nrtBalanceResult, FROCK_DECIMALS),
+    });
   };
 
   // const handleGetFrock = async () => {
