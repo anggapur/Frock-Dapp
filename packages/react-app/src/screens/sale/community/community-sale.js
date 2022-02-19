@@ -13,6 +13,7 @@ import {
   USDCoinABI,
 } from '@project/contracts/src/address';
 import moment from 'moment';
+import shallow from 'zustand/shallow';
 
 import ellipseTopLeft from '../../../assets/ellipse-top-left.svg';
 import CountdownUI from '../../../components/countdown/countdown';
@@ -21,6 +22,7 @@ import { FROCK_DECIMALS, USDC_DECIMALS } from '../../../constants/index';
 import { useWeb3Accounts } from '../../../hooks/ethers/account';
 import { useContract } from '../../../hooks/ethers/contracts';
 import { useProvider } from '../../../hooks/ethers/provider';
+import { useStore } from '../../../hooks/useStore';
 import {
   handleCommunityDepositErr,
   handleCommunityRedeemErr,
@@ -31,9 +33,6 @@ import CardCoinRaised from '../sections/card-coin-raised/card-coin-raised';
 import CardDeposit from '../sections/card-deposit/card-deposit';
 
 export default function CommunitySale() {
-  const [usdcBalance, setUsdcBalance] = useState('0');
-  const [nrtBalance, setNRTBalance] = useState('0');
-  const [frockBalance, setFrockBalance] = useState('0');
   const [totalContribution, setTotalContribution] = useState('0');
   const [currentCap, setCurrentCap] = useState('0');
   const [startTime, setStartTime] = useState(1644681600);
@@ -48,6 +47,11 @@ export default function CommunitySale() {
 
   const startTimeUtc = moment.unix(startTime).utc();
   const isAfterStartTime = moment(new Date()).isSameOrAfter(startTimeUtc);
+
+  const [setUsdcBalance, setNRTBalance, setFrockBalance] = useStore(
+    state => [state.setUsdcBalance, state.setNRTBalance, state.setFrockBalance],
+    shallow,
+  );
 
   const usdCoin = useContract(
     USDCoinABI,
@@ -285,12 +289,7 @@ export default function CommunitySale() {
             />
           </Col>
           <Col lg={5}>
-            <CardBalance
-              communitySale
-              usdcBalance={usdcBalance}
-              nrtBalance={nrtBalance}
-              frockBalance={frockBalance}
-            />
+            <CardBalance communitySale />
             <CardDeposit
               communitySale
               startTime={startTime}
@@ -300,7 +299,6 @@ export default function CommunitySale() {
               maxContribution={currentCap}
               handleDeposit={handleDeposit}
               handleRedeem={handleRedeem}
-              nrtBalance={nrtBalance}
               prices={{
                 startPrice: '0',
                 currentPrice: '0',
