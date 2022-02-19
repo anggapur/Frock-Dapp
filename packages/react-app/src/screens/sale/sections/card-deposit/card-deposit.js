@@ -54,14 +54,15 @@ export default function CardDeposit({
   const [selected, setSelected] = useState('deposit');
   const [buttonLoading, setButtonLoading] = useState(null);
 
-  const calculation = (investedPerPerson * 10 ** 9) / prices.finalPrice;
+  const calculation =
+    (investedPerPerson * 10 ** 9) / prices.finalPrice / 10 ** 9;
 
   const calculateFrock =
     investedPerPerson !== '0' &&
     prices.finalPrice !== '0' &&
     !Number.isNaN(calculation)
-      ? formatUnits(calculation.toString(), FROCK_DECIMALS)
-      : 0;
+      ? calculation.toString()
+      : '0';
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
