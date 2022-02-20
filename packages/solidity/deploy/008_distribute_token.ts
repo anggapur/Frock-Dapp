@@ -15,6 +15,10 @@ const func: DeployFunction = async function ({
     const deployer = await ethers.getNamedSigner('deployer');
     const user1 = await ethers.getNamedSigner('user1');
     const user2 = await ethers.getNamedSigner('user2');
+    const user3 = await ethers.getNamedSigner('user3');
+    const user4 = await ethers.getNamedSigner('user4');
+    const user5 = await ethers.getNamedSigner('user5');
+    const user6 = await ethers.getNamedSigner('user6');
     const usdcHolder = await ethers.getNamedSigner('usdcHolder');
   
 
@@ -29,6 +33,10 @@ const func: DeployFunction = async function ({
     const recepients = [
         user1,
         user2,
+        user3,
+        user4,
+        user5,
+        user6,
         deployer,
     ]        
     const sendUSDC = recepients.map((recepient) => {
