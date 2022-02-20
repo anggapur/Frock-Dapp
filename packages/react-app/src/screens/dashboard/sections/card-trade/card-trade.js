@@ -92,6 +92,10 @@ export default function CardTrade({
             ? () => null
             : () => handleClaim(0)
         }
+        disabled={
+          (accounts === undefined && isEmpty(accounts)) ||
+          renderNumberFormatter(claimableDividend) === '0'
+        }
       >
         Claim
       </RoundButton>

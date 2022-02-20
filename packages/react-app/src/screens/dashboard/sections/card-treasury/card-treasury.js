@@ -82,6 +82,7 @@ export default function CardTreasury({
             ? () => null
             : () => handleClaim(1)
         }
+        disabled={renderNumberFormatter(claimableDividend) === '0'}
       >
         Claim
       </RoundButton>
