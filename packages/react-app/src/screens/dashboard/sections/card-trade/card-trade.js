@@ -6,6 +6,7 @@ import { isEmpty } from 'lodash';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Loading from '../../../../components/loading/loading';
 import { useWeb3Accounts } from '../../../../hooks/ethers/account';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-trade.module.scss';
@@ -28,6 +29,7 @@ export default function CardTrade({
   claimableDividend,
   totalClaimed,
   handleClaim,
+  isClaimButtonLoading,
 }) {
   const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -97,7 +99,11 @@ export default function CardTrade({
           renderNumberFormatter(claimableDividend) === '0'
         }
       >
-        Claim
+        {!isClaimButtonLoading ? (
+          'Claim'
+        ) : (
+          <Loading variant="light" size="34" style={{ flex: 1 }} />
+        )}
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>

@@ -4,6 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Loading from '../../../../components/loading/loading';
 import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
@@ -25,6 +26,7 @@ export default function CardTreasury({
   claimableDividend,
   totalClaimed,
   handleClaim,
+  isClaimButtonLoading,
 }) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
@@ -84,7 +86,11 @@ export default function CardTreasury({
         }
         disabled={renderNumberFormatter(claimableDividend) === '0'}
       >
-        Claim
+        {!isClaimButtonLoading ? (
+          'Claim'
+        ) : (
+          <Loading variant="light" size="34" style={{ flex: 1 }} />
+        )}
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>
