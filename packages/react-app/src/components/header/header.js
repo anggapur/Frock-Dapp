@@ -285,11 +285,11 @@ export default function Header() {
                     >
                       Add $bFROCK to wallet
                     </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
-                    >
-                      Add $FROCK to wallet
-                    </NavDropdown.Item>
+                    {/* <NavDropdown.Item */}
+                    {/*  onClick={() => handleAddToken(FROCK_TOKEN_DATA)} */}
+                    {/* > */}
+                    {/*  Add $FROCK to wallet */}
+                    {/* </NavDropdown.Item> */}
                   </NavDropdown>
                 )}
               </Nav>

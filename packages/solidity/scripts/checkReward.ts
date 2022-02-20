@@ -2,12 +2,13 @@ import { network, ethers } from 'hardhat';
 import { DividenDistributorProxy, DividenDistributorV1 } from '@project/contracts/typechain/generated';
 
 /**
- * @dev to run this function :  yarn solidity run-local scripts/checkReward.ts
+ * @dev to run this function :  yarn solidity run-local scripts/checkReward.ts --reward-id [rewardId]
  */
 async function main() {
     console.log("Check Reward")
 
-    const rewardId = 0; // Id of Reward
+    var args = process.argv.slice(2);
+    const rewardId = args[1]; // Id of Reward
 
     const user = await ethers.getNamedSigner('deployer'); 
     const dividenDistributorProxy = await ethers.getContract<DividenDistributorProxy>('DividenDistributorProxy');

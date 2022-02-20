@@ -59,6 +59,8 @@ export default function PublicSale() {
   const [isClaimEnabled, setIsClaimEnabled] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isApproveUsdcLoading, setIsApproveUsdcLoading] = useState(false);
+  const [isClaimBFrockLoading, setIsClaimBFrockLoading] = useState(false);
+  const [isRedeemLoading, setIsRedeemLoading] = useState(false);
   const [hasClaimed, setHasClaimed] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
@@ -246,6 +248,8 @@ export default function PublicSale() {
       await handleRefetch(true);
     } catch (error) {
       ToastError('Cannot approve your USDC. Please try again!');
+    } finally {
+      setIsApproveUsdcLoading(false);
     }
   };
 
@@ -296,6 +300,7 @@ export default function PublicSale() {
 
   const handleRedeem = async () => {
     try {
+      setIsRedeemLoading(true);
       const tx = await fairLaunch.redeem();
       await tx.wait();
       await handleRefetch(true);
@@ -303,17 +308,22 @@ export default function PublicSale() {
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairRedeemErr(errorMsg));
+    } finally {
+      setIsRedeemLoading(false);
     }
   };
 
   const handleClaim = async () => {
     try {
+      setIsClaimBFrockLoading(true);
       const tx = await fairLaunch.claimRedeemable();
       await tx.wait();
       await handleRefetch(true);
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairClaimErr(errorMsg));
+    } finally {
+      setIsClaimBFrockLoading(false);
     }
   };
 
@@ -334,7 +344,7 @@ export default function PublicSale() {
       return null;
     }
 
-    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const hours = Math.floor(difference / (1000 * 60 * 60));
     const minutes = Math.floor((difference / 1000 / 60) % 60);
     const seconds = Math.floor((difference / 1000) % 60);
 
@@ -420,6 +430,8 @@ export default function PublicSale() {
               handleClaim={handleClaim}
               hasClaimed={hasClaimed}
               isApproveUsdcLoading={isApproveUsdcLoading}
+              isClaimBFrockLoading={isClaimBFrockLoading}
+              isRedeemLoading={isRedeemLoading}
               prices={prices}
               investedPerPerson={investedPerPerson}
             />

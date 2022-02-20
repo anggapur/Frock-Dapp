@@ -58,12 +58,12 @@ export default function Calculator({
   const handleResetClicked = () => {
     setCalc({
       ftmPrice: ftmPriceFromApi,
-      dailyVolume: 10000,
+      dailyVolume: 20000,
       precentClaimPeriod: 100,
       precentReflection: 7,
       precentTreasury: 14,
       frocPrice: 0.12,
-      yourEntryPrice: 0.08,
+      yourEntryPrice: 0.20,
       precentYourPortfolio: 0.5,
       precentCompound: 67,
       precentReturn: 33,
