@@ -59,6 +59,9 @@ export default function PublicSale() {
   const [isClaimEnabled, setIsClaimEnabled] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [isApproveUsdcLoading, setIsApproveUsdcLoading] = useState(false);
+  const [isClaimBFrockLoading, setIsClaimBFrockLoading] = useState(false);
+  const [isRedeemLoading, setIsRedeemLoading] = useState(false);
+  const [hasClaimed, setHasClaimed] = useState(false);
   const accounts = useWeb3Accounts();
   const provider = useProvider();
   const firework = useFirework();
@@ -86,19 +89,19 @@ export default function PublicSale() {
     accounts ? accounts[0] : 0,
   );
 
-  const frockContract = useContract(
-    FrockABI,
-    provider,
-    FROCK_ADDR,
-    accounts ? accounts[0] : 0,
-  );
+  // const frockContract = useContract(
+  //   FrockABI,
+  //   provider,
+  //   FROCK_ADDR,
+  //   accounts ? accounts[0] : 0,
+  // );
 
   useEffect(() => {
     (async () => {
       if (provider && accounts) {
         await handleGetUSDC();
         await handleGetNRT();
-        await handleGetFrock();
+        // await handleGetFrock();
 
         await handleGetGlobalMaxInvest();
         await handleGetTotalInvested();
@@ -112,6 +115,8 @@ export default function PublicSale() {
 
         await handleGetIsRedeemEnabled();
         await handleGetIsClaimEnabled();
+
+        await handleGetHasClaimed();
 
         await handleGetStartTime();
         await handleGetEndTime();
@@ -141,12 +146,12 @@ export default function PublicSale() {
     });
   };
 
-  const handleGetFrock = async () => {
-    const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
-    setFrockBalance({
-      frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
-    });
-  };
+  // const handleGetFrock = async () => {
+  //   const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
+  //   setFrockBalance({
+  //     frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
+  //   });
+  // };
 
   const handleGetIsRedeemEnabled = async () => {
     const isRedeemEnabledResult = await fairLaunch.redeemEnabled();
@@ -213,6 +218,11 @@ export default function PublicSale() {
     );
   };
 
+  const handleGetHasClaimed = async () => {
+    const hasClaimedResult = await fairLaunch.investorInfoMap(accounts[0]);
+    setHasClaimed(hasClaimedResult.hasClaimed);
+  };
+
   const handleGetTotalInvested = async () => {
     const totalGlobalInvestedResult = await fairLaunch.totalGlobalInvested();
     setTotalGlobalInvested(
@@ -230,7 +240,7 @@ export default function PublicSale() {
   };
 
   const handleApproveDeposit = async _depositAmount => {
-    const parsedDepositAmount = parseUnits(String(2500), USDC_DECIMALS);
+    const parsedDepositAmount = parseUnits(String(9999), USDC_DECIMALS);
     try {
       const tx = await usdCoin.approve(FAIR_PRICE_ADDR, parsedDepositAmount);
       setIsApproveUsdcLoading(true);
@@ -238,6 +248,8 @@ export default function PublicSale() {
       await handleRefetch(true);
     } catch (error) {
       ToastError('Cannot approve your USDC. Please try again!');
+    } finally {
+      setIsApproveUsdcLoading(false);
     }
   };
 
@@ -288,6 +300,7 @@ export default function PublicSale() {
 
   const handleRedeem = async () => {
     try {
+      setIsRedeemLoading(true);
       const tx = await fairLaunch.redeem();
       await tx.wait();
       await handleRefetch(true);
@@ -295,16 +308,22 @@ export default function PublicSale() {
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairRedeemErr(errorMsg));
+    } finally {
+      setIsRedeemLoading(false);
     }
   };
 
   const handleClaim = async () => {
     try {
+      setIsClaimBFrockLoading(true);
       const tx = await fairLaunch.claimRedeemable();
       await tx.wait();
+      await handleRefetch(true);
     } catch (error) {
       const errorMsg = error.data.message;
       ToastError(handleFairClaimErr(errorMsg));
+    } finally {
+      setIsClaimBFrockLoading(false);
     }
   };
 
@@ -325,7 +344,7 @@ export default function PublicSale() {
       return null;
     }
 
-    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const hours = Math.floor(difference / (1000 * 60 * 60));
     const minutes = Math.floor((difference / 1000 / 60) % 60);
     const seconds = Math.floor((difference / 1000) % 60);
 
@@ -409,7 +428,10 @@ export default function PublicSale() {
               handleWithdraw={handleWithdraw}
               handleRedeem={handleRedeem}
               handleClaim={handleClaim}
+              hasClaimed={hasClaimed}
               isApproveUsdcLoading={isApproveUsdcLoading}
+              isClaimBFrockLoading={isClaimBFrockLoading}
+              isRedeemLoading={isRedeemLoading}
               prices={prices}
               investedPerPerson={investedPerPerson}
             />

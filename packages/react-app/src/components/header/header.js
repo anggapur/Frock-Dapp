@@ -91,11 +91,21 @@ export default function Header() {
   }, []);
 
   const logoButtonRef = createRef();
+  const logoButtonModalRef = createRef();
 
   useEffect(() => {
     lottie.loadAnimation({
       name: 'logo-on-button',
       container: logoButtonRef.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: false,
+      animationData: logoWhiteJson,
+    });
+
+    lottie.loadAnimation({
+      name: 'logo-on-button',
+      container: logoButtonModalRef.current,
       renderer: 'svg',
       loop: true,
       autoplay: false,
@@ -136,8 +146,16 @@ export default function Header() {
     }
 
     if (provider === undefined) {
-      await loadWeb3Modal();
-      await handleAddOrChangeNetwork();
+      try {
+        lottie.play('logo-on-button');
+        await loadWeb3Modal();
+        await handleAddOrChangeNetwork();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      } finally {
+        lottie.stop('logo-on-button');
+      }
     }
   };
 
@@ -213,14 +231,12 @@ export default function Header() {
                 <Link to="/public-sale" className="nav-link">
                   Public Sale
                 </Link>
-                <Link to="/dashboard" className="nav-link">
-                  Dashboard
-                </Link>
+                {/* <Link to="/dashboard" className="nav-link"> */}
+                {/*  Dashboard */}
+                {/* </Link> */}
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
-                    onMouseOver={() => lottie.play('logo-on-button')}
-                    onMouseOut={() => lottie.pause('logo-on-button')}
                     variant="primary"
                     isRounded
                   >
@@ -251,14 +267,8 @@ export default function Header() {
                     }
                     id="nav-dropdown"
                     align="end"
-                    onMouseOver={() => {
-                      lottie.play('logo-on-button');
-                      setIsShowDropdown(true);
-                    }}
-                    onMouseOut={() => {
-                      lottie.pause('logo-on-button');
-                      setIsShowDropdown(false);
-                    }}
+                    onMouseOver={() => setIsShowDropdown(true)}
+                    onMouseOut={() => setIsShowDropdown(false)}
                     onClick={() => setIsShowDropdown(!isShowDropdown)}
                     show={isShowDropdown}
                   >
@@ -275,11 +285,11 @@ export default function Header() {
                     >
                       Add $bFROCK to wallet
                     </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
-                    >
-                      Add $FROCK to wallet
-                    </NavDropdown.Item>
+                    {/* <NavDropdown.Item */}
+                    {/*  onClick={() => handleAddToken(FROCK_TOKEN_DATA)} */}
+                    {/* > */}
+                    {/*  Add $FROCK to wallet */}
+                    {/* </NavDropdown.Item> */}
                   </NavDropdown>
                 )}
               </Nav>
@@ -304,6 +314,14 @@ export default function Header() {
             onClick={handleConnectWallet}
             variant="primary"
           >
+            <div
+              ref={logoButtonModalRef}
+              style={{
+                height: '32px',
+                display: 'inline-block',
+                margin: '-5px 0px -5px -5px',
+              }}
+            />{' '}
             Connect Wallet
           </RoundButton>
         </Modal.Body>

@@ -5,6 +5,7 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 
 import arrowDownIconGray from '../../../../assets/arrow-down-icon-gray.svg';
@@ -18,6 +19,7 @@ import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { FROCK_DECIMALS } from '../../../../constants';
+import { useWeb3Accounts } from '../../../../hooks/ethers/account';
 import { useProvider } from '../../../../hooks/ethers/provider';
 import { useStore } from '../../../../hooks/useStore';
 import { CommunityOfferingSchema } from '../../../../schemas/CommunityOfferingSchema';
@@ -38,12 +40,16 @@ export default function CardDeposit({
   handleWithdraw,
   handleRedeem,
   handleClaim,
+  hasClaimed,
   isApproveUsdcLoading,
+  isClaimBFrockLoading,
+  isRedeemLoading,
   prices,
   investedPerPerson,
 }) {
   const store = useStore();
   const provider = useProvider();
+  const accounts = useWeb3Accounts();
   const startTimeUtc = moment.unix(startTime).utc();
   const endTimeUtc = moment.unix(endTime).utc();
   const isBeforeStartTime = moment(new Date()).isSameOrBefore(startTimeUtc);
@@ -53,13 +59,15 @@ export default function CardDeposit({
   const [selected, setSelected] = useState('deposit');
   const [buttonLoading, setButtonLoading] = useState(null);
 
+  const calculation =
+    (investedPerPerson * 10 ** 9) / prices.finalPrice / 10 ** 9;
+
   const calculateFrock =
     investedPerPerson !== '0' &&
     prices.finalPrice !== '0' &&
-    formatUnits(
-      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
-      FROCK_DECIMALS,
-    );
+    !Number.isNaN(calculation)
+      ? calculation.toString()
+      : '0';
 
   useEffect(() => {
     if (communitySale === false && !isBeforeEndTime) {
@@ -150,7 +158,7 @@ export default function CardDeposit({
   };
 
   const renderDeposit = () => {
-    if (isAfterStartTime && isBeforeEndTime) {
+    if (isBeforeEndTime) {
       return (
         <>
           <p>
@@ -217,16 +225,20 @@ export default function CardDeposit({
             ) : null}
             <RoundButton
               variant={
-                Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(maxContribution)
+                accounts === undefined ||
+                isEmpty(accounts) ||
+                (Number(totalApproved) > 0 &&
+                  Number(totalApproved) <= Number(9999))
                   ? 'disabled'
                   : 'primary'
               }
               onClick={() => _handleApproveDeposit(formik.values.depositAmount)}
               className={styles.button}
               disabled={
-                Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(maxContribution)
+                accounts === undefined ||
+                isEmpty(accounts) ||
+                (Number(totalApproved) > 0 &&
+                  Number(totalApproved) <= Number(9999))
               }
               isRounded
             >
@@ -235,7 +247,7 @@ export default function CardDeposit({
             <RoundButton
               variant={
                 Number(totalApproved) > 0 &&
-                Number(totalApproved) <= Number(maxContribution)
+                Number(totalApproved) <= Number(9999)
                   ? 'primary'
                   : 'disabled'
               }
@@ -243,7 +255,7 @@ export default function CardDeposit({
               type="submit"
               disabled={
                 Number(totalApproved) <= 0 ||
-                Number(totalApproved) > Number(maxContribution) ||
+                Number(totalApproved) > Number(9999) ||
                 buttonLoading === 'deposit'
               }
               isRounded
@@ -275,7 +287,9 @@ export default function CardDeposit({
     const loadingName = String(name).toLocaleLowerCase();
     if (
       buttonLoading === loadingName ||
-      (loadingName === 'approve usdc' && isApproveUsdcLoading)
+      (loadingName === 'approve usdc' && isApproveUsdcLoading) ||
+      (loadingName === 'claim $bfrock' && isClaimBFrockLoading) ||
+      (loadingName === 'redeem $bfrock for $frock' && isRedeemLoading)
     ) {
       return <Loading variant="light" size="34" style={{ flex: 1 }} />;
     }
@@ -284,7 +298,7 @@ export default function CardDeposit({
   };
 
   const renderWithdraw = () => {
-    if (isAfterStartTime && isBeforeEndTime) {
+    if (isBeforeEndTime) {
       return (
         <>
           <p>
@@ -347,6 +361,7 @@ export default function CardDeposit({
         variant="disabled"
         className={clsx(styles.button, 'disabled')}
         onClick={() => null}
+        disabled
         isRounded
       >
         {isBeforeStartTime && communitySale && 'Community sale not started yet'}
@@ -359,30 +374,21 @@ export default function CardDeposit({
 
   const renderClaim = () => (
     <>
-      <h3>
-        Your total Contribution{' '}
-        <Tooltip anchorLink="/" anchorText="Read more">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-          malesuada posuere dolor in tempus.
-        </Tooltip>
-      </h3>
+      <h3>Your total Contribution</h3>
       <h2>{renderNumberFormatter(totalContribution)} $USDC</h2>
       <br />
-      <h3>
-        Your claimable $bFROCK{' '}
-        <Tooltip anchorLink="/" anchorText="Read more">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-          malesuada posuere dolor in tempus.
-        </Tooltip>
-      </h3>
-      <h2>{renderNumberFormatter(calculateFrock)} $bFROCK</h2>
+      <h3>Your claimable $bFROCK</h3>
+      <h2>
+        {hasClaimed ? '0' : renderNumberFormatter(calculateFrock)} $bFROCK
+      </h2>
       <RoundButton
-        onClick={isClaimEnabled ? handleClaim : () => null}
-        variant={isClaimEnabled ? 'primary' : 'disabled'}
+        onClick={isClaimEnabled && !hasClaimed ? handleClaim : () => null}
+        variant={isClaimEnabled && !hasClaimed ? 'primary' : 'disabled'}
         className={styles.button}
+        disabled={!isClaimEnabled || hasClaimed}
         isRounded
       >
-        Claim $bFROCK
+        {renderButtonText('Claim $bFROCK')}
       </RoundButton>
     </>
   );
@@ -406,6 +412,7 @@ export default function CardDeposit({
             : 'disabled'
         }
         className={styles.button}
+        disabled={!isRedeemEnabled || Number(store.nrtBalance) === 0}
         isRounded
       >
         {provider
@@ -413,11 +420,11 @@ export default function CardDeposit({
             ? Number(store.nrtBalance) !== 0
               ? communitySale
                 ? 'Redeem $aFROCK for $FROCK'
-                : 'Redeem $bFROCK for $FROCK'
+                : renderButtonText('Redeem $bFROCK for $FROCK')
               : `You have no ${
                   communitySale ? '$aFROCK' : '$bFROCK'
                 } in your wallet`
-            : 'Redeeming not possible yet'
+            : 'Redeeming not yet possible'
           : 'Please connect your wallet'}
       </RoundButton>
     </>

@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { formatUnits } from '@ethersproject/units';
 import clsx from 'clsx';
 import _ from 'lodash';
 import moment from 'moment';
@@ -10,7 +9,6 @@ import 'moment-timezone';
 
 import timeSymbol from '../../../../assets/time-symbol.svg';
 import Card from '../../../../components/card/card';
-import { FROCK_DECIMALS } from '../../../../constants';
 import {
   converSecondsToHours,
   getPercentageFromHour,
@@ -51,13 +49,15 @@ export default function CardCoinRaised({
 
   const circleRef = useRef();
 
+  const calculation =
+    (investedPerPerson * 10 ** 9) / prices.finalPrice / 10 ** 9;
+
   const calculateFrock =
     investedPerPerson !== '0' &&
     prices.finalPrice !== '0' &&
-    formatUnits(
-      ((investedPerPerson * 10 ** 9) / prices.finalPrice).toString(),
-      FROCK_DECIMALS,
-    );
+    !Number.isNaN(calculation)
+      ? calculation.toString()
+      : '0';
 
   useEffect(() => {
     if (
@@ -184,7 +184,7 @@ export default function CardCoinRaised({
           elapsed={converSecondsToHours(duration)}
           precent={getPercentageFromHour(
             Math.floor(Number(duration) / 3600),
-            24,
+            communitySale ? 24 : 48,
           )}
           type={communitySale ? 'Community Sale' : 'Public Sale'}
           isFinish={isSaleFinished}
