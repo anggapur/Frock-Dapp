@@ -7,6 +7,9 @@ import {
   DividenABI,
   FROCK_ADDR,
   FrockABI,
+  SPOOKY_ADDR,
+  SpookyABI,
+  WFTM_ADDR,
 } from '@project/contracts/src/address';
 import { isEmpty } from 'lodash';
 
@@ -19,10 +22,11 @@ import CardTrade from './sections/card-trade/card-trade';
 import CardTreasury from './sections/card-treasury/card-treasury';
 import FaqSection from './sections/faq-section/faq-section';
 
-export default function Dashboard() {
+function Dashboard() {
   const accounts = useWeb3Accounts();
   const provider = useProvider();
 
+  const [refetch, setRefetch] = useState(false);
   const [snapshotId, setSnapshotId] = useState('0');
   const [buildTradeDividend, setBuildTradeDividend] = useState('0');
   const [claimableDividend, setClaimableDividend] = useState({
@@ -53,6 +57,13 @@ export default function Dashboard() {
     accounts ? accounts[0] : 0,
   );
 
+  const spookyRouter = useContract(
+    SpookyABI,
+    provider,
+    SPOOKY_ADDR,
+    accounts ? accounts[0] : 0,
+  );
+
   useEffect(() => {
     (async () => {
       if (provider && accounts) {
@@ -63,9 +74,15 @@ export default function Dashboard() {
         await handleGetTokenBalance();
 
         await handleGetRewards();
+
+        await handleRefetch(false);
       }
     })();
-  }, [provider, accounts]);
+  }, [provider, accounts, refetch]);
+
+  const handleRefetch = async value => {
+    setRefetch(value);
+  };
 
   const handleGetLastSnapshot = async () => {
     const lastSnapshotResult = await frockContract.lastSnapshotId();
@@ -74,11 +91,16 @@ export default function Dashboard() {
 
   const handleBuildTradeDividend = async () => {
     if (!accounts) return;
-    if (snapshotId === '0') return;
 
     const buildTradeDividenResult =
       await dividenDistributor.buildingTradeDividendOfHolder(accounts[0]);
-    setBuildTradeDividend(formatUnits(buildTradeDividenResult, 18));
+
+    const frockToFTM = await spookyRouter.getAmountsOut(
+      buildTradeDividenResult,
+      [FROCK_ADDR, WFTM_ADDR],
+    );
+
+    setBuildTradeDividend(formatUnits(frockToFTM[1], 18));
   };
 
   const handleClaimableDividend = async () => {
@@ -103,8 +125,10 @@ export default function Dashboard() {
       accounts[0],
       0,
     );
-    const treasuryTotalClaimed =
-      await dividenDistributor.getTotalUnclaimedReward(accounts[0], 1);
+    const treasuryTotalClaimed = await dividenDistributor.holderToTotalClaimed(
+      accounts[0],
+      1,
+    );
     setTotalClaimed({
       trade: formatUnits(tradeTotalClaimed, 18),
       treasury: formatUnits(treasuryTotalClaimed, 18),
@@ -147,6 +171,8 @@ export default function Dashboard() {
         );
         resultTreasuryClaim.wait();
       }
+
+      await handleRefetch(true);
     } catch (e) {
       console.log(e);
     }
@@ -182,3 +208,5 @@ export default function Dashboard() {
     </Container>
   );
 }
+
+export default Dashboard;

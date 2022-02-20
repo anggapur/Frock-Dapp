@@ -52,25 +52,36 @@ export default function CardTreasury({
           </p>
         </Column>
       </Row>
+      <hr />
       <Row>
         <Column isDescription>
           <h6>Your claimable treasury dividends</h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
-            FTM{' '}
+            FTM {renderNumberFormatter(claimableDividend)}
+          </p>
+          <p>
+            ${' '}
             {renderNumberFormatter(
               (fantomPrice * Number(claimableDividend)).toString(),
             )}
           </p>
-          <p>$ {renderNumberFormatter(claimableDividend)}</p>
         </Column>
       </Row>
       <RoundButton
-        variant="primary"
+        variant={
+          renderNumberFormatter(claimableDividend) === '0'
+            ? 'disabled'
+            : 'primary'
+        }
         className="mt-4 w-100"
         isRounded
-        onClick={() => handleClaim(1)}
+        onClick={
+          renderNumberFormatter(claimableDividend) === '0'
+            ? () => null
+            : () => handleClaim(1)
+        }
       >
         Claim
       </RoundButton>
@@ -81,12 +92,14 @@ export default function CardTreasury({
           </Column>
           <Column className="px-xl-2 px-lg-0">
             <p className={styles.strong}>
-              FTM{' '}
+              FTM {renderNumberFormatter(totalClaimed)}
+            </p>
+            <p>
+              ${' '}
               {renderNumberFormatter(
                 (fantomPrice * Number(totalClaimed)).toString(),
               )}
             </p>
-            <p>$ {renderNumberFormatter(totalClaimed)}</p>
           </Column>
         </Row>
       </Card.Footer>

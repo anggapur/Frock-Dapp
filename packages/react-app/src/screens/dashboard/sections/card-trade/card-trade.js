@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
+import { isEmpty } from 'lodash';
+
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import { useWeb3Accounts } from '../../../../hooks/ethers/account';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-trade.module.scss';
 
@@ -26,6 +29,7 @@ export default function CardTrade({
   totalClaimed,
   handleClaim,
 }) {
+  const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
 
   useEffect(() => {
@@ -34,6 +38,8 @@ export default function CardTrade({
       // eslint-disable-next-line no-console
       .catch(console.error);
   }, []);
+
+  console.log('buildTradeDividend', buildTradeDividend);
 
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
@@ -44,12 +50,14 @@ export default function CardTrade({
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
-            FTM{' '}
+            FTM {renderNumberFormatter(buildTradeDividend)}
+          </p>
+          <p>
+            ${' '}
             {renderNumberFormatter(
               (fantomPrice * Number(buildTradeDividend)).toString(),
             )}
           </p>
-          <p>$ {renderNumberFormatter(buildTradeDividend)}</p>
         </Column>
       </Row>
       <hr />
@@ -59,19 +67,31 @@ export default function CardTrade({
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
-            FTM{' '}
+            FTM {renderNumberFormatter(claimableDividend)}
+          </p>
+          <p>
+            ${' '}
             {renderNumberFormatter(
               (fantomPrice * Number(claimableDividend)).toString(),
             )}
           </p>
-          <p>$ {renderNumberFormatter(claimableDividend)}</p>
         </Column>
       </Row>
       <RoundButton
-        variant="primary"
+        variant={
+          (accounts === undefined && isEmpty(accounts)) ||
+          renderNumberFormatter(claimableDividend) === '0'
+            ? 'disabled'
+            : 'primary'
+        }
         className="mt-4 w-100"
         isRounded
-        onClick={() => handleClaim(0)}
+        onClick={
+          (accounts === undefined && isEmpty(accounts)) ||
+          renderNumberFormatter(claimableDividend) === '0'
+            ? () => null
+            : () => handleClaim(0)
+        }
       >
         Claim
       </RoundButton>
@@ -82,12 +102,14 @@ export default function CardTrade({
           </Column>
           <Column className="ps-xl-2 px-lg-0">
             <p className={styles.strong}>
-              FTM{' '}
+              FTM {renderNumberFormatter(totalClaimed)}
+            </p>
+            <p>
+              ${' '}
               {renderNumberFormatter(
                 (fantomPrice * Number(totalClaimed)).toString(),
               )}
             </p>
-            <p>$ {renderNumberFormatter(totalClaimed)}</p>
           </Column>
         </Row>
       </Card.Footer>

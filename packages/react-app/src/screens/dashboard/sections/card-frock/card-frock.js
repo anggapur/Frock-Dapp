@@ -92,10 +92,7 @@ export default function CardFrock({ tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(
-                    (Number(tokenBalance) * frockPrice).toString(),
-                  )}{' '}
-                  $FROCK
+                  {renderNumberFormatter(tokenBalance)} $FROCK
                 </p>
               </Col>
               <Col
@@ -105,7 +102,12 @@ export default function CardFrock({ tokenBalance }) {
                 xs={12}
                 className="d-flex align-items-stretch"
               >
-                <p>$ {renderNumberFormatter(tokenBalance)}</p>
+                <p>
+                  ${' '}
+                  {renderNumberFormatter(
+                    (Number(tokenBalance) * frockPrice).toString(),
+                  )}
+                </p>
               </Col>
             </Row>
           </Card>
