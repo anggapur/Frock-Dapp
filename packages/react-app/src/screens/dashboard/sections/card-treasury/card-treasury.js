@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
-import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants';
+import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 

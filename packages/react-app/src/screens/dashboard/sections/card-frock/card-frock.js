@@ -8,10 +8,8 @@ import {
 } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
-import {
-  FROCK_SUPPLY,
-  TOTAL_TREASURY_VALUE_IN_STRONG,
-} from '../../../../constants';
+import { FROCK_SUPPLY } from '../../../../constants';
+import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
