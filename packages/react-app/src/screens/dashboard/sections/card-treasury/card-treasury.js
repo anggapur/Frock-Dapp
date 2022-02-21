@@ -4,7 +4,9 @@ import { Col, Row } from 'react-bootstrap';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
-import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants';
+import Loading from '../../../../components/loading/loading';
+import Tooltip from '../../../../components/tooltip/tooltip';
+import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 
@@ -25,6 +27,7 @@ export default function CardTreasury({
   claimableDividend,
   totalClaimed,
   handleClaim,
+  isClaimButtonLoading,
 }) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
@@ -55,7 +58,10 @@ export default function CardTreasury({
       <hr />
       <Row>
         <Column isDescription>
-          <h6>Your claimable treasury dividends</h6>
+          <h6>
+            Your claimable treasury dividends{' '}
+            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+          </h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -82,13 +88,21 @@ export default function CardTreasury({
             ? () => null
             : () => handleClaim(1)
         }
+        disabled={renderNumberFormatter(claimableDividend) === '0'}
       >
-        Claim
+        {!isClaimButtonLoading ? (
+          'Claim'
+        ) : (
+          <Loading variant="light" size="34" style={{ flex: 1 }} />
+        )}
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>
           <Column isDescription>
-            <h6>Your total claimed treasury dividends</h6>
+            <h6>
+              Your total claimed treasury dividends{' '}
+              <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            </h6>
           </Column>
           <Column className="px-xl-2 px-lg-0">
             <p className={styles.strong}>

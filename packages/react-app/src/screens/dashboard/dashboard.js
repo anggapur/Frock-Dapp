@@ -43,6 +43,7 @@ function Dashboard() {
     trade: [],
     treasury: [],
   });
+  const [claimButtonIsLoading, setClaimButtonIsLoading] = useState(null);
 
   const frockContract = useContract(
     FrockABI,
@@ -187,6 +188,7 @@ function Dashboard() {
     if (isEmpty(rewards.trade) && isEmpty(rewards.treasury)) return;
     try {
       if (rewardSource === 0) {
+        setClaimButtonIsLoading('trade');
         const resultTradeClaim = await dividenDistributor.batchClaimReward(
           rewards.trade,
         );
@@ -194,6 +196,7 @@ function Dashboard() {
       }
 
       if (rewardSource === 1) {
+        setClaimButtonIsLoading('treasury');
         const resultTreasuryClaim = await dividenDistributor.batchClaimReward(
           rewards.treasury,
         );
@@ -203,6 +206,8 @@ function Dashboard() {
       await handleRefetch(true);
     } catch (e) {
       console.log(e);
+    } finally {
+      setClaimButtonIsLoading(null);
     }
   };
 
@@ -215,6 +220,7 @@ function Dashboard() {
             claimableDividend={claimableDividend.trade}
             totalClaimed={totalClaimed.trade}
             handleClaim={handleClaim}
+            isClaimButtonLoading={claimButtonIsLoading === 'trade'}
           />
         </Col>
         <Col lg={4} className="mb-4">
@@ -225,6 +231,7 @@ function Dashboard() {
             claimableDividend={claimableDividend.treasury}
             totalClaimed={totalClaimed.treasury}
             handleClaim={handleClaim}
+            isClaimButtonLoading={claimButtonIsLoading === 'treasury'}
           />
         </Col>
       </Row>

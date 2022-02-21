@@ -6,6 +6,8 @@ import { isEmpty } from 'lodash';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Loading from '../../../../components/loading/loading';
+import Tooltip from '../../../../components/tooltip/tooltip';
 import { useWeb3Accounts } from '../../../../hooks/ethers/account';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-trade.module.scss';
@@ -28,6 +30,7 @@ export default function CardTrade({
   claimableDividend,
   totalClaimed,
   handleClaim,
+  isClaimButtonLoading,
 }) {
   const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -46,7 +49,10 @@ export default function CardTrade({
       <Card.Header>Trade dividends</Card.Header>
       <Row>
         <Column isDescription>
-          <h6>Your building trade dividends</h6>
+          <h6>
+            Your building trade dividends{' '}
+            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+          </h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -63,7 +69,10 @@ export default function CardTrade({
       <hr />
       <Row>
         <Column isDescription>
-          <h6>Your claimable trade dividends</h6>
+          <h6>
+            Your claimable trade dividends{' '}
+            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+          </h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -92,13 +101,24 @@ export default function CardTrade({
             ? () => null
             : () => handleClaim(0)
         }
+        disabled={
+          (accounts === undefined && isEmpty(accounts)) ||
+          renderNumberFormatter(claimableDividend) === '0'
+        }
       >
-        Claim
+        {!isClaimButtonLoading ? (
+          'Claim'
+        ) : (
+          <Loading variant="light" size="34" style={{ flex: 1 }} />
+        )}
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>
           <Column isDescription>
-            <h6>Your total claimed trade dividends</h6>
+            <h6>
+              Your total claimed trade dividends{' '}
+              <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            </h6>
           </Column>
           <Column className="ps-xl-2 px-lg-0">
             <p className={styles.strong}>
