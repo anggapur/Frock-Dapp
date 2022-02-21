@@ -5,6 +5,7 @@ import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
+import Tooltip from '../../../../components/tooltip/tooltip';
 import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
@@ -57,7 +58,10 @@ export default function CardTreasury({
       <hr />
       <Row>
         <Column isDescription>
-          <h6>Your claimable treasury dividends</h6>
+          <h6>
+            Your claimable treasury dividends{' '}
+            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+          </h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -95,7 +99,10 @@ export default function CardTreasury({
       <Card.Footer className={styles.footer}>
         <Row>
           <Column isDescription>
-            <h6>Your total claimed treasury dividends</h6>
+            <h6>
+              Your total claimed treasury dividends{' '}
+              <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            </h6>
           </Column>
           <Column className="px-xl-2 px-lg-0">
             <p className={styles.strong}>

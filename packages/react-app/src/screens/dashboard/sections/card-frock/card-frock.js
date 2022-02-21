@@ -8,6 +8,7 @@ import {
 } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
+import Tooltip from '../../../../components/tooltip/tooltip';
 import { FROCK_SUPPLY } from '../../../../constants';
 import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
@@ -80,7 +81,10 @@ export default function CardFrock({ tokenBalance }) {
           className="d-flex align-items-stretch mb-xxl-0 mb-lg-4"
         >
           <Card ellipse="top-right">
-            <h6>Total building trade dividends</h6>
+            <h6>
+              Total building trade dividends{' '}
+              <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            </h6>
             <Row>
               <Col
                 xxl={12}
@@ -112,7 +116,9 @@ export default function CardFrock({ tokenBalance }) {
         </Col>
         <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
-            <h6>Total treasury value</h6>
+            <h6>
+              Total treasury value <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            </h6>
             <Row>
               <Col
                 xxl={12}
