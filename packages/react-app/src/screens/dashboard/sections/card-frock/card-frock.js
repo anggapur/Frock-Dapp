@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import {
+  GetFantomPrice,
   GetFrockMarketChart,
   GetFrockPrice,
   GetStrongPrice,
@@ -15,19 +16,26 @@ import {
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
-export default function CardFrock({ tokenBalance }) {
+export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
+  const [fantomPrice, setFantomPrice] = useState(0);
   const [strongPrice, setStrongPrice] = useState(0);
 
   useEffect(() => {
-    Promise.all([GetFrockPrice(), GetStrongPrice(), GetFrockMarketChart()])
+    Promise.all([
+      GetFrockPrice(),
+      GetStrongPrice(),
+      GetFantomPrice(),
+      GetFrockMarketChart(),
+    ])
       .then(price => {
         setFrockPrice(price[0]);
         setStrongPrice(price[1]);
+        setFantomPrice(price[2]);
 
-        if (price[2]?.market_caps && Array.isArray(price[2]?.market_caps)) {
-          const marketCaps = price[2].market_caps.pop();
+        if (price[3]?.market_caps && Array.isArray(price[3]?.market_caps)) {
+          const marketCaps = price[3].market_caps.pop();
           setFrockMarketCap(marketCaps[1]);
         }
       })
@@ -45,7 +53,12 @@ export default function CardFrock({ tokenBalance }) {
         <Row>
           <Col xl={6} lg={12} xs={6}>
             <h3>$FROCK Price</h3>
-            <h1>${new Intl.NumberFormat('en-US').format(frockPrice)}</h1>
+            <h1>
+              $
+              {renderNumberFormatter(
+                (Number(frockPriceDex) * fantomPrice).toString(),
+              )}
+            </h1>
             <RoundButton
               variant="primary"
               className="mt-3 mb-xl-3 mb-4 px-4"
@@ -92,7 +105,7 @@ export default function CardFrock({ tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(tokenBalance)} $FROCK
+                  {renderNumberFormatter(Number(tokenBalance))} $FTM
                 </p>
               </Col>
               <Col
@@ -105,7 +118,7 @@ export default function CardFrock({ tokenBalance }) {
                 <p>
                   ${' '}
                   {renderNumberFormatter(
-                    (Number(tokenBalance) * frockPrice).toString(),
+                    (Number(tokenBalance) * fantomPrice).toString(),
                   )}
                 </p>
               </Col>

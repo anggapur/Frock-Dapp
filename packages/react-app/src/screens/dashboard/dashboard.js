@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import { formatUnits } from '@ethersproject/units';
+import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
   DIVIDEN_ADDR,
   DividenABI,
@@ -28,6 +28,7 @@ function Dashboard() {
 
   const [refetch, setRefetch] = useState(false);
   const [snapshotId, setSnapshotId] = useState('0');
+  const [frockPrice, setFrockPrice] = useState('0');
   const [buildTradeDividend, setBuildTradeDividend] = useState('0');
   const [claimableDividend, setClaimableDividend] = useState({
     trade: '0',
@@ -68,6 +69,7 @@ function Dashboard() {
     (async () => {
       if (provider && accounts) {
         await handleGetLastSnapshot();
+        await handleGetFrockPrice();
         await handleBuildTradeDividend();
         await handleClaimableDividend();
         await handleHolderToTotalClaimed();
@@ -78,7 +80,7 @@ function Dashboard() {
         await handleRefetch(false);
       }
     })();
-  }, [provider, accounts, refetch]);
+  }, [provider, accounts, refetch, snapshotId]);
 
   const handleRefetch = async value => {
     setRefetch(value);
@@ -89,18 +91,39 @@ function Dashboard() {
     setSnapshotId(lastSnapshotResult.toString());
   };
 
+  const handleFrockToFTM = async (amount, firstPair, secondPair) => {
+    const frockToFTM = await spookyRouter.getAmountsOut(amount, [
+      firstPair,
+      secondPair,
+    ]);
+
+    return frockToFTM;
+  };
+
   const handleBuildTradeDividend = async () => {
-    if (!accounts) return;
+    if (!accounts || snapshotId === '0') return;
 
     const buildTradeDividenResult =
       await dividenDistributor.buildingTradeDividendOfHolder(accounts[0]);
 
-    const frockToFTM = await spookyRouter.getAmountsOut(
+    const resultConverted = await handleFrockToFTM(
       buildTradeDividenResult,
-      [FROCK_ADDR, WFTM_ADDR],
+      FROCK_ADDR,
+      WFTM_ADDR,
     );
 
-    setBuildTradeDividend(formatUnits(frockToFTM[1], 18));
+    setBuildTradeDividend(formatUnits(resultConverted[1], 18));
+  };
+
+  const handleGetFrockPrice = async () => {
+    if (!accounts) return;
+
+    const resultConverted = await handleFrockToFTM(
+      parseUnits('1', 9),
+      FROCK_ADDR,
+      WFTM_ADDR,
+    );
+    setFrockPrice(formatUnits(resultConverted[1], 18));
   };
 
   const handleClaimableDividend = async () => {
@@ -138,7 +161,12 @@ function Dashboard() {
   const handleGetTokenBalance = async () => {
     if (!accounts) return;
     const tokenBalanceResult = await dividenDistributor.getTokenBalance();
-    setTokenBalance(formatUnits(tokenBalanceResult, FROCK_DECIMALS));
+    const resultConverted = await handleFrockToFTM(
+      tokenBalanceResult,
+      FROCK_ADDR,
+      WFTM_ADDR,
+    );
+    setTokenBalance(formatUnits(resultConverted[1], 18));
   };
 
   const handleGetRewards = async () => {
@@ -190,7 +218,7 @@ function Dashboard() {
           />
         </Col>
         <Col lg={4} className="mb-4">
-          <CardFrock tokenBalance={tokenBalance} />
+          <CardFrock frockPrice={frockPrice} tokenBalance={tokenBalance} />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTreasury
