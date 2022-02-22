@@ -110,6 +110,9 @@ const config: HardhatUserConfig = {
     snapshoter: {
       default: 19
     },
+    team: {
+      default: 19
+    },
     user1: {
       default: 1,
     },
