@@ -9,10 +9,10 @@ async function main() {
   console.log("Create Liquidity Pool FrockxFTM")
 
   // Accounts  
-  const liquidityProvider = await ethers.getNamedSigner('deployer');    
+  const liquidityProvider = await ethers.getNamedSigner('deployer');
   const frockAmount = ethers.utils.parseUnits("400000", 9)
-  const ftmAmount = ethers.utils.parseUnits("37000", 18)
-  
+  const ftmAmount = ethers.utils.parseUnits("3700", 18)
+
   // Contracts
   const pancakeFactory = await ethers.getContract<SpookyFactory>('SpookyFactory');
   const pancakeRouter = await ethers.getContract<SpookyRouter>('SpookyRouter');
