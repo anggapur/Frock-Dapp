@@ -35,6 +35,12 @@ async function main() {
   console.log(`Frock of Dividen Distributor : ${ethers.utils.formatUnits((await frock.balanceOf(dividenDistributor.address)), frockDecimals)}`)
   console.log(`Frock of Community Sales : ${ethers.utils.formatUnits((await frock.balanceOf(communityOffering.address)), frockDecimals)}`)
   console.log(`Frock of Fair Launch Sales : ${ethers.utils.formatUnits((await frock.balanceOf(fairLaunch.address)), frockDecimals)}`)
+  console.log(`Frock of User 1 : ${ethers.utils.formatUnits((await frock.balanceOf(user1.address)), frockDecimals)}`)
+  console.log(`Frock of User 2 : ${ethers.utils.formatUnits((await frock.balanceOf(user2.address)), frockDecimals)}`)
+  console.log(`Frock of User 3 : ${ethers.utils.formatUnits((await frock.balanceOf(user3.address)), frockDecimals)}`)
+  console.log(`Frock of User 4 : ${ethers.utils.formatUnits((await frock.balanceOf(user4.address)), frockDecimals)}`)
+  console.log(`Frock of User 5 : ${ethers.utils.formatUnits((await frock.balanceOf(user5.address)), frockDecimals)}`)
+  console.log(`Frock of User 6 : ${ethers.utils.formatUnits((await frock.balanceOf(user6.address)), frockDecimals)}`)
 
 }
 
