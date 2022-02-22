@@ -110,7 +110,7 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(Number(tokenBalance))} $FTM
+                  {renderNumberFormatter(Number(tokenBalance))} FTM
                 </p>
               </Col>
               <Col
