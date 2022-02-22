@@ -411,6 +411,7 @@ export default function PublicSale() {
               totalInvestors={totalInvestors}
               prices={prices}
               investedPerPerson={investedPerPerson}
+              isSaleFinished
             />
           </Col>
           <Col lg={5}>
