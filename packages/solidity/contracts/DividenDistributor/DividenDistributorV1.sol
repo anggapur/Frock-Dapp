@@ -299,7 +299,13 @@ contract DividenDistributorV1 is
             uint256 holderBalance = IERC20SnapshotUpgradeable(mainToken).balanceOfAt(holder, snapshotId);
             uint256 supply = IERC20SnapshotUpgradeable(mainToken).totalSupplyAt(snapshotId);
             uint256 currentContractBalance = getTokenBalance();
-            return currentContractBalance * holderBalance / supply;
+
+            // Calculate The total Tokens that need to excluded from reward
+            uint256 totalExcludedFromReward = 0;
+            for(uint256 i = 0; i < listExcludedFromReward.length; i++) {
+                totalExcludedFromReward += IERC20SnapshotUpgradeable(mainToken).balanceOfAt(listExcludedFromReward[i], snapshotId);
+            }            
+            return currentContractBalance * holderBalance / (supply - totalExcludedFromReward);
         }
         return 0;
     }
