@@ -51,7 +51,10 @@ export default function CardTrade({
         <Column isDescription>
           <h6>
             Your building trade dividends{' '}
-            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            <Tooltip>
+              Your share of the trade dividends which are not yet claimable.
+              All $FTM and $ prices are based on current rates, not historical earnings.
+            </Tooltip>
           </h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
@@ -71,7 +74,10 @@ export default function CardTrade({
         <Column isDescription>
           <h6>
             Your claimable trade dividends{' '}
-            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            <Tooltip>
+              Your share of the trade dividends, ready to claim!
+              The $ price is based on current rate.
+            </Tooltip>
           </h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
@@ -117,7 +123,10 @@ export default function CardTrade({
           <Column isDescription>
             <h6>
               Your total claimed trade dividends{' '}
-              <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+              <Tooltip>
+                Your historical amount of trade dividends claimed.
+                The $ price is based on current rate.
+              </Tooltip>
             </h6>
           </Column>
           <Column className="ps-xl-2 px-lg-0">

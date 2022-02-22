@@ -60,7 +60,10 @@ export default function CardTreasury({
         <Column isDescription>
           <h6>
             Your claimable treasury dividends{' '}
-            <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+            <Tooltip>
+              Your share of the treasury dividends, ready to claim.
+              The $ price is based on current rate.
+            </Tooltip>
           </h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
@@ -101,7 +104,10 @@ export default function CardTreasury({
           <Column isDescription>
             <h6>
               Your total claimed treasury dividends{' '}
-              <Tooltip>Lorem ipsum dolor sit amet</Tooltip>
+              <Tooltip>
+                Your historical amount of treasury dividends claimed.
+                The $ price is based on current rate.
+              </Tooltip>
             </h6>
           </Column>
           <Column className="px-xl-2 px-lg-0">
