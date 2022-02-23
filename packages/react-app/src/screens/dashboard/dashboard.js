@@ -81,7 +81,14 @@ function Dashboard() {
         await handleRefetch(false);
       }
     })();
-  }, [provider, accounts, refetch, snapshotId]);
+  }, [
+    provider,
+    accounts,
+    refetch,
+    snapshotId,
+    tokenBalance,
+    buildTradeDividend,
+  ]);
 
   const handleRefetch = async value => {
     setRefetch(value);
@@ -106,6 +113,8 @@ function Dashboard() {
 
     const buildTradeDividenResult =
       await dividenDistributor.buildingTradeDividendOfHolder(accounts[0]);
+
+    if (buildTradeDividenResult.toString() === '0') return;
 
     const resultConverted = await handleFrockToFTM(
       buildTradeDividenResult,
@@ -162,6 +171,7 @@ function Dashboard() {
   const handleGetTokenBalance = async () => {
     if (!accounts) return;
     const tokenBalanceResult = await dividenDistributor.getTokenBalance();
+    if (tokenBalanceResult.toString() === '0') return;
     const resultConverted = await handleFrockToFTM(
       tokenBalanceResult,
       FROCK_ADDR,

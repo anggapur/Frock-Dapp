@@ -42,8 +42,6 @@ export default function CardTrade({
       .catch(console.error);
   }, []);
 
-  console.log('buildTradeDividend', buildTradeDividend);
-
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
       <Card.Header>Trade dividends</Card.Header>
@@ -52,8 +50,9 @@ export default function CardTrade({
           <h6>
             Your building trade dividends{' '}
             <Tooltip>
-              Your share of the trade dividends which are not yet claimable.
-              All $FTM and $ prices are based on current rates, not historical earnings.
+              Your share of the trade dividends which are not yet claimable. All
+              $FTM and $ prices are based on current rates, not historical
+              earnings.
             </Tooltip>
           </h6>
         </Column>
@@ -75,8 +74,8 @@ export default function CardTrade({
           <h6>
             Your claimable trade dividends{' '}
             <Tooltip>
-              Your share of the trade dividends, ready to claim!
-              The $ price is based on current rate.
+              Your share of the trade dividends, ready to claim! The $ price is
+              based on current rate.
             </Tooltip>
           </h6>
         </Column>
@@ -124,8 +123,8 @@ export default function CardTrade({
             <h6>
               Your total claimed trade dividends{' '}
               <Tooltip>
-                Your historical amount of trade dividends claimed.
-                The $ price is based on current rate.
+                Your historical amount of trade dividends claimed. The $ price
+                is based on current rate.
               </Tooltip>
             </h6>
           </Column>

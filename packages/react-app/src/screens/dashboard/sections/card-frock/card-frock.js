@@ -73,7 +73,7 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
               ${' '}
               {new Intl.NumberFormat('en-US', {
                 maximumFractionDigits: 0,
-              }).format(frockMarketCap)}
+              }).format(FROCK_SUPPLY * (Number(frockPriceDex) * fantomPrice))}
             </p>
             <h6>Total supply</h6>
             <p>
@@ -97,8 +97,8 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
             <h6>
               Total building trade dividends{' '}
               <Tooltip>
-                Trade dividends which are not yet claimable.
-                All $FTM and $ prices are based on current rates, not historical earnings.
+                Trade dividends which are not yet claimable. All $FTM and $
+                prices are based on current rates, not historical earnings.
               </Tooltip>
             </h6>
             <Row>
@@ -110,7 +110,7 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(Number(tokenBalance))} $FTM
+                  {renderNumberFormatter(Number(tokenBalance))} FTM
                 </p>
               </Col>
               <Col
@@ -133,9 +133,8 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
         <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
             <h6>
-              Total treasury value <Tooltip>
-              $ price is based on current rate.
-            </Tooltip>
+              Total treasury value{' '}
+              <Tooltip>$ price is based on current rate.</Tooltip>
             </h6>
             <Row>
               <Col
@@ -146,7 +145,7 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {TOTAL_TREASURY_VALUE_IN_STRONG/10} $STRONG NODES
+                  {TOTAL_TREASURY_VALUE_IN_STRONG / 10} $STRONG NODES
                 </p>
               </Col>
               <Col

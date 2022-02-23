@@ -11,7 +11,7 @@ async function main() {
   // Accounts  
   const liquidityProvider = await ethers.getNamedSigner('deployer');
   const frockAmount = ethers.utils.parseUnits("400000", 9)
-  const ftmAmount = ethers.utils.parseUnits("3700", 18)
+  const ftmAmount = ethers.utils.parseUnits("42800", 18)
 
   // Contracts
   const pancakeFactory = await ethers.getContract<SpookyFactory>('SpookyFactory');

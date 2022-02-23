@@ -17,10 +17,11 @@ async function main() {
   const user3 = await ethers.getNamedSigner('user3');
   const user4 = await ethers.getNamedSigner('user4');
   const user5 = await ethers.getNamedSigner('user5');
-  const user6 = await ethers.getNamedSigner('user6');  
+  const user6 = await ethers.getNamedSigner('user6');
+  const team = await ethers.getNamedSigner('team');
   // Contracts
   const dividenDistributorProxy = (await ethers.getContract<DividenDistributorProxy>('DividenDistributorProxy'))
-    const dividenDistributor = (await ethers.getContract<DividenDistributorV1>('DividenDistributorV1')).attach(dividenDistributorProxy.address)    
+  const dividenDistributor = (await ethers.getContract<DividenDistributorV1>('DividenDistributorV1')).attach(dividenDistributorProxy.address)
   const frockProxy = (await ethers.getContract<FrockProxy>('FrockProxy'))
   const frock = (await ethers.getContract<FrockTokenV1>('FrockTokenV1')).attach(frockProxy.address)         
   const frockDecimals = await frock.decimals();
@@ -30,6 +31,9 @@ async function main() {
 
   // Check Balances
   console.log(`Frock of Deployer : ${ethers.utils.formatUnits((await frock.balanceOf(deployer.address)), frockDecimals)}`)
+  // console.log(`Frock of Deployer : ${ethers.utils.formatUnits((await frock.balanceOf(deployer.address)), frockDecimals)}` + ' ' +  (Number(ethers.utils.formatUnits(await frock.balanceOf(deployer.address, frockDecimals)) / 600000))
+  console.log(`Frock in LP : ${ethers.utils.formatUnits((await frock.balanceOf('0xf345B847cA5fBc1f0F47bd90a618650AC9bB8a1B')), frockDecimals)}`) // should we show LP here?
+  console.log(`Frock of Team : ${ethers.utils.formatUnits((await frock.balanceOf(team.address)), frockDecimals)}`)
   console.log(`Frock of Marketing : ${ethers.utils.formatUnits((await frock.balanceOf(marketing.address)), frockDecimals)}`)
   console.log(`Frock of Treasury : ${ethers.utils.formatUnits((await frock.balanceOf(treasury.address)), frockDecimals)}`)
   console.log(`Frock of Dividen Distributor : ${ethers.utils.formatUnits((await frock.balanceOf(dividenDistributor.address)), frockDecimals)}`)

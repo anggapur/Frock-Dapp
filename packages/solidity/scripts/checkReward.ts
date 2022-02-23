@@ -26,7 +26,7 @@ async function main() {
     console.log(`totalClaimed: ${ethers.utils.formatUnits(totalClaimed)} FTM`);
     console.log(`issuedAt: ${issuedAt}`);
     console.log(`snapshotId: ${snapshotId}`);
-    console.log(`totalExcludedFromSupply: ${ethers.utils.formatUnits(totalExcludedFromSupply, 9)}`);
+    console.log(`totalExcludedFromDistribution: ${ethers.utils.formatUnits(totalExcludedFromSupply, 9)}`);
     console.log(`rewardSource: ${rewardSource}`);
 }
 

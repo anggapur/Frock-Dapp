@@ -15,9 +15,9 @@ async function main() {
 
     // Parameters
     const amountToLock =  ethers.utils.parseUnits("125000", frockDecimals)
-    const lockPeriode  = 15778800 // 6 months
+    const lockPeriode  = 2629800 // 1 months
     const periodPerWithdraw = 2629800 // 1 month
-    const maxAmountPerWithdraw = ethers.utils.parseUnits("25000", frockDecimals); 
+    const maxAmountPerWithdraw = ethers.utils.parseUnits("10417", frockDecimals);
     const user = await ethers.getNamedSigner('user1'); // Need to change
 
     // Approve token 

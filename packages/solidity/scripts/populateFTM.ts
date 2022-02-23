@@ -16,7 +16,7 @@ async function main() {
     const user5 = await ethers.getNamedSigner('user15');
     const user6 = await ethers.getNamedSigner('user16');
     const user7 = await ethers.getNamedSigner('user17');
-    const user8 = await ethers.getNamedSigner('user18');
+    const notInvestor = await ethers.getNamedSigner('notInvestor');
 
     const FTMHolder = [
       user1,
@@ -26,7 +26,7 @@ async function main() {
       user5,
       user6,
       user7,
-      user8
+      notInvestor
     ];
     const sendFTM = FTMHolder.map((holder) => holder.sendTransaction({
       to: destination.address,
