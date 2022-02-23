@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.5;
+pragma solidity 0.8.5;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 import "../DividenDistributor/IDividenDistributor.sol";
 
-contract Vault is Context{
+contract Vault is Context {
 
     struct Withdraw {
         uint256 withdrawAmount;

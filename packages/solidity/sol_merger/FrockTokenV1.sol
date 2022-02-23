@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity 0.8.5;
 
 
 // SPDX-License-Identifier: MIT
@@ -189,7 +189,7 @@ library AddressUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (proxy/utils/Initializable.sol)
 /**
  * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed
@@ -265,7 +265,7 @@ abstract contract Initializable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (proxy/beacon/IBeacon.sol)
 /**
  * @dev This is the interface that {BeaconProxy} expects of its beacon.
@@ -279,7 +279,7 @@ interface IBeaconUpgradeable {
     function implementation() external view returns (address);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/StorageSlot.sol)
 /**
  * @dev Library for reading and writing primitive types to specific storage slots.
@@ -361,7 +361,7 @@ library StorageSlotUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (proxy/ERC1967/ERC1967Upgrade.sol)
 /**
  * @dev This abstract contract provides getters and event emitting update functions for
@@ -570,7 +570,7 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (proxy/utils/UUPSUpgradeable.sol)
 /**
  * @dev An upgradeability mechanism designed for UUPS proxies. The functions included here can perform an upgrade of an
@@ -647,7 +647,7 @@ abstract contract UUPSUpgradeable is Initializable, ERC1967UpgradeUpgradeable {
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/IERC20.sol)
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -727,7 +727,7 @@ interface IERC20Upgradeable {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/IERC20Metadata.sol)
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -751,7 +751,7 @@ interface IERC20MetadataUpgradeable is IERC20Upgradeable {
     function decimals() external view returns (uint8);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 /**
  * @dev Provides information about the current execution context, including the
@@ -780,7 +780,7 @@ abstract contract ContextUpgradeable is Initializable {
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/ERC20.sol)
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1136,7 +1136,7 @@ contract ERC20Upgradeable is Initializable, ContextUpgradeable, IERC20Upgradeabl
     uint256[45] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/ERC20Capped.sol)
 /**
  * @dev Extension of {ERC20} that adds a cap to the supply of tokens.
@@ -1175,7 +1175,7 @@ abstract contract ERC20CappedUpgradeable is Initializable, ERC20Upgradeable {
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/ERC20Burnable.sol)
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
@@ -1221,7 +1221,7 @@ abstract contract ERC20BurnableUpgradeable is Initializable, ContextUpgradeable,
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/math/Math.sol)
 /**
  * @dev Standard math utilities missing in the Solidity language.
@@ -1262,7 +1262,7 @@ library MathUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Arrays.sol)
 /**
  * @dev Collection of functions related to array types.
@@ -1306,7 +1306,7 @@ library ArraysUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Counters.sol)
 /**
  * @title Counters
@@ -1347,7 +1347,7 @@ library CountersUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/ERC20Snapshot.sol)
 /**
  * @dev This contract extends an ERC20 token with a snapshot mechanism. When a snapshot is created, the balances and
@@ -1543,7 +1543,7 @@ abstract contract ERC20SnapshotUpgradeable is Initializable, ERC20Upgradeable {
     uint256[46] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/draft-IERC20Permit.sol)
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -1601,7 +1601,7 @@ interface IERC20PermitUpgradeable {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Strings.sol)
 /**
  * @dev String operations.
@@ -1666,7 +1666,7 @@ library StringsUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/cryptography/ECDSA.sol)
 /**
  * @dev Elliptic Curve Digital Signature Algorithm (ECDSA) operations.
@@ -1896,7 +1896,7 @@ library ECDSAUpgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/cryptography/draft-EIP712.sol)
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -2004,7 +2004,7 @@ abstract contract EIP712Upgradeable is Initializable {
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/draft-ERC20Permit.sol)
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -2090,7 +2090,7 @@ abstract contract ERC20PermitUpgradeable is Initializable, ERC20Upgradeable, IER
     uint256[49] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (access/IAccessControl.sol)
 /**
  * @dev External interface of AccessControl declared to support ERC165 detection.
@@ -2176,7 +2176,7 @@ interface IAccessControlUpgradeable {
     function renounceRole(bytes32 role, address account) external;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
 /**
  * @dev Interface of the ERC165 standard, as defined in the
@@ -2199,7 +2199,7 @@ interface IERC165Upgradeable {
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/ERC165.sol)
 /**
  * @dev Implementation of the {IERC165} interface.
@@ -2231,7 +2231,7 @@ abstract contract ERC165Upgradeable is Initializable, IERC165Upgradeable {
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (access/AccessControl.sol)
 /**
  * @dev Contract module that allows children to implement role-based access
@@ -2456,7 +2456,7 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable,
     uint256[49] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (security/Pausable.sol)
 /**
  * @dev Contract module which allows children to implement an emergency stop
@@ -2549,7 +2549,7 @@ abstract contract PausableUpgradeable is Initializable, ContextUpgradeable {
     uint256[49] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 /**
  * @title IERC1363 Interface
  * @author Vittorio Minacori (https://github.com/vittominacori)
@@ -2640,7 +2640,7 @@ interface IERC1363Upgradeable is IERC20Upgradeable, IERC165Upgradeable {
     ) external returns (bool);
 }
 
-// SPDX-License-Identifier: MIT
+
 /**
  * @title IERC1363Receiver Interface
  * @author Vittorio Minacori (https://github.com/vittominacori)
@@ -2670,7 +2670,7 @@ interface IERC1363Receiver {
     ) external returns (bytes4);
 }
 
-// SPDX-License-Identifier: MIT
+
 /**
  * @title IERC1363Spender Interface
  * @author Vittorio Minacori (https://github.com/vittominacori)
@@ -2698,7 +2698,7 @@ interface IERC1363Spender {
     ) external returns (bytes4);
 }
 
-// SPDX-License-Identifier: MIT
+
 /**
  * @title ERC1363
  * @author Vittorio Minacori (https://github.com/vittominacori)
@@ -2902,7 +2902,7 @@ abstract contract ERC1363Upgradeable is
     uint256[50] private __gap;
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/utils/SafeERC20.sol)
 /**
  * @title SafeERC20
@@ -2996,7 +2996,7 @@ library SafeERC20Upgradeable {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 /**
  * @title SafeTokenRecover
  * @author Vittorio Minacori (https://github.com/vittominacori)
@@ -3209,7 +3209,7 @@ contract TokenBasic is
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // solhint-disable-next-line no-empty-blocks
 contract FrockTokenV1 is TokenBasic {
 

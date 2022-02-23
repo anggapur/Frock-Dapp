@@ -1,4 +1,4 @@
-pragma solidity ^0.8.5;
+pragma solidity 0.8.5;
 
 
 // SPDX-License-Identifier: MIT
@@ -23,7 +23,7 @@ abstract contract Context {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/IERC20.sol)
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -103,7 +103,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
 /**
  * @dev Interface of the ERC165 standard, as defined in the
@@ -126,13 +126,13 @@ interface IERC165Upgradeable {
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
 
-// SPDX-License-Identifier: MIT
+
 interface IDividenDistributor {
     function claimReward(uint256 rewardId) external;
 }
 
-// SPDX-License-Identifier: MIT
-contract Vault is Context{{
+
+contract Vault is Context {
 
     struct Withdraw {
         uint256 withdrawAmount;
