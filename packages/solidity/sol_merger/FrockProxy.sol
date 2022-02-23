@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity 0.8.5;
 
 
 // SPDX-License-Identifier: MIT
@@ -85,7 +85,7 @@ abstract contract Proxy {
     function _beforeFallback() internal virtual {}
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (proxy/beacon/IBeacon.sol)
 /**
  * @dev This is the interface that {BeaconProxy} expects of its beacon.
@@ -99,7 +99,7 @@ interface IBeacon {
     function implementation() external view returns (address);
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Address.sol)
 /**
  * @dev Collection of functions related to the address type
@@ -314,7 +314,7 @@ library Address {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/StorageSlot.sol)
 /**
  * @dev Library for reading and writing primitive types to specific storage slots.
@@ -396,7 +396,7 @@ library StorageSlot {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (proxy/ERC1967/ERC1967Upgrade.sol)
 /**
  * @dev This abstract contract provides getters and event emitting update functions for
@@ -604,7 +604,7 @@ contract ERC1967Proxy is Proxy, ERC1967Upgrade {
     }
 }
 
-// SPDX-License-Identifier: MIT
+
 contract FrockProxy is ERC1967Proxy {
     /**
      * @dev Initializes the upgradeable proxy with an initial implementation specified by `_logic`.
