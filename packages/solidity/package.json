@@ -69,6 +69,7 @@
     "hardhat": "^2.2.1",
     "hardhat-deploy": "^0.8.11",
     "hardhat-gas-reporter": "^1.0.4",
+    "sol-merger": "^4.0.0",
     "ts-morph": "^11.0.0",
     "ts-node": "^9.1.1",
     "typechain": "^5.0.0",
