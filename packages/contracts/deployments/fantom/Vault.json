@@ -1,0 +1,512 @@
+{
+  "address": "0x0b80eC2FDF289e0673b28ae688e66F8871B26314",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_frockToken",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_dividenDistributor",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "rewardId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "rewardAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ClaimDividen",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "holder",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amountFrockTokenLocked",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "lockPeriode",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "periodPerWithdraw",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amountPerWithdraw",
+          "type": "uint256"
+        }
+      ],
+      "name": "Locked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "epoch",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "withdrawAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "WithdrawToken",
+      "type": "event"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [],
+      "name": "DIVIDEN_DISTRIBUTOR",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "amountFrockTokenLocked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "rewardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimDividen",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "rewardAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "currentEpoch",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dividenDistributor",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "endLock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "frockToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "holder",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "lockPeriode",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountFrockTokenLockedParam",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lockPeriodeParam",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "periodPerWithdrawParam",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxAmountPerWithdrawParam",
+          "type": "uint256"
+        }
+      ],
+      "name": "lockToken",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxAmountPerWithdraw",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "periodPerWithdraw",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "startLock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "withdrawAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawalHistory",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "withdrawAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "withdrawTime",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x14d7d590e5cc54f08bcada271bfe8ab96133cf1256bb0386829ca624def6cfc5",
+  "receipt": {
+    "to": null,
+    "from": "0x2508a6bE351a05d535A1f59F3a0c2E5c6bB7AF5C",
+    "contractAddress": "0x0b80eC2FDF289e0673b28ae688e66F8871B26314",
+    "transactionIndex": 13,
+    "gasUsed": "743634",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x00014b10000000f2a881b1fda704b71575d959626fd0c60f59050012e547a769",
+    "transactionHash": "0x14d7d590e5cc54f08bcada271bfe8ab96133cf1256bb0386829ca624def6cfc5",
+    "logs": [],
+    "blockNumber": 31744198,
+    "cumulativeGasUsed": "2220026",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x26186D542f6AC6F9F6753230A8cBaeCdac61E142",
+    "0x99C148E287D83C040715137570C28d20052cd415"
+  ],
+  "solcInputHash": "c869ab13a682359a8a5563ac712a08d0",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.5+commit.a4f2e591\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_frockToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_dividenDistributor\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewardId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewardAmount\",\"type\":\"uint256\"}],\"name\":\"ClaimDividen\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"holder\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amountFrockTokenLocked\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockPeriode\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"periodPerWithdraw\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amountPerWithdraw\",\"type\":\"uint256\"}],\"name\":\"Locked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"epoch\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"withdrawAmount\",\"type\":\"uint256\"}],\"name\":\"WithdrawToken\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"DIVIDEN_DISTRIBUTOR\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"amountFrockTokenLocked\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"rewardId\",\"type\":\"uint256\"}],\"name\":\"claimDividen\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"rewardAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currentEpoch\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"dividenDistributor\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"endLock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"frockToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"holder\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lockPeriode\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amountFrockTokenLockedParam\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockPeriodeParam\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"periodPerWithdrawParam\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxAmountPerWithdrawParam\",\"type\":\"uint256\"}],\"name\":\"lockToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxAmountPerWithdraw\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"periodPerWithdraw\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"startLock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawAmount\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"withdrawalHistory\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"withdrawTime\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/Vault/Vault.sol\":\"Vault\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC165 standard, as defined in the\\n * https://eips.ethereum.org/EIPS/eip-165[EIP].\\n *\\n * Implementers can declare support of contract interfaces, which can then be\\n * queried by others ({ERC165Checker}).\\n *\\n * For an implementation, see {ERC165}.\\n */\\ninterface IERC165Upgradeable {\\n    /**\\n     * @dev Returns true if this contract implements the interface defined by\\n     * `interfaceId`. See the corresponding\\n     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]\\n     * to learn more about how these ids are created.\\n     *\\n     * This function call must use less than 30 000 gas.\\n     */\\n    function supportsInterface(bytes4 interfaceId) external view returns (bool);\\n}\\n\",\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20 {\\n    /**\\n     * @dev Returns the amount of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves `amount` tokens from the caller's account to `recipient`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address recipient, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Moves `amount` tokens from `sender` to `recipient` using the\\n     * allowance mechanism. `amount` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(\\n        address sender,\\n        address recipient,\\n        uint256 amount\\n    ) external returns (bool);\\n\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n}\\n\",\"keccak256\":\"0x61437cb513a887a1bbad006e7b1c8b414478427d33de47c5600af3c748f108da\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\"},\"contracts/DividenDistributor/IDividenDistributor.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.5;\\n\\ninterface IDividenDistributor {\\n    function claimReward(uint256 rewardId) external;\\n}\",\"keccak256\":\"0xe3543eb336db362c0c3d9775596e117cc06be9da2bc5ab8d54f859f99b8a8a77\",\"license\":\"MIT\"},\"contracts/Vault/Vault.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.5;\\n\\nimport \\\"@openzeppelin/contracts/utils/Context.sol\\\";\\nimport \\\"@openzeppelin/contracts/token/ERC20/IERC20.sol\\\";\\nimport \\\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\\\";\\nimport \\\"../DividenDistributor/IDividenDistributor.sol\\\";\\n\\ncontract Vault is Context{\\n\\n    struct Withdraw {\\n        uint256 withdrawAmount;\\n        uint256 withdrawTime;\\n    }\\n\\n    bytes4 public constant DIVIDEN_DISTRIBUTOR = type(IDividenDistributor).interfaceId;\\n\\n    // Fixed Parameters\\n    address public frockToken; // Address of Frock Token/Token that will be locked\\n    address public dividenDistributor;\\n    address public holder; // address of token's holder that lock the token\\n    uint256 public amountFrockTokenLocked; // amount token that locked\\n    uint256 public lockPeriode; // How long the token will be locked before will be able to withdraw\\n    uint256 public startLock; // start time of token's lock\\n    uint256 public endLock; // end time of token's lock\\n    uint256 public periodPerWithdraw; // Period of each withdrawal, ex : for a month only able to withdraw once\\n    uint256 public maxAmountPerWithdraw; // Amount fo token that able to withdraw per withdrawal's periode\\n\\n    // Dynamic Parameter\\n    uint256 totalWithdraw;\\n    bool isLocked; // Lock State    \\n    mapping(uint256 => Withdraw) public withdrawalHistory; // Epoch withdrawal => time of withdrawal\\n    \\n    event Locked(\\n        address indexed holder, \\n        uint256 amountFrockTokenLocked, \\n        uint256 lockPeriode, \\n        uint256 periodPerWithdraw, \\n        uint256 amountPerWithdraw\\n    );\\n    event WithdrawToken(uint256 epoch, uint256 withdrawAmount);\\n    event ClaimDividen(uint256 rewardId, uint256 rewardAmount);\\n\\n    constructor(address _frockToken, address _dividenDistributor) {\\n        frockToken = _frockToken;   \\n        dividenDistributor = _dividenDistributor;     \\n        isLocked = false;\\n    }\\n\\n    function lockToken(\\n        uint256 amountFrockTokenLockedParam,\\n        uint256 lockPeriodeParam,    \\n        uint256 periodPerWithdrawParam,\\n        uint256 maxAmountPerWithdrawParam\\n    ) external {\\n        // Requirement\\n        require(!isLocked, \\\"Vault: Already Locked\\\");\\n\\n        // Transfer Token\\n        require(\\n            IERC20(frockToken).transferFrom(_msgSender(), address(this), amountFrockTokenLockedParam),\\n            \\\"Vault: Transfer Failed\\\"\\n        );\\n\\n        // Update State\\n        isLocked = true;\\n        holder = _msgSender();\\n        amountFrockTokenLocked = amountFrockTokenLockedParam;\\n        lockPeriode = lockPeriodeParam;\\n        startLock = block.timestamp;\\n        endLock = startLock + lockPeriode;\\n        periodPerWithdraw = periodPerWithdrawParam;\\n        maxAmountPerWithdraw = maxAmountPerWithdrawParam;        \\n\\n        emit Locked(\\n            _msgSender(), \\n            amountFrockTokenLockedParam, \\n            lockPeriodeParam, \\n            periodPerWithdrawParam, \\n            maxAmountPerWithdrawParam\\n        );\\n    }\\n\\n    function currentEpoch() public view returns(uint256) {\\n        require(block.timestamp > endLock, \\\"Vault: Cannot Calculate Epoch\\\");\\n        return (block.timestamp - (endLock))/periodPerWithdraw;\\n    }\\n\\n    function withdraw(uint256 withdrawAmount) external {\\n        require(holder == _msgSender(), \\\"Vault: Not the Holder\\\");        \\n        require(withdrawAmount <= maxAmountPerWithdraw, \\\"Vault: withdrawal exceed limit\\\");\\n        require((amountFrockTokenLocked - totalWithdraw) >= withdrawAmount,\\\"Vault: withdrawal exceed stocks\\\");\\n\\n        uint256 epoch = currentEpoch();\\n        require(withdrawalHistory[epoch].withdrawTime == 0, \\\"Vault: Already Withdraw for This Period\\\");\\n\\n        // Update Value\\n        withdrawalHistory[epoch] = Withdraw(withdrawAmount, block.timestamp);\\n        totalWithdraw += withdrawAmount;\\n\\n        // Transfer Token\\n        require(\\n            IERC20(frockToken).transfer(holder, withdrawAmount),\\n            \\\"Vault: Transfer Failed\\\"\\n        );\\n\\n        emit WithdrawToken(epoch, withdrawAmount);\\n    }\\n\\n    function claimDividen(uint256 rewardId) external returns(uint256 rewardAmount ) {\\n        if(IERC165Upgradeable(dividenDistributor).supportsInterface(DIVIDEN_DISTRIBUTOR)) {\\n            IDividenDistributor(dividenDistributor).claimReward(rewardId);\\n            rewardAmount = address(this).balance;\\n            _safeTransferETH(holder, rewardAmount);\\n            emit ClaimDividen(rewardId, rewardAmount);\\n            return rewardAmount;\\n        }\\n        revert(\\\"Vault: Address not support claimReward\\\");\\n    }\\n\\n    function _safeTransferETH(address to, uint value) internal {\\n        (bool success,) = to.call{value:value}(new bytes(0));\\n        require(success, 'Vault: ETH_TRANSFER_FAILED');\\n    }\\n\\n    // Function to receive Ether. msg.data must be empty\\n    receive() external payable {}\\n\\n    // Fallback function is called when msg.data is not empty\\n    fallback() external payable {}\\n    \\n}\",\"keccak256\":\"0x86a22cda242983cf592b01e6a13d14e47bec5fa336fde66c346157166a3e950d\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50604051610c6d380380610c6d83398101604081905261002f91610086565b600080546001600160a01b039384166001600160a01b03199182161790915560018054929093169116179055600a805460ff191690556100b9565b80516001600160a01b038116811461008157600080fd5b919050565b6000806040838503121561009957600080fd5b6100a28361006a565b91506100b06020840161006a565b90509250929050565b610ba5806100c86000396000f3fe6080604052600436106100e05760003560e01c80637fc5497611610084578063d333401311610056578063d33340131461024b578063d800b9bd1461026b578063e534155d146102b4578063e78f1d4a146102d457005b80637fc54976146101d1578063a01af260146101e7578063a4252d7c1461021f578063b1df0a741461023557005b8063404e6ff1116100bd578063404e6ff1146101525780635d3b110a14610186578063657f2bdb1461019c57806376671808146101bc57005b8063077e6334146100e95780632e1a7d4d146101125780633e950ca51461013257005b366100e757005b005b3480156100f557600080fd5b506100ff60065481565b6040519081526020015b60405180910390f35b34801561011e57600080fd5b506100e761012d366004610a82565b6102ea565b34801561013e57600080fd5b506100ff61014d366004610a82565b6105bc565b34801561015e57600080fd5b5061016d630ae169a560e41b81565b6040516001600160e01b03199091168152602001610109565b34801561019257600080fd5b506100ff60085481565b3480156101a857600080fd5b506100e76101b7366004610a9b565b610751565b3480156101c857600080fd5b506100ff610925565b3480156101dd57600080fd5b506100ff60055481565b3480156101f357600080fd5b50600054610207906001600160a01b031681565b6040516001600160a01b039091168152602001610109565b34801561022b57600080fd5b506100ff60035481565b34801561024157600080fd5b506100ff60045481565b34801561025757600080fd5b50600154610207906001600160a01b031681565b34801561027757600080fd5b5061029f610286366004610a82565b600b602052600090815260409020805460019091015482565b60408051928352602083019190915201610109565b3480156102c057600080fd5b50600254610207906001600160a01b031681565b3480156102e057600080fd5b506100ff60075481565b6002546001600160a01b031633146103415760405162461bcd60e51b81526020600482015260156024820152742b30bab63a1d102737ba103a3432902437b63232b960591b60448201526064015b60405180910390fd5b6008548111156103935760405162461bcd60e51b815260206004820152601e60248201527f5661756c743a207769746864726177616c20657863656564206c696d697400006044820152606401610338565b806009546003546103a49190610b42565b10156103f25760405162461bcd60e51b815260206004820152601f60248201527f5661756c743a207769746864726177616c206578636565642073746f636b73006044820152606401610338565b60006103fc610925565b6000818152600b60205260409020600101549091501561046e5760405162461bcd60e51b815260206004820152602760248201527f5661756c743a20416c726561647920576974686472617720666f7220546869736044820152660814195c9a5bd960ca1b6064820152608401610338565b6040805180820182528381524260208083019182526000858152600b9091529283209151825551600190910155600980548492906104ad908490610b08565b909155505060005460025460405163a9059cbb60e01b81526001600160a01b0391821660048201526024810185905291169063a9059cbb90604401602060405180830381600087803b15801561050257600080fd5b505af1158015610516573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061053a9190610a59565b61057f5760405162461bcd60e51b815260206004820152601660248201527515985d5b1d0e88151c985b9cd9995c8811985a5b195960521b6044820152606401610338565b60408051828152602081018490527f95dd0e2e107200a306885c0ef32382ee5f87b7eb0ba95a7cd1686d7819874148910160405180910390a15050565b6001546040516301ffc9a760e01b8152630ae169a560e41b60048201526000916001600160a01b0316906301ffc9a79060240160206040518083038186803b15801561060757600080fd5b505afa15801561061b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061063f9190610a59565b156106fa57600154604051630ae169a560e41b8152600481018490526001600160a01b039091169063ae169a5090602401600060405180830381600087803b15801561068a57600080fd5b505af115801561069e573d6000803e3d6000fd5b50506002544793506106bc92506001600160a01b0316905082610997565b60408051838152602081018390527f6283a3aa79ad4f37d1cee8ba1e65b768d1ea48cb166c0e2b48e1a484cd42d30b910160405180910390a1919050565b60405162461bcd60e51b815260206004820152602660248201527f5661756c743a2041646472657373206e6f7420737570706f727420636c61696d60448201526514995dd85c9960d21b6064820152608401610338565b600a5460ff161561079c5760405162461bcd60e51b815260206004820152601560248201527415985d5b1d0e88105b1c9958591e48131bd8dad959605a1b6044820152606401610338565b6000546001600160a01b03166323b872dd336040516001600160e01b031960e084901b1681526001600160a01b03909116600482015230602482015260448101879052606401602060405180830381600087803b1580156107fc57600080fd5b505af1158015610810573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108349190610a59565b6108795760405162461bcd60e51b815260206004820152601660248201527515985d5b1d0e88151c985b9cd9995c8811985a5b195960521b6044820152606401610338565b600a805460ff1916600117905561088d3390565b600280546001600160a01b0319166001600160a01b0392909216919091179055600384905560048390554260058190556108c8908490610b08565b60065560078290556008819055604080518581526020810185905280820184905260608101839052905133917fc1126f780558d178a12a5cf08c087496f33400d9b431b6530eb0001f3c34fa99919081900360800190a250505050565b600060065442116109785760405162461bcd60e51b815260206004820152601d60248201527f5661756c743a2043616e6e6f742043616c63756c6174652045706f63680000006044820152606401610338565b6007546006546109889042610b42565b6109929190610b20565b905090565b604080516000808252602082019092526001600160a01b0384169083906040516109c19190610acd565b60006040518083038185875af1925050503d80600081146109fe576040519150601f19603f3d011682016040523d82523d6000602084013e610a03565b606091505b5050905080610a545760405162461bcd60e51b815260206004820152601a60248201527f5661756c743a204554485f5452414e534645525f4641494c45440000000000006044820152606401610338565b505050565b600060208284031215610a6b57600080fd5b81518015158114610a7b57600080fd5b9392505050565b600060208284031215610a9457600080fd5b5035919050565b60008060008060808587031215610ab157600080fd5b5050823594602084013594506040840135936060013592509050565b6000825160005b81811015610aee5760208186018101518583015201610ad4565b81811115610afd576000828501525b509190910192915050565b60008219821115610b1b57610b1b610b59565b500190565b600082610b3d57634e487b7160e01b600052601260045260246000fd5b500490565b600082821015610b5457610b54610b59565b500390565b634e487b7160e01b600052601160045260246000fdfea264697066735822122064e9510f08285483cd51c4e4175acc121abcb75f06eae01aa54df74a31b44ced64736f6c63430008050033",
+  "deployedBytecode": "0x6080604052600436106100e05760003560e01c80637fc5497611610084578063d333401311610056578063d33340131461024b578063d800b9bd1461026b578063e534155d146102b4578063e78f1d4a146102d457005b80637fc54976146101d1578063a01af260146101e7578063a4252d7c1461021f578063b1df0a741461023557005b8063404e6ff1116100bd578063404e6ff1146101525780635d3b110a14610186578063657f2bdb1461019c57806376671808146101bc57005b8063077e6334146100e95780632e1a7d4d146101125780633e950ca51461013257005b366100e757005b005b3480156100f557600080fd5b506100ff60065481565b6040519081526020015b60405180910390f35b34801561011e57600080fd5b506100e761012d366004610a82565b6102ea565b34801561013e57600080fd5b506100ff61014d366004610a82565b6105bc565b34801561015e57600080fd5b5061016d630ae169a560e41b81565b6040516001600160e01b03199091168152602001610109565b34801561019257600080fd5b506100ff60085481565b3480156101a857600080fd5b506100e76101b7366004610a9b565b610751565b3480156101c857600080fd5b506100ff610925565b3480156101dd57600080fd5b506100ff60055481565b3480156101f357600080fd5b50600054610207906001600160a01b031681565b6040516001600160a01b039091168152602001610109565b34801561022b57600080fd5b506100ff60035481565b34801561024157600080fd5b506100ff60045481565b34801561025757600080fd5b50600154610207906001600160a01b031681565b34801561027757600080fd5b5061029f610286366004610a82565b600b602052600090815260409020805460019091015482565b60408051928352602083019190915201610109565b3480156102c057600080fd5b50600254610207906001600160a01b031681565b3480156102e057600080fd5b506100ff60075481565b6002546001600160a01b031633146103415760405162461bcd60e51b81526020600482015260156024820152742b30bab63a1d102737ba103a3432902437b63232b960591b60448201526064015b60405180910390fd5b6008548111156103935760405162461bcd60e51b815260206004820152601e60248201527f5661756c743a207769746864726177616c20657863656564206c696d697400006044820152606401610338565b806009546003546103a49190610b42565b10156103f25760405162461bcd60e51b815260206004820152601f60248201527f5661756c743a207769746864726177616c206578636565642073746f636b73006044820152606401610338565b60006103fc610925565b6000818152600b60205260409020600101549091501561046e5760405162461bcd60e51b815260206004820152602760248201527f5661756c743a20416c726561647920576974686472617720666f7220546869736044820152660814195c9a5bd960ca1b6064820152608401610338565b6040805180820182528381524260208083019182526000858152600b9091529283209151825551600190910155600980548492906104ad908490610b08565b909155505060005460025460405163a9059cbb60e01b81526001600160a01b0391821660048201526024810185905291169063a9059cbb90604401602060405180830381600087803b15801561050257600080fd5b505af1158015610516573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061053a9190610a59565b61057f5760405162461bcd60e51b815260206004820152601660248201527515985d5b1d0e88151c985b9cd9995c8811985a5b195960521b6044820152606401610338565b60408051828152602081018490527f95dd0e2e107200a306885c0ef32382ee5f87b7eb0ba95a7cd1686d7819874148910160405180910390a15050565b6001546040516301ffc9a760e01b8152630ae169a560e41b60048201526000916001600160a01b0316906301ffc9a79060240160206040518083038186803b15801561060757600080fd5b505afa15801561061b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061063f9190610a59565b156106fa57600154604051630ae169a560e41b8152600481018490526001600160a01b039091169063ae169a5090602401600060405180830381600087803b15801561068a57600080fd5b505af115801561069e573d6000803e3d6000fd5b50506002544793506106bc92506001600160a01b0316905082610997565b60408051838152602081018390527f6283a3aa79ad4f37d1cee8ba1e65b768d1ea48cb166c0e2b48e1a484cd42d30b910160405180910390a1919050565b60405162461bcd60e51b815260206004820152602660248201527f5661756c743a2041646472657373206e6f7420737570706f727420636c61696d60448201526514995dd85c9960d21b6064820152608401610338565b600a5460ff161561079c5760405162461bcd60e51b815260206004820152601560248201527415985d5b1d0e88105b1c9958591e48131bd8dad959605a1b6044820152606401610338565b6000546001600160a01b03166323b872dd336040516001600160e01b031960e084901b1681526001600160a01b03909116600482015230602482015260448101879052606401602060405180830381600087803b1580156107fc57600080fd5b505af1158015610810573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108349190610a59565b6108795760405162461bcd60e51b815260206004820152601660248201527515985d5b1d0e88151c985b9cd9995c8811985a5b195960521b6044820152606401610338565b600a805460ff1916600117905561088d3390565b600280546001600160a01b0319166001600160a01b0392909216919091179055600384905560048390554260058190556108c8908490610b08565b60065560078290556008819055604080518581526020810185905280820184905260608101839052905133917fc1126f780558d178a12a5cf08c087496f33400d9b431b6530eb0001f3c34fa99919081900360800190a250505050565b600060065442116109785760405162461bcd60e51b815260206004820152601d60248201527f5661756c743a2043616e6e6f742043616c63756c6174652045706f63680000006044820152606401610338565b6007546006546109889042610b42565b6109929190610b20565b905090565b604080516000808252602082019092526001600160a01b0384169083906040516109c19190610acd565b60006040518083038185875af1925050503d80600081146109fe576040519150601f19603f3d011682016040523d82523d6000602084013e610a03565b606091505b5050905080610a545760405162461bcd60e51b815260206004820152601a60248201527f5661756c743a204554485f5452414e534645525f4641494c45440000000000006044820152606401610338565b505050565b600060208284031215610a6b57600080fd5b81518015158114610a7b57600080fd5b9392505050565b600060208284031215610a9457600080fd5b5035919050565b60008060008060808587031215610ab157600080fd5b5050823594602084013594506040840135936060013592509050565b6000825160005b81811015610aee5760208186018101518583015201610ad4565b81811115610afd576000828501525b509190910192915050565b60008219821115610b1b57610b1b610b59565b500190565b600082610b3d57634e487b7160e01b600052601260045260246000fd5b500490565b600082821015610b5457610b54610b59565b500390565b634e487b7160e01b600052601160045260246000fdfea264697066735822122064e9510f08285483cd51c4e4175acc121abcb75f06eae01aa54df74a31b44ced64736f6c63430008050033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 9194,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "frockToken",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 9196,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "dividenDistributor",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 9198,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "holder",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_address"
+      },
+      {
+        "astId": 9200,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "amountFrockTokenLocked",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9202,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "lockPeriode",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9204,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "startLock",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9206,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "endLock",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9208,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "periodPerWithdraw",
+        "offset": 0,
+        "slot": "7",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9210,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "maxAmountPerWithdraw",
+        "offset": 0,
+        "slot": "8",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9212,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "totalWithdraw",
+        "offset": 0,
+        "slot": "9",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 9214,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "isLocked",
+        "offset": 0,
+        "slot": "10",
+        "type": "t_bool"
+      },
+      {
+        "astId": 9219,
+        "contract": "contracts/Vault/Vault.sol:Vault",
+        "label": "withdrawalHistory",
+        "offset": 0,
+        "slot": "11",
+        "type": "t_mapping(t_uint256,t_struct(Withdraw)9186_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_uint256,t_struct(Withdraw)9186_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct Vault.Withdraw)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Withdraw)9186_storage"
+      },
+      "t_struct(Withdraw)9186_storage": {
+        "encoding": "inplace",
+        "label": "struct Vault.Withdraw",
+        "members": [
+          {
+            "astId": 9183,
+            "contract": "contracts/Vault/Vault.sol:Vault",
+            "label": "withdrawAmount",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 9185,
+            "contract": "contracts/Vault/Vault.sol:Vault",
+            "label": "withdrawTime",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
