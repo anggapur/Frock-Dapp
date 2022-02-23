@@ -2,31 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import {
+  GetFantomPrice,
   GetFrockMarketChart,
   GetFrockPrice,
   GetStrongPrice,
 } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
-import {
-  FROCK_SUPPLY,
-  TOTAL_TREASURY_VALUE_IN_STRONG,
-} from '../../../../constants';
+import Tooltip from '../../../../components/tooltip/tooltip';
+import { FROCK_SUPPLY } from '../../../../constants';
+import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants/treasuryStatus';
+import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
-export default function CardFrock() {
+export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
+  const [fantomPrice, setFantomPrice] = useState(0);
   const [strongPrice, setStrongPrice] = useState(0);
 
   useEffect(() => {
-    Promise.all([GetFrockPrice(), GetStrongPrice(), GetFrockMarketChart()])
+    Promise.all([
+      GetFrockPrice(),
+      GetStrongPrice(),
+      GetFantomPrice(),
+      GetFrockMarketChart(),
+    ])
       .then(price => {
         setFrockPrice(price[0]);
         setStrongPrice(price[1]);
+        setFantomPrice(price[2]);
 
-        if (price[2]?.market_caps && Array.isArray(price[2]?.market_caps)) {
-          const marketCaps = price[2].market_caps.pop();
+        if (price[3]?.market_caps && Array.isArray(price[3]?.market_caps)) {
+          const marketCaps = price[3].market_caps.pop();
           setFrockMarketCap(marketCaps[1]);
         }
       })
@@ -44,12 +52,23 @@ export default function CardFrock() {
         <Row>
           <Col xl={6} lg={12} xs={6}>
             <h3>$FROCK Price</h3>
-            <h1>${new Intl.NumberFormat('en-US').format(frockPrice)}</h1>
+            <h1>
+              $
+              {renderNumberFormatter(
+                (Number(frockPriceDex) * fantomPrice).toString(),
+              )}
+            </h1>
             <RoundButton
               variant="primary"
               className="mt-3 mb-xl-3 mb-4 px-4"
               isOutline
               isRounded
+              onClick={() =>
+                window.open(
+                  'https://spookyswap.finance/swap?outputCurrency=0xe679ae2b7e97D759eC758fafe50cB011eBfb7D77',
+                  '_blank',
+                )
+              }
             >
               Buy $FROCK
             </RoundButton>
@@ -60,7 +79,7 @@ export default function CardFrock() {
               ${' '}
               {new Intl.NumberFormat('en-US', {
                 maximumFractionDigits: 0,
-              }).format(frockMarketCap)}
+              }).format(FROCK_SUPPLY * (Number(frockPriceDex) * fantomPrice))}
             </p>
             <h6>Total supply</h6>
             <p>
@@ -81,7 +100,13 @@ export default function CardFrock() {
           className="d-flex align-items-stretch mb-xxl-0 mb-lg-4"
         >
           <Card ellipse="top-right">
-            <h6>Total building trade dividends</h6>
+            <h6>
+              Total building trade dividends{' '}
+              <Tooltip>
+                Trade dividends which are not yet claimable. All $FTM and $
+                prices are based on current rates, not historical earnings.
+              </Tooltip>
+            </h6>
             <Row>
               <Col
                 xxl={12}
@@ -90,7 +115,9 @@ export default function CardFrock() {
                 xs={12}
                 className="d-flex align-items-stretch"
               >
-                <p className={styles.bigger}>350 $FROCK</p>
+                <p className={styles.bigger}>
+                  {renderNumberFormatter(Number(tokenBalance))} FTM
+                </p>
               </Col>
               <Col
                 xxl={12}
@@ -101,10 +128,9 @@ export default function CardFrock() {
               >
                 <p>
                   ${' '}
-                  {new Intl.NumberFormat('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(frockPrice * 350)}
+                  {renderNumberFormatter(
+                    (Number(tokenBalance) * fantomPrice).toString(),
+                  )}
                 </p>
               </Col>
             </Row>
@@ -112,7 +138,10 @@ export default function CardFrock() {
         </Col>
         <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
-            <h6>Total treasury value</h6>
+            <h6>
+              Total treasury value{' '}
+              <Tooltip>$ price is based on current rate.</Tooltip>
+            </h6>
             <Row>
               <Col
                 xxl={12}
@@ -122,7 +151,7 @@ export default function CardFrock() {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {TOTAL_TREASURY_VALUE_IN_STRONG} $STRONG
+                  {TOTAL_TREASURY_VALUE_IN_STRONG / 10} $STRONG NODES
                 </p>
               </Col>
               <Col

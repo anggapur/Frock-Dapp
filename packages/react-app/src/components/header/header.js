@@ -231,9 +231,9 @@ export default function Header() {
                 <Link to="/public-sale" className="nav-link">
                   Public Sale
                 </Link>
-                {/* <Link to="/dashboard" className="nav-link"> */}
-                {/*  Dashboard */}
-                {/* </Link> */}
+                <Link to="/dashboard" className="nav-link">
+                  Dashboard
+                </Link>
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
@@ -285,11 +285,11 @@ export default function Header() {
                     >
                       Add $bFROCK to wallet
                     </NavDropdown.Item>
-                    {/* <NavDropdown.Item */}
-                    {/*  onClick={() => handleAddToken(FROCK_TOKEN_DATA)} */}
-                    {/* > */}
-                    {/*  Add $FROCK to wallet */}
-                    {/* </NavDropdown.Item> */}
+                     <NavDropdown.Item
+                      onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
+                     >
+                      Add $FROCK to wallet
+                     </NavDropdown.Item>
                   </NavDropdown>
                 )}
               </Nav>

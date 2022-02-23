@@ -15,58 +15,12 @@ export default function FaqSection() {
                   Can't buy or sell $FROCK on SpookySwap?
                 </Accordion.Header>
                 <Accordion.Body className={styles['accordion-body']}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="1" className={styles['accordion-item']}>
-                <Accordion.Header className={styles['accordion-header']}>
-                  How is my APR calculated?
-                </Accordion.Header>
-                <Accordion.Body className={styles['accordion-body']}>
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                  occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </Col>
-          <Col lg={6}>
-            <Accordion flush>
-              <Accordion.Item eventKey="3" className={styles['accordion-item']}>
-                <Accordion.Header className={styles['accordion-header']}>
-                  Can't buy or sell $FROCK on SpookySwap?
-                </Accordion.Header>
-                <Accordion.Body className={styles['accordion-body']}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="4" className={styles['accordion-item']}>
-                <Accordion.Header className={styles['accordion-header']}>
-                  How is my APR calculated?
-                </Accordion.Header>
-                <Accordion.Body className={styles['accordion-body']}>
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                  occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="5" className={styles['accordion-item']}>
-                <Accordion.Header className={styles['accordion-header']}>
-                  Some other questions goes here ?
-                </Accordion.Header>
-                <Accordion.Body className={styles['accordion-body']}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                  Set slippage to 25% or higher: <a
+                      href="https://medium.com/@fr0ck/fractional-rocket-protocol-stealth-launch-trade-instructions-7c807803bc0"
+                      className="text-red-dark text-decoration-underline"
+                      target="_blank"
+                  >Read more</a>
+
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>

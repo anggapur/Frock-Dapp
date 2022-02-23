@@ -4,7 +4,10 @@ import { Col, Row } from 'react-bootstrap';
 import { GetFantomPrice } from '../../../../api';
 import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
-import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants';
+import Loading from '../../../../components/loading/loading';
+import Tooltip from '../../../../components/tooltip/tooltip';
+import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
+import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 
 function Column({ children, isDescription = false, ...rest }) {
@@ -20,7 +23,12 @@ function Column({ children, isDescription = false, ...rest }) {
   );
 }
 
-export default function CardTreasury() {
+export default function CardTreasury({
+  claimableDividend,
+  totalClaimed,
+  handleClaim,
+  isClaimButtonLoading,
+}) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
   useEffect(() => {
@@ -50,28 +58,67 @@ export default function CardTreasury() {
       <hr />
       <Row>
         <Column isDescription>
-          <h6>Your claimable treasury dividends</h6>
+          <h6>
+            Your claimable treasury dividends{' '}
+            <Tooltip>
+              Your share of the treasury dividends, ready to claim.
+              The $ price is based on current rate.
+            </Tooltip>
+          </h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
-          <p className={styles.strong}>$FTM 13.50</p>
-          <p>$ 30.20</p>
+          <p className={styles.strong}>
+            FTM {renderNumberFormatter(claimableDividend)}
+          </p>
+          <p>
+            ${' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(claimableDividend)).toString(),
+            )}
+          </p>
         </Column>
       </Row>
-      <RoundButton variant="primary" className="mt-4 w-100" isRounded>
-        Claim
+      <RoundButton
+        variant={
+          renderNumberFormatter(claimableDividend) === '0'
+            ? 'disabled'
+            : 'primary'
+        }
+        className="mt-4 w-100"
+        isRounded
+        onClick={
+          renderNumberFormatter(claimableDividend) === '0'
+            ? () => null
+            : () => handleClaim(1)
+        }
+        disabled={renderNumberFormatter(claimableDividend) === '0'}
+      >
+        {!isClaimButtonLoading ? (
+          'Claim'
+        ) : (
+          <Loading variant="light" size="34" style={{ flex: 1 }} />
+        )}
       </RoundButton>
       <Card.Footer className={styles.footer}>
         <Row>
           <Column isDescription>
-            <h6>Your total claimed treasury dividends</h6>
+            <h6>
+              Your total claimed treasury dividends{' '}
+              <Tooltip>
+                Your historical amount of treasury dividends claimed.
+                The $ price is based on current rate.
+              </Tooltip>
+            </h6>
           </Column>
           <Column className="px-xl-2 px-lg-0">
-            <p className={styles.strong}>$FTM 27.00</p>
+            <p className={styles.strong}>
+              FTM {renderNumberFormatter(totalClaimed)}
+            </p>
             <p>
               ${' '}
-              {new Intl.NumberFormat('en-US', {
-                maximumFractionDigits: 2,
-              }).format(fantomPrice * 27)}
+              {renderNumberFormatter(
+                (fantomPrice * Number(totalClaimed)).toString(),
+              )}
             </p>
           </Column>
         </Row>

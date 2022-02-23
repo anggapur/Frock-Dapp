@@ -93,6 +93,18 @@ describe("Dividend Distributor 2", async () => {
         console.log("Pair Address:")
         console.log(`Balance Frock of Pair : ${await frockToken.balanceOf(pairAddress)}`)
     })   
+
+    it('Change Minimum Amount of Frock to Swap', async() => {
+      const newMinimumFrockToSwap = ethers.utils.parseUnits("1", 9)
+
+      await expect(
+        dividenDistributor.connect(deployer).setMinimumFrockToSwap(
+          newMinimumFrockToSwap
+        )
+      ).to.emit(dividenDistributor, "NewMinimumFrockToSwap")
+      .withArgs(newMinimumFrockToSwap);
+    })
+
     it('Share First Reward mode 0', async() => {   
       console.log('Dividen Distributor balances : ', (await frockToken.balanceOf(dividenDistributor.address)).toString())    
       // Create Balance on Dividen Distributor

@@ -57,6 +57,9 @@ export const renderNumberFormatter = num => {
         thousandSeparator
         decimalScale={2}
         fixedDecimalScale
+        renderText={formattedValue =>
+          formattedValue === '0.00' ? '0' : formattedValue
+        }
       />
     );
   }

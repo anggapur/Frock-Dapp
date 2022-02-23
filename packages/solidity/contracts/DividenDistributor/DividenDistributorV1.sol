@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.5;
+pragma solidity 0.8.5;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -35,7 +35,8 @@ contract DividenDistributorV1 is
 
     IUniswapV2Router02 public uniswapV2Router;    
     uint256 public lastRewardShare;   
-    uint256 rewardLength;     
+    uint256 public rewardLength;     
+    uint256 public minimumFrockToSwap;
     address public mainToken;       
     bool private inSwap;
     bytes32 public constant REWARDER_ROLE = keccak256("REWARDER");
@@ -47,6 +48,7 @@ contract DividenDistributorV1 is
     event NewReward(uint256 rewardId, uint256 rewardAmount, uint256 snapshotId, uint8 rewardSource);
     event ClaimReward(uint256 indexed rewardId, uint256 rewardAmount, address indexed holder); 
     event ExcludedFromReward(address indexed holder, bool state);
+    event NewMinimumFrockToSwap(uint256 newMinimumFrockToSwap);
 
     modifier lockTheSwap {
         inSwap = true;
@@ -66,6 +68,7 @@ contract DividenDistributorV1 is
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(RESCUER_ROLE, _msgSender());
 
+        minimumFrockToSwap = 1000 * (10 ** 9);
 
         uniswapV2Router = IUniswapV2Router02(0xF491e7B69E4244ad4002BC14e878a34207E38c29);
         inSwap = false;
@@ -88,7 +91,13 @@ contract DividenDistributorV1 is
     function swapAndShareReward() external onlyRole(REWARDER_ROLE) {
         require(mainToken != address(0), "DD : MAIN_TOKEN_NOT_SETTED");
         uint256 mainTokenBalance = getTokenBalance();
-        
+
+        // Minimum Frock that must owned by Dividen contract to Swap
+        require(
+            mainTokenBalance >= minimumFrockToSwap,
+            "DD: REQUIREMENT_NOT_PASSED"
+        );
+
         lastRewardShare = block.timestamp;
 
         uint256 ethBalanceBefore = getBalance();
@@ -100,6 +109,7 @@ contract DividenDistributorV1 is
 
         _createReward(ethBalanceAfter - ethBalanceBefore, 0);
     }    
+      
     
     function shareReward() external payable onlyRole(REWARDER_ROLE) {
         require(msg.value > 0, "DD: NO_ETH_SENT");
@@ -232,6 +242,14 @@ contract DividenDistributorV1 is
         emit UpdateMainToken(tokenAddress);
     }
 
+    /**
+     * 
+     */
+    function setMinimumFrockToSwap(uint256 newMinimumFrockToSwap) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        minimumFrockToSwap = newMinimumFrockToSwap;
+        emit NewMinimumFrockToSwap(newMinimumFrockToSwap);
+    }
+
     function _safeTransferETH(address to, uint value) internal {
         (bool success,) = to.call{value:value}(new bytes(0));
         require(success, 'DD: ETH_TRANSFER_FAILED');
@@ -281,7 +299,13 @@ contract DividenDistributorV1 is
             uint256 holderBalance = IERC20SnapshotUpgradeable(mainToken).balanceOfAt(holder, snapshotId);
             uint256 supply = IERC20SnapshotUpgradeable(mainToken).totalSupplyAt(snapshotId);
             uint256 currentContractBalance = getTokenBalance();
-            return currentContractBalance * holderBalance / supply;
+
+            // Calculate The total Tokens that need to excluded from reward
+            uint256 totalExcludedFromReward = 0;
+            for(uint256 i = 0; i < listExcludedFromReward.length; i++) {
+                totalExcludedFromReward += IERC20SnapshotUpgradeable(mainToken).balanceOfAt(listExcludedFromReward[i], snapshotId);
+            }            
+            return currentContractBalance * holderBalance / (supply - totalExcludedFromReward);
         }
         return 0;
     }

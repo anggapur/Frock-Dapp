@@ -102,12 +102,15 @@ const config: HardhatUserConfig = {
       default : '0x0b7b7AE45bC137Ea0A36422eaC5Bc52e7657A225'
     },
     marketing: {
-      default : '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65'
+      default : '0x995CdE3d74C099e6716D228B27B7C1cFf3a1E5d7' // PK : 466dda59135afdfc1604cee576db04d5e4331844e88bba939f475cbdca00d9a9
     },
     wftmHolder: {
       default : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e'
     },
     snapshoter: {
+      default: 19
+    },
+    team: {
       default: 19
     },
     user1: {

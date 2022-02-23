@@ -117,12 +117,12 @@ import {
     await frockToken.connect(deployer).setReflection(dividenDistributor.address);
     await frockToken.connect(deployer).setTreasury(treasury.address);
     await frockToken.connect(deployer).setMarketing(marketing.address);
-    await frockToken.connect(deployer).setPercentage(700,1400,100); // 7% reflection, 14% treasury, 1% Marketing    
+    await frockToken.connect(deployer).setPercentage(0,2100,100); // 7% reflection, 14% treasury, 1% Marketing
     
     // Set snapshooter    
     const snapshoterRole = await frockToken.SNAPSHOTER();
     await frockToken.connect(deployer).grantRole(snapshoterRole, dividenDistributor.address)
-    await frockToken.connect(deployer).grantRole(snapshoterRole, snapshoter)
+    // await frockToken.connect(deployer).grantRole(snapshoterRole, snapshoter)
 
     // Set Main Token on DividenDistributor
     await dividenDistributor.connect(deployer).setMainToken(frockToken.address)
