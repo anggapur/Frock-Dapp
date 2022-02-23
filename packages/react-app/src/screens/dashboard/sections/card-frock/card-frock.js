@@ -63,6 +63,12 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
               className="mt-3 mb-xl-3 mb-4 px-4"
               isOutline
               isRounded
+              onClick={() =>
+                window.open(
+                  'https://spookyswap.finance/swap?outputCurrency=0xe679ae2b7e97D759eC758fafe50cB011eBfb7D77',
+                  '_blank',
+                )
+              }
             >
               Buy $FROCK
             </RoundButton>
