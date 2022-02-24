@@ -299,7 +299,8 @@ export default function Header() {
       </header>
       <Modal
         show={
-          (location.pathname === '/community-sale' ||
+          (location.pathname === '/' ||
+            location.pathname === '/community-sale' ||
             location.pathname === '/public-sale') &&
           showModal &&
           provider === undefined
