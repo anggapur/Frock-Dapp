@@ -82,13 +82,13 @@ export default function Header() {
     }
   }, [provider, setProvider]);
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+  // useEffect(() => {
+  //   const id = setInterval(() => {
+  //     setTimeLeft(calculateTimeLeft());
+  //   }, 1000);
 
-    return () => clearInterval(id);
-  }, []);
+  //   return () => clearInterval(id);
+  // }, []);
 
   const logoButtonRef = createRef();
   const logoButtonModalRef = createRef();
@@ -182,7 +182,7 @@ export default function Header() {
   return (
     <>
       <header>
-        <NotificationBar
+        {/* <NotificationBar
           text={
             Object.keys(timeLeft).length !== 1
               ? `Community Sale sold out! Countdown to Public Sale: ${
@@ -210,7 +210,7 @@ export default function Header() {
                   !timeLeft.isAfterTwoDays ? 'is Active Now!' : 'has finished.'
                 }`
           }
-        />
+        /> */}
         <Navbar bg="light" expand="lg">
           <Container>
             <Navbar.Brand onClick={() => setActive(true)}>
