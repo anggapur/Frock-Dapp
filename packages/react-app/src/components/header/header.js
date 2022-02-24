@@ -222,6 +222,9 @@ export default function Header() {
               className="justify-content-end"
             >
               <Nav>
+                <Link to="/" className="nav-link">
+                  Dashboard
+                </Link>
                 <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
@@ -230,9 +233,6 @@ export default function Header() {
                 </Link>
                 <Link to="/public-sale" className="nav-link">
                   Public Sale
-                </Link>
-                <Link to="/dashboard" className="nav-link">
-                  Dashboard
                 </Link>
                 {!provider ? (
                   <RoundButton
@@ -285,11 +285,11 @@ export default function Header() {
                     >
                       Add $bFROCK to wallet
                     </NavDropdown.Item>
-                     <NavDropdown.Item
+                    <NavDropdown.Item
                       onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
-                     >
+                    >
                       Add $FROCK to wallet
-                     </NavDropdown.Item>
+                    </NavDropdown.Item>
                   </NavDropdown>
                 )}
               </Nav>
