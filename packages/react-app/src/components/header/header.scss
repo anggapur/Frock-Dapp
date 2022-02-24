@@ -114,7 +114,9 @@ header {
       }
 
       .nav-item.dropdown a#nav-dropdown {
-        margin-left: 20px;
+        @media (min-width: 769px) {
+          margin-left: 20px;
+        }
       }
     }
   }
