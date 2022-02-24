@@ -112,6 +112,12 @@ header {
           margin-right: 13px;
         }
       }
+
+      .nav-item.dropdown a#nav-dropdown {
+        @media (min-width: 769px) {
+          margin-left: 20px;
+        }
+      }
     }
   }
 
