@@ -13,7 +13,6 @@ import {
   FROCK_TOKEN_DATA,
 } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
-import { useFirework } from '../../hooks/useFirework';
 import { useStore } from '../../hooks/useStore';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
@@ -35,8 +34,6 @@ export default function Header() {
   const [showModal, setShowModal] = useState(true);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
   const location = useLocation();
-
-  const { setActive } = useFirework();
 
   const web3ModalConfig = {
     autoLoad: true,
@@ -213,7 +210,10 @@ export default function Header() {
         /> */}
         <Navbar bg="light" expand="lg">
           <Container>
-            <Navbar.Brand onClick={() => setActive(true)}>
+            <Navbar.Brand
+              href="https://fractionalrocket.money/"
+              target="_blank"
+            >
               <CompanyLogo />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
