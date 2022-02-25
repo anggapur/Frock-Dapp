@@ -125,7 +125,7 @@ export default function Calculator({
                 type="text"
                 symbol={{ label: '$', position: 'start' }}
                 minValue={100}
-                maxValue={2500}
+                maxValue={10000}
                 step={100}
                 value={amountInvested}
                 setValue={value => setAmountInvested(value)}
@@ -243,7 +243,7 @@ export default function Calculator({
                 type="text"
                 symbol={{ label: '$', position: 'start' }}
                 minValue={100}
-                maxValue={2500}
+                maxValue={10000}
                 step={100}
                 value={amountInvested}
                 setValue={value => setAmountInvested(value)}
