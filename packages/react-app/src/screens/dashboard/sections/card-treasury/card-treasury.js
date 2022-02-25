@@ -47,11 +47,11 @@ export default function CardTreasury({
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
-            {/* {new Intl.DateTimeFormat(undefined, { */}
-            {/*  day: '2-digit', */}
-            {/*  month: '2-digit', */}
-            {/*  year: 'numeric', */}
-            {/* }).format(LAST_TREASURY_DIVIDEND_DISTRIBUTION)} */}
+            {new Intl.DateTimeFormat(undefined, {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            }).format(LAST_TREASURY_DIVIDEND_DISTRIBUTION)}
           </p>
         </Column>
       </Row>
