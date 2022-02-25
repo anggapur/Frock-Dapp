@@ -29,7 +29,7 @@ export default function Calculator() {
     days: 365,
     strongPrice: 500,
     strongReturn: 0.085,
-    nodesCount: 4,
+    nodesCount: 7,
   });
   const [ftmPriceFromApi, setFtmPriceFromApi] = useState(0);
   const [strongPriceFromApi, setStrongPriceFromApi] = useState(0);

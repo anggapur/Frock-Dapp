@@ -71,7 +71,7 @@ export default function Calculator({
       days: 365,
       strongPrice: strongPriceFromApi,
       strongReturn: 0.085,
-      nodesCount: 4,
+      nodesCount: 7,
     });
     setAmountInvested(400);
   };
@@ -267,7 +267,7 @@ export default function Calculator({
                 }}
                 type="number"
                 minValue={1}
-                maxValue={10}
+                maxValue={50}
                 value={calc.nodesCount}
                 setValue={value => handleOnChange('nodesCount', value)}
               />
