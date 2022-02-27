@@ -52,6 +52,7 @@ function Dashboard() {
     treasury: [],
   });
   const [claimButtonIsLoading, setClaimButtonIsLoading] = useState(null);
+  const [lastRewardShare, setLastRewardShare] = useState(0);
 
   const [setAFrockBalance, setBFrockBalance, setFrockBalance] = useStore(
     state => [
@@ -112,6 +113,7 @@ function Dashboard() {
         await handleGetTokenBalance();
 
         await handleGetRewards();
+        await handleGetLastRewardShare();
 
         await handleRefetch(false);
       }
@@ -278,6 +280,11 @@ function Dashboard() {
     });
   };
 
+  const handleGetLastRewardShare = async () => {
+    const _lastRewardShare = await dividenDistributor.lastRewardShare();
+    setLastRewardShare(Number(formatUnits(_lastRewardShare, 0)) * 1000);
+  };
+
   return (
     <Container>
       <Balance />
@@ -289,6 +296,7 @@ function Dashboard() {
             totalClaimed={totalClaimed.trade}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'trade'}
+            lastRewardShare={lastRewardShare}
           />
         </Col>
         <Col lg={4} className="mb-4">

@@ -31,6 +31,7 @@ export default function CardTrade({
   totalClaimed,
   handleClaim,
   isClaimButtonLoading,
+  lastRewardShare,
 }) {
   const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -44,7 +45,17 @@ export default function CardTrade({
 
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
-      <Card.Header>Trade dividends</Card.Header>
+      <Card.Header>
+        Trade dividends <br />
+        <small>
+          {lastRewardShare !== 0 &&
+            new Intl.DateTimeFormat(undefined, {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            }).format(lastRewardShare)}
+        </small>
+      </Card.Header>
       <Row>
         <Column isDescription>
           <h6>
