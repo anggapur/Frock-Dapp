@@ -45,6 +45,7 @@ function Dashboard() {
     trade: '0',
     treasury: '0',
   });
+  const [tokenBalanceInFrock, setTokenBalanceInFrock] = useState('0');
   const [tokenBalance, setTokenBalance] = useState('0');
   const [rewards, setRewards] = useState({
     trade: [],
@@ -211,6 +212,7 @@ function Dashboard() {
       FROCK_ADDR,
       WFTM_ADDR,
     );
+    setTokenBalanceInFrock(formatUnits(tokenBalanceResult, FROCK_DECIMALS));
     setTokenBalance(formatUnits(resultConverted[1], 18));
   };
 
@@ -290,7 +292,11 @@ function Dashboard() {
           />
         </Col>
         <Col lg={4} className="mb-4">
-          <CardFrock frockPrice={frockPrice} tokenBalance={tokenBalance} />
+          <CardFrock
+            frockPrice={frockPrice}
+            tokenBalance={tokenBalance}
+            tokenBalanceInFrock={tokenBalanceInFrock}
+          />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTreasury
