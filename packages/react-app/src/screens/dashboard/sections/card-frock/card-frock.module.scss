@@ -4,6 +4,10 @@
   margin-bottom: 26px;
   width: 100%;
 
+  @media (min-width: 1400px) {
+    min-height: 330px;
+  }
+
   h3 {
     font-weight: 700;
     font-size: 20px;
