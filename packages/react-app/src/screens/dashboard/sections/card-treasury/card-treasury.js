@@ -6,7 +6,6 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
-import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
 import { supabase } from '../../../../supabaseClient';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
