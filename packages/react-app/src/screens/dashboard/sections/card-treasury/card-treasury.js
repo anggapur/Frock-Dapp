@@ -28,6 +28,7 @@ export default function CardTreasury({
   totalClaimed,
   handleClaim,
   isClaimButtonLoading,
+  rewardAmountTreasury,
 }) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
@@ -40,7 +41,10 @@ export default function CardTreasury({
 
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
-      <Card.Header>Treasury dividends</Card.Header>
+      <Card.Header>
+        Treasury dividends{' '}
+        <small>$ {renderNumberFormatter(rewardAmountTreasury)}</small>
+      </Card.Header>
       <Row>
         <Column isDescription>
           <h6>Last dividend distribution</h6>
@@ -61,8 +65,8 @@ export default function CardTreasury({
           <h6>
             Your claimable treasury dividends{' '}
             <Tooltip>
-              Your share of the treasury dividends, ready to claim.
-              The $ price is based on current rate.
+              Your share of the treasury dividends, ready to claim. The $ price
+              is based on current rate.
             </Tooltip>
           </h6>
         </Column>
@@ -105,8 +109,8 @@ export default function CardTreasury({
             <h6>
               Your total claimed treasury dividends{' '}
               <Tooltip>
-                Your historical amount of treasury dividends claimed.
-                The $ price is based on current rate.
+                Your historical amount of treasury dividends claimed. The $
+                price is based on current rate.
               </Tooltip>
             </h6>
           </Column>

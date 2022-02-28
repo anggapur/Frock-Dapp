@@ -32,6 +32,7 @@ export default function CardTrade({
   handleClaim,
   isClaimButtonLoading,
   lastRewardShare,
+  rewardAmountTrade,
 }) {
   const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -53,7 +54,8 @@ export default function CardTrade({
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-            }).format(lastRewardShare)}
+            }).format(lastRewardShare)}{' '}
+          - $ {renderNumberFormatter(rewardAmountTrade)}
         </small>
       </Card.Header>
       <Row>

@@ -23,6 +23,7 @@ import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useContract } from '../../hooks/ethers/contracts';
 import { useProvider } from '../../hooks/ethers/provider';
 import { useStore } from '../../hooks/useStore';
+import { supabase } from '../../supabaseClient';
 import Balance from './sections/balance/balance';
 import CardFrock from './sections/card-frock/card-frock';
 import CardTrade from './sections/card-trade/card-trade';
@@ -53,6 +54,8 @@ function Dashboard() {
   });
   const [claimButtonIsLoading, setClaimButtonIsLoading] = useState(null);
   const [lastRewardShare, setLastRewardShare] = useState(0);
+  const [rewardAmountTrade, setRewardAmountTrade] = useState(0);
+  const [rewardAmountTreasury, setRewardAmountTreasury] = useState(0);
 
   const [setAFrockBalance, setBFrockBalance, setFrockBalance] = useStore(
     state => [
@@ -114,6 +117,7 @@ function Dashboard() {
 
         await handleGetRewards();
         await handleGetLastRewardShare();
+        await handleGetRewardDistribution();
 
         await handleRefetch(false);
       }
@@ -285,6 +289,31 @@ function Dashboard() {
     setLastRewardShare(Number(formatUnits(_lastRewardShare, 0)) * 1000);
   };
 
+  const handleGetRewardDistribution = async () => {
+    const { data, error } = await supabase
+      .from('reward_distributions')
+      .select('reward_amount, reward_source');
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return;
+    }
+
+    let _rewardAmountTrade = 0;
+    let _rewardAmountTreasury = 0;
+
+    data.forEach(row => {
+      if (row.reward_source === 0) {
+        _rewardAmountTrade += Number(row.reward_amount);
+      } else {
+        _rewardAmountTreasury += Number(row.reward_amount);
+      }
+    });
+
+    setRewardAmountTrade(_rewardAmountTrade);
+    setRewardAmountTreasury(_rewardAmountTreasury);
+  };
+
   return (
     <Container>
       <Balance />
@@ -297,6 +326,7 @@ function Dashboard() {
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'trade'}
             lastRewardShare={lastRewardShare}
+            rewardAmountTrade={rewardAmountTrade}
           />
         </Col>
         <Col lg={4} className="mb-4">
@@ -312,6 +342,7 @@ function Dashboard() {
             totalClaimed={totalClaimed.treasury}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'treasury'}
+            rewardAmountTreasury={rewardAmountTreasury}
           />
         </Col>
       </Row>
