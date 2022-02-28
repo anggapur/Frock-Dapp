@@ -7,6 +7,7 @@ import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
+import { supabase } from '../../../../supabaseClient';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 
@@ -31,20 +32,39 @@ export default function CardTreasury({
   rewardAmountTreasury,
 }) {
   const [fantomPrice, setFantomPrice] = useState(0);
+  const [lastDistribution, setLastDistribution] = useState(0);
 
   useEffect(() => {
     GetFantomPrice()
       .then(price => setFantomPrice(price))
       // eslint-disable-next-line no-console
       .catch(console.error);
+
+    (async () => {
+      await handleGetLastDistribution();
+    })();
   }, []);
+
+  const handleGetLastDistribution = async () => {
+    const { data, error } = await supabase
+      .from('reward_distributions')
+      .select('issued_at')
+      .eq('reward_source', 1)
+      .order('id', { ascending: false })
+      .limit(1);
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return;
+    }
+
+    const timestamp = data[0]?.issued_at ?? 0;
+    setLastDistribution(timestamp);
+  };
 
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
-      <Card.Header>
-        Treasury dividends{' '}
-        <small>$ {renderNumberFormatter(rewardAmountTreasury)}</small>
-      </Card.Header>
+      <Card.Header>Treasury dividends</Card.Header>
       <Row>
         <Column isDescription>
           <h6>Last dividend distribution</h6>
@@ -55,7 +75,18 @@ export default function CardTreasury({
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-            }).format(LAST_TREASURY_DIVIDEND_DISTRIBUTION)}
+            }).format(lastDistribution * 1000)}
+          </p>
+        </Column>
+      </Row>
+      <hr />
+      <Row>
+        <Column isDescription>
+          <h6>Total treasury reward distribution</h6>
+        </Column>
+        <Column className="px-xl-2 px-lg-0">
+          <p className={styles.strong}>
+            $ {renderNumberFormatter(rewardAmountTreasury)}
           </p>
         </Column>
       </Row>

@@ -46,18 +46,33 @@ export default function CardTrade({
 
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
-      <Card.Header>
-        Trade dividends <br />
-        <small>
-          {lastRewardShare !== 0 &&
-            new Intl.DateTimeFormat(undefined, {
+      <Card.Header>Trade dividends</Card.Header>
+      <Row>
+        <Column isDescription>
+          <h6>Last trade dividend distribution</h6>
+        </Column>
+        <Column className="ps-xl-2 px-lg-0">
+          <p className={styles.strong}>
+            {new Intl.DateTimeFormat(undefined, {
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-            }).format(lastRewardShare)}{' '}
-          - $ {renderNumberFormatter(rewardAmountTrade)}
-        </small>
-      </Card.Header>
+            }).format(lastRewardShare)}
+          </p>
+        </Column>
+      </Row>
+      <hr />
+      <Row>
+        <Column isDescription>
+          <h6>Total trade reward distribution</h6>
+        </Column>
+        <Column className="ps-xl-2 px-lg-0">
+          <p className={styles.strong}>
+            $ {renderNumberFormatter(rewardAmountTrade)}
+          </p>
+        </Column>
+      </Row>
+      <hr />
       <Row>
         <Column isDescription>
           <h6>
