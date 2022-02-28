@@ -64,7 +64,7 @@ export default function CardTrade({
       <hr />
       <Row>
         <Column isDescription>
-          <h6>Total trade reward distribution</h6>
+          <h6>Total trade dividend distribution</h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -84,8 +84,7 @@ export default function CardTrade({
           <h6>
             Your claimable trade dividends{' '}
             <Tooltip>
-              Your share of the trade dividends, ready to claim! The $ price is
-              based on current rate.
+              Your share of the trade dividends, ready to claim!
             </Tooltip>
           </h6>
         </Column>
@@ -133,8 +132,7 @@ export default function CardTrade({
             <h6>
               Your total claimed trade dividends{' '}
               <Tooltip>
-                Your historical amount of trade dividends claimed. The $ price
-                is based on current rate.
+                Your historical amount of trade dividends claimed.
               </Tooltip>
             </h6>
           </Column>

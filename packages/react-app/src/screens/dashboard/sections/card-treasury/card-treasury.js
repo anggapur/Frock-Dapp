@@ -66,7 +66,7 @@ export default function CardTreasury({
       <Card.Header>Treasury dividends</Card.Header>
       <Row>
         <Column isDescription>
-          <h6>Last dividend distribution</h6>
+          <h6>Last treasury dividend distribution</h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -81,7 +81,7 @@ export default function CardTreasury({
       <hr />
       <Row>
         <Column isDescription>
-          <h6>Total treasury reward distribution</h6>
+          <h6>Total treasury dividend distribution</h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -101,8 +101,7 @@ export default function CardTreasury({
           <h6>
             Your claimable treasury dividends{' '}
             <Tooltip>
-              Your share of the treasury dividends, ready to claim. The $ price
-              is based on current rate.
+              Your share of the treasury dividends, ready to claim.
             </Tooltip>
           </h6>
         </Column>
@@ -145,8 +144,7 @@ export default function CardTreasury({
             <h6>
               Your total claimed treasury dividends{' '}
               <Tooltip>
-                Your historical amount of treasury dividends claimed. The $
-                price is based on current rate.
+                Your historical amount of treasury dividends claimed.
               </Tooltip>
             </h6>
           </Column>

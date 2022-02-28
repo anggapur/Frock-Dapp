@@ -98,8 +98,7 @@ export default function CardFrock({
         <Row className="mt-2">
           <Col xl={6} lg={12} xs={6}>
             <h6 className="mb-0">
-              Total treasury value{' '}
-              <Tooltip>$ price is based on current rate.</Tooltip>
+              Total treasury value
             </h6>
           </Col>
           <Col xl={6} lg={12} xs={6} className="my-xl-0 my-lg-2">
@@ -128,9 +127,7 @@ export default function CardFrock({
             <h6>
               Your building trade dividends{' '}
               <Tooltip>
-                Your share of the trade dividends which are not yet claimable.
-                All $FTM and $ prices are based on current rates, not historical
-                earnings.
+                Your share of the trade dividends which are not yet made claimable.
               </Tooltip>
             </h6>
             <Row>
@@ -167,8 +164,7 @@ export default function CardFrock({
             <h6>
               Total building trade dividends{' '}
               <Tooltip>
-                Trade dividends which are not yet claimable. All $FTM and $
-                prices are based on current rates, not historical earnings.
+                Trade dividends which are not yet made claimable.
               </Tooltip>
             </h6>
             <Row>

@@ -7,6 +7,7 @@ import { FROCK_SUPPLY } from '../../../../constants';
 import { useStore } from '../../../../hooks/useStore';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './balance.module.scss';
+import Tooltip from "../../../../components/tooltip/tooltip";
 
 export default function Balance({ totalExcludedDistri }) {
   const { aFrockBalance, bFrockBalance, frockBalance } = useStore();
@@ -19,7 +20,11 @@ export default function Balance({ totalExcludedDistri }) {
 
   return (
     <div className={styles.wrapper}>
-      <p>Your balance:</p>
+      <p>Your balance{' '}
+          <Tooltip>
+              The % is based on the last reward distribution, minor changes will occur.
+          </Tooltip>
+      </p>
       {renderNumberFormatter(aFrockBalance) !== '0' && (
         <div>
           <img src={afrockLogo} alt="aFROCK logo" />
