@@ -86,7 +86,13 @@ export default function CardTreasury({
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
-            $ {renderNumberFormatter(rewardAmountTreasury)}
+            FTM {renderNumberFormatter(rewardAmountTreasury)}
+          </p>
+          <p>
+            ${' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(rewardAmountTreasury)).toString(),
+            )}
           </p>
         </Column>
       </Row>

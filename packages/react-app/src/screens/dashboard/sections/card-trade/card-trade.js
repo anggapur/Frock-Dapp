@@ -68,7 +68,13 @@ export default function CardTrade({
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
-            $ {renderNumberFormatter(rewardAmountTrade)}
+            FTM {renderNumberFormatter(rewardAmountTrade)}
+          </p>
+          <p>
+            ${' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(rewardAmountTrade)).toString(),
+            )}
           </p>
         </Column>
       </Row>
