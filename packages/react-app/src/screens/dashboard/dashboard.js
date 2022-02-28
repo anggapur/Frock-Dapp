@@ -56,6 +56,7 @@ function Dashboard() {
   const [lastRewardShare, setLastRewardShare] = useState(0);
   const [rewardAmountTrade, setRewardAmountTrade] = useState(0);
   const [rewardAmountTreasury, setRewardAmountTreasury] = useState(0);
+  const [totalExcludedDistri, setTotalExcludedDistri] = useState(0);
 
   const [setAFrockBalance, setBFrockBalance, setFrockBalance] = useStore(
     state => [
@@ -292,12 +293,16 @@ function Dashboard() {
   const handleGetRewardDistribution = async () => {
     const { data, error } = await supabase
       .from('reward_distributions')
-      .select('reward_amount, reward_source');
+      .select('reward_amount, reward_source, total_excluded_from_distribution')
+      .order('id', { ascending: false });
     if (error) {
       // eslint-disable-next-line no-console
       console.error(error);
       return;
     }
+
+    const totalExcluded = data[0]?.total_excluded_from_distribution ?? 0;
+    setTotalExcludedDistri(Number(totalExcluded));
 
     let _rewardAmountTrade = 0;
     let _rewardAmountTreasury = 0;
@@ -316,7 +321,7 @@ function Dashboard() {
 
   return (
     <Container>
-      <Balance />
+      <Balance totalExcludedDistri={totalExcludedDistri} />
       <Row>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTrade
