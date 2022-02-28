@@ -180,7 +180,7 @@ export default function CardFrock({
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(Number(tokenBalanceInFrock))} FROCK
+                  FROCK {renderNumberFormatter(Number(tokenBalanceInFrock))}
                 </p>
               </Col>
               <Col
@@ -205,7 +205,7 @@ export default function CardFrock({
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(Number(tokenBalance))} FTM
+                  FTM {renderNumberFormatter(Number(tokenBalance))}
                 </p>
               </Col>
             </Row>
