@@ -19,6 +19,7 @@ export default function CardFrock({
   frockPrice: frockPriceDex,
   tokenBalance,
   tokenBalanceInFrock,
+  buildTradeDividend,
 }) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
@@ -94,6 +95,26 @@ export default function CardFrock({
             </p>
           </Col>
         </Row>
+        <Row className="mt-2">
+          <Col xl={6} lg={12} xs={6}>
+            <h6 className="mb-0">
+              Total treasury value{' '}
+              <Tooltip>$ price is based on current rate.</Tooltip>
+            </h6>
+          </Col>
+          <Col xl={6} lg={12} xs={6} className="my-xl-0 my-lg-2">
+            <p className="mb-1">
+              {TOTAL_TREASURY_VALUE_IN_STRONG / 10} $STRONG NODES
+            </p>
+            <p className="mb-3">
+              ${' '}
+              {new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
+            </p>
+          </Col>
+        </Row>
       </Card>
 
       <Row className={styles['card-on-bottom']}>
@@ -103,6 +124,45 @@ export default function CardFrock({
           xs={6}
           className="d-flex align-items-stretch mb-xxl-0 mb-lg-4"
         >
+          <Card ellipse="top-right">
+            <h6>
+              Your building trade dividends{' '}
+              <Tooltip>
+                Your share of the trade dividends which are not yet claimable.
+                All $FTM and $ prices are based on current rates, not historical
+                earnings.
+              </Tooltip>
+            </h6>
+            <Row>
+              <Col
+                xxl={12}
+                xl={6}
+                lg={7}
+                xs={12}
+                className="d-flex align-items-stretch"
+              >
+                <p className={styles.bigger}>
+                  FTM {renderNumberFormatter(buildTradeDividend)}
+                </p>
+              </Col>
+              <Col
+                xxl={{ order: 'last', span: 12 }}
+                xl={6}
+                lg={5}
+                xs={{ order: 'last', span: 12 }}
+                className="d-flex align-items-stretch"
+              >
+                <p>
+                  ${' '}
+                  {renderNumberFormatter(
+                    (fantomPrice * Number(buildTradeDividend)).toString(),
+                  )}
+                </p>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
             <h6>
               Total building trade dividends{' '}
@@ -146,42 +206,6 @@ export default function CardFrock({
               >
                 <p className={styles.bigger}>
                   {renderNumberFormatter(Number(tokenBalance))} FTM
-                </p>
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-        <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
-          <Card ellipse="top-right">
-            <h6>
-              Total treasury value{' '}
-              <Tooltip>$ price is based on current rate.</Tooltip>
-            </h6>
-            <Row>
-              <Col
-                xxl={12}
-                xl={6}
-                lg={7}
-                xs={12}
-                className="d-flex align-items-stretch"
-              >
-                <p className={styles.bigger}>
-                  {TOTAL_TREASURY_VALUE_IN_STRONG / 10} $STRONG NODES
-                </p>
-              </Col>
-              <Col
-                xxl={12}
-                xl={6}
-                lg={5}
-                xs={12}
-                className="d-flex align-items-stretch"
-              >
-                <p>
-                  ${' '}
-                  {new Intl.NumberFormat('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
                 </p>
               </Col>
             </Row>

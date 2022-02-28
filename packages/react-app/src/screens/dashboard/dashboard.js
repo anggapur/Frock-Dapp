@@ -339,6 +339,7 @@ function Dashboard() {
             frockPrice={frockPrice}
             tokenBalance={tokenBalance}
             tokenBalanceInFrock={tokenBalanceInFrock}
+            buildTradeDividend={buildTradeDividend}
           />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
