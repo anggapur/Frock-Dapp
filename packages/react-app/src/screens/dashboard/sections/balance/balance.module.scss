@@ -1,0 +1,33 @@
+.wrapper {
+  margin-bottom: 1.5rem;
+  text-align: center;
+
+  p {
+    margin-right: 1rem;
+    margin-bottom: 0;
+    font-weight: 600;
+
+    @media (min-width: 768px) {
+      display: inline;
+    }
+  }
+
+  > div {
+    margin-right: 1rem;
+    display: inline-block;
+    margin-top: 0.5rem;
+
+    @media (min-width: 768px) {
+      margin-top: 0;
+    }
+
+    :last-child {
+      margin-right: 0;
+    }
+
+    img {
+      margin-right: 5px;
+      height: 26px;
+    }
+  }
+}

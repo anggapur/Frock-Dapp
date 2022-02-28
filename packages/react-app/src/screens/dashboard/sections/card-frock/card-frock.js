@@ -15,7 +15,11 @@ import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants/treasurySt
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
-export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
+export default function CardFrock({
+  frockPrice: frockPriceDex,
+  tokenBalance,
+  tokenBalanceInFrock,
+}) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -63,6 +67,12 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
               className="mt-3 mb-xl-3 mb-4 px-4"
               isOutline
               isRounded
+              onClick={() =>
+                window.open(
+                  'https://spookyswap.finance/swap?outputCurrency=0xe679ae2b7e97D759eC758fafe50cB011eBfb7D77',
+                  '_blank',
+                )
+              }
             >
               Buy $FROCK
             </RoundButton>
@@ -110,14 +120,14 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(Number(tokenBalance))} FTM
+                  {renderNumberFormatter(Number(tokenBalanceInFrock))} FROCK
                 </p>
               </Col>
               <Col
-                xxl={12}
+                xxl={{ order: 'last', span: 12 }}
                 xl={6}
                 lg={5}
-                xs={12}
+                xs={{ order: 'last', span: 12 }}
                 className="d-flex align-items-stretch"
               >
                 <p>
@@ -125,6 +135,17 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                   {renderNumberFormatter(
                     (Number(tokenBalance) * fantomPrice).toString(),
                   )}
+                </p>
+              </Col>
+              <Col
+                xxl={12}
+                xl={6}
+                lg={7}
+                xs={12}
+                className="d-flex align-items-stretch"
+              >
+                <p className={styles.bigger}>
+                  {renderNumberFormatter(Number(tokenBalance))} FTM
                 </p>
               </Col>
             </Row>

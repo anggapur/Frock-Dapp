@@ -13,7 +13,6 @@ import {
   FROCK_TOKEN_DATA,
 } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
-import { useFirework } from '../../hooks/useFirework';
 import { useStore } from '../../hooks/useStore';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
@@ -35,8 +34,6 @@ export default function Header() {
   const [showModal, setShowModal] = useState(true);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
   const location = useLocation();
-
-  const { setActive } = useFirework();
 
   const web3ModalConfig = {
     autoLoad: true,
@@ -82,13 +79,13 @@ export default function Header() {
     }
   }, [provider, setProvider]);
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+  // useEffect(() => {
+  //   const id = setInterval(() => {
+  //     setTimeLeft(calculateTimeLeft());
+  //   }, 1000);
 
-    return () => clearInterval(id);
-  }, []);
+  //   return () => clearInterval(id);
+  // }, []);
 
   const logoButtonRef = createRef();
   const logoButtonModalRef = createRef();
@@ -182,7 +179,7 @@ export default function Header() {
   return (
     <>
       <header>
-        <NotificationBar
+        {/* <NotificationBar
           text={
             Object.keys(timeLeft).length !== 1
               ? `Community Sale sold out! Countdown to Public Sale: ${
@@ -210,10 +207,13 @@ export default function Header() {
                   !timeLeft.isAfterTwoDays ? 'is Active Now!' : 'has finished.'
                 }`
           }
-        />
+        /> */}
         <Navbar bg="light" expand="lg">
           <Container>
-            <Navbar.Brand onClick={() => setActive(true)}>
+            <Navbar.Brand
+              href="https://fractionalrocket.money/"
+              target="_blank"
+            >
               <CompanyLogo />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -222,6 +222,9 @@ export default function Header() {
               className="justify-content-end"
             >
               <Nav>
+                <Link to="/" className="nav-link">
+                  Dashboard
+                </Link>
                 <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
@@ -230,9 +233,6 @@ export default function Header() {
                 </Link>
                 <Link to="/public-sale" className="nav-link">
                   Public Sale
-                </Link>
-                <Link to="/dashboard" className="nav-link">
-                  Dashboard
                 </Link>
                 {!provider ? (
                   <RoundButton
@@ -285,11 +285,11 @@ export default function Header() {
                     >
                       Add $bFROCK to wallet
                     </NavDropdown.Item>
-                     <NavDropdown.Item
+                    <NavDropdown.Item
                       onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
-                     >
+                    >
                       Add $FROCK to wallet
-                     </NavDropdown.Item>
+                    </NavDropdown.Item>
                   </NavDropdown>
                 )}
               </Nav>
@@ -299,7 +299,8 @@ export default function Header() {
       </header>
       <Modal
         show={
-          (location.pathname === '/community-sale' ||
+          (location.pathname === '/' ||
+            location.pathname === '/community-sale' ||
             location.pathname === '/public-sale') &&
           showModal &&
           provider === undefined
