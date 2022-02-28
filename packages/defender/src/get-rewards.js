@@ -43,12 +43,12 @@ async function getRewards(payload, signer) {
     .rewards(++currentRewardId);
   const rewardAmount = ethers.utils.formatUnits(reward[0]);
   const totalClaimed = ethers.utils.formatUnits(reward[1]);
-  const issuedAt = reward[2];
-  const snapshotId = reward[3];
+  const issuedAt = ethers.utils.formatUnits(reward[2], 0);
+  const snapshotId = ethers.utils.formatUnits(reward[3], 0);
   const totalExcludedFromDistribution = ethers.utils.formatUnits(reward[4], 9);
   const rewardSource = reward[5];
 
-  if (rewardAmount == "0" && totalClaimed == "0") {
+  if (rewardAmount == "0.0" && totalClaimed == "0.0") {
     console.log("Rewards not yet available");
   } else {
     console.log("Insert Rewards Distribution to Supabase");
@@ -57,7 +57,7 @@ async function getRewards(payload, signer) {
         reward_amount: rewardAmount,
         total_claimed: totalClaimed,
         issued_at: issuedAt,
-        spanshot_id: snapshotId,
+        snapshot_id: snapshotId,
         total_excluded_from_distribution: totalExcludedFromDistribution,
         reward_source: rewardSource,
         current_reward_id: currentRewardId,
