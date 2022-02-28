@@ -1,7 +1,6 @@
 import { calculateDividen } from "./utils/calculations";
 import { SignerWithAddress } from "./utils/interfaces";
-import {
-  TreasuryProxy,
+import {  
   TreasuryV1,
   FrockTokenV1,
   FrockProxy,
@@ -17,8 +16,7 @@ describe("Dividend Distributor 1", async () => {
   let treasuryDestination: SignerWithAddress
   let frockToken: FrockTokenV1
   let frockProxy: FrockProxy  
-  let treasuryContract: TreasuryV1
-  let treasuryProxy: TreasuryProxy  
+  let treasuryContract: TreasuryV1  
   let frockDecimals: number;
   let spookyRouter: SpookyRouter;
   let spookyFactory: SpookyFactory;
@@ -35,9 +33,8 @@ describe("Dividend Distributor 1", async () => {
     // Get Spooky DEX
     spookyRouter = await ethers.getContract<SpookyRouter>('SpookyRouter');
     spookyFactory = await ethers.getContract<SpookyFactory>('SpookyFactory');
-    // Treasury
-    treasuryProxy = await ethers.getContract<TreasuryProxy>('TreasuryProxy');
-    treasuryContract = (await ethers.getContract<TreasuryV1>('TreasuryV1')).attach(treasuryProxy.address);
+    // Treasury    
+    treasuryContract = await ethers.getContract<TreasuryV1>('TreasuryV1');
 
     ({
       deployer,
@@ -74,32 +71,26 @@ describe("Dividend Distributor 1", async () => {
     })
 
     it('Send FROCK to Contract', async() => {
-      const amountToSwap = ethers.utils.parseUnits("50", frockDecimals);    
+      const amountToSwap = ethers.utils.parseUnits("300", frockDecimals);    
       await frockToken.connect(deployer).transfer(treasuryContract.address, amountToSwap)      
-    })
+    })    
 
-    
-
-    it('Swap And Share', async() => {
-      const amountToSwap = ethers.utils.parseUnits("50", frockDecimals);
-
-      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
-      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
-      await treasuryContract.connect(deployer).swapAndSend()
-      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
-      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
-
-      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
-      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    it('Failed to Swap And Send', async() => {            
+      await expect(
+        treasuryContract.connect(deployer).swapAndSend()
+      ).to.be.revertedWith('Treasury: Not passing fixed limit token to swap')
     })
 
     it('Send FROCK to Contract', async() => {
-      const amountToSwap = ethers.utils.parseUnits("1000", frockDecimals);
-      await frockToken.connect(deployer).transfer(treasuryContract.address, amountToSwap)
+      const amountToSwap = ethers.utils.parseUnits("600", frockDecimals);    
+      await frockToken.connect(deployer).transfer(treasuryContract.address, amountToSwap) 
+      
+      // Now Contract have 900 FROCK
     })
 
-    it('Swap And Share', async() => {
-      const amountToSwap = ethers.utils.parseUnits("100", frockDecimals);
+    it('Swap And Send', async() => {
+      // 1st Attempt
+      const amountToSwap = ethers.utils.parseUnits("500", frockDecimals);
 
       const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
       const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
@@ -108,26 +99,98 @@ describe("Dividend Distributor 1", async () => {
       const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
 
       expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
+      expect(frockBalanceAfter).to.be.eq(ethers.utils.parseUnits("400", 9))
       expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    })  
+    
+    
+    it('Send FROCK to Contract', async() => {
+      const amountToSwap = ethers.utils.parseUnits("2600", frockDecimals);    
+      await frockToken.connect(deployer).transfer(treasuryContract.address, amountToSwap) 
+      
+      // Now Contract have 3000 FROCK
+    })
+
+    it('Swap And Send', async() => {
+      // 1st Attempt
+      const amountToSwap = ethers.utils.parseUnits("750", frockDecimals);
+
+      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
+      await treasuryContract.connect(deployer).swapAndSend()
+      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
+
+      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
+      expect(frockBalanceAfter).to.be.eq(ethers.utils.parseUnits("2250", 9))
+      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    })  
+
+    it('Swap And Send', async() => {
+      // 2nd Attempt
+      const amountToSwap = ethers.utils.parseUnits("562.5", frockDecimals);
+
+      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
+      await treasuryContract.connect(deployer).swapAndSend()
+      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
+
+      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
+      expect(frockBalanceAfter).to.be.eq(ethers.utils.parseUnits("1687.5", 9))
+      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    }) 
+
+    it('Swap And Send', async() => {
+      // 3rd Attempt
+      const amountToSwap = ethers.utils.parseUnits("500", frockDecimals);
+
+      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
+      await treasuryContract.connect(deployer).swapAndSend()
+      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
+
+      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
+      expect(frockBalanceAfter).to.be.eq(ethers.utils.parseUnits("1187.5", 9))
+      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    }) 
+
+    it('Swap And Send', async() => {
+      // 4rd Attempt
+      const amountToSwap = ethers.utils.parseUnits("500", frockDecimals);
+
+      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
+      await treasuryContract.connect(deployer).swapAndSend()
+      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
+
+      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
+      expect(frockBalanceAfter).to.be.eq(ethers.utils.parseUnits("687.5", 9))
+      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    }) 
+
+    it('Swap And Send', async() => {
+      // 5rd Attempt
+      const amountToSwap = ethers.utils.parseUnits("500", frockDecimals);
+
+      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
+      await treasuryContract.connect(deployer).swapAndSend()
+      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
+      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
+
+      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
+      expect(frockBalanceAfter).to.be.eq(ethers.utils.parseUnits("187.5", 9))
+      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
+    }) 
+    
+    it('Failed to Swap And Send', async() => {            
+      await expect(
+        treasuryContract.connect(deployer).swapAndSend()
+      ).to.be.revertedWith('Treasury: Not passing fixed limit token to swap')
     })
     
-    it('Change Maximum Swap And Swap', async() => {
-      // Change Maximum Swap
-      const newMaximum = ethers.utils.parseUnits("200", 9);
-      await treasuryContract.connect(deployer).setMaximumTokenToSwap(newMaximum)
-
-      // Swap
-      const amountToSwap = ethers.utils.parseUnits("200", frockDecimals);
-
-      const frockBalanceBefore = await frockToken.balanceOf(treasuryContract.address)
-      const ftmOfTreasuryDestBefore = await ethers.provider.getBalance(treasuryDestination.address)
-      await treasuryContract.connect(deployer).swapAndSend()
-      const frockBalanceAfter = await frockToken.balanceOf(treasuryContract.address)
-      const ftmOfTreasuryDestAfter = await ethers.provider.getBalance(treasuryDestination.address)
-
-      expect(frockBalanceAfter).to.be.eq(frockBalanceBefore.sub(amountToSwap))
-      expect(ftmOfTreasuryDestAfter).to.gt(ftmOfTreasuryDestBefore)
-
-    })
   })
 });

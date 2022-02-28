@@ -1,21 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.5;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "../EIP/SafeTokenRecoverUpgradeable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./IUniswapV2Router02.sol";
 
-contract TreasuryV1 is      
-    Initializable,
-    UUPSUpgradeable,
-    AccessControlUpgradeable,
-    SafeTokenRecoverUpgradeable 
+contract TreasuryV1 is              
+    AccessControl    
 {
     bool private inSwap;
-    uint256 maximumTokenToSwap; // maximum token that able to swap at one time
+    uint256 minimumTokenToSwap; // maximum token that able to swap at one time
+    uint256 fixedLimitTokenToSwap; // fixed limit token to swap
+    uint256 percentageToSwap; // 2 digits _00
     address mainToken; // Frock Token Address
     address treasuryDestination; // FTM will be sent to this address after swap
     bytes32 public constant CALLER_ROLE = keccak256("CALLER");
@@ -29,47 +25,34 @@ contract TreasuryV1 is
 
     event SwapAndSend(uint256 amountToSwap, uint256 ftmBalanceAmount, address treasuryDestination);
     event Withdraw(uint256 ftmBalanceAmount, address treasuryDestination);
+    event WithdrawToken(uint256 amount, address destination);
     event UpdateMainToken(address newMainTokenAddress);
     event UpdateTreasuryDestination(address newTreasuryDestination);
-    event UpdateMaximumTokenToSwap(uint256 newMaximumTokenToSwap);
+    event UpdateMinimumTokenToSwap(uint256 newMinimumTokenToSwap);
+    event UpdateFixedTokenToSwap(uint256 newFixedTokenToSwap);
+    event UpdatePercentageTokenToSwap(uint256 newPercentageTokenToSwap);    
     
     // Initialize
-    function initialize(
-        uint256 _maximumTokenToSwap,
+    constructor(
+        uint256 _minimumTokenToSwap,
+        uint256 _fixedLimitTokenToSwap,
+        uint256 _percentageToSwap,
         address _mainToken,
         address _treasuryDestination
-    ) external initializer {        
-
-        __AccessControl_init_unchained();
-        __Context_init_unchained();
-        __SafeTokenRecover_init_unchained();        
+    ) {       
 
         // Setup deployer as Admin when construction
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(RESCUER_ROLE, _msgSender());
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());        
         
-        uniswapV2Router = IUniswapV2Router02(0xF491e7B69E4244ad4002BC14e878a34207E38c29);
-        maximumTokenToSwap = 0;
+        uniswapV2Router = IUniswapV2Router02(0xF491e7B69E4244ad4002BC14e878a34207E38c29);        
         inSwap = false;
-
-        maximumTokenToSwap = _maximumTokenToSwap;
+        
+        minimumTokenToSwap = _minimumTokenToSwap;
+        fixedLimitTokenToSwap = _fixedLimitTokenToSwap;
+        percentageToSwap = _percentageToSwap;
         mainToken = _mainToken;
         treasuryDestination = _treasuryDestination;
-    }
-
-    /**
-     * @dev Override function when contract upgraded
-     */
-    function _authorizeUpgrade(address newImplementation) internal override {
-        require(
-            newImplementation != address(0),
-            "Treasury: Cannot zero address"
-        );
-        require(
-            _msgSender() == _getAdmin(),
-            "Treasury: Not the Owner of Contract"
-        );
-    } // solhint-disable-line no-empty-blocks    
+    }  
 
     /**
      * @dev Swap Frock token on DEX and send the FTM to treasuryDestination
@@ -78,9 +61,12 @@ contract TreasuryV1 is
     function swapAndSend() external onlyRole(CALLER_ROLE) {  
         require(mainToken != address(0), "Treasury: Main Token not setted yet");
         require(treasuryDestination != address(0), "Treasury : Destination not setted yet");        
-        require(maximumTokenToSwap > 0, "Treasury: Maximum Token to Swap not setted yet");         
+        require(minimumTokenToSwap > 0, "Treasury: Minimum Token to Swap not setted yet");         
+        require(getTokenBalance() > minimumTokenToSwap, "Treasury: Not passing minimum token");
+        require(getTokenBalance() >= fixedLimitTokenToSwap, "Treasury: Not passing fixed limit token to swap");
 
-        uint256 amountToSwap = getTokenBalance() > maximumTokenToSwap ? maximumTokenToSwap : getTokenBalance();
+        uint256 percentageAmountToSwap = getTokenBalance() * percentageToSwap / 10000;
+        uint256 amountToSwap = percentageAmountToSwap >= fixedLimitTokenToSwap ? percentageAmountToSwap : fixedLimitTokenToSwap;
 
         // Swap        
         _swapTokensForEth(amountToSwap);
@@ -103,6 +89,17 @@ contract TreasuryV1 is
 
         emit Withdraw(ftmBalanceAmount, treasuryDestination);
     }
+
+     /**
+     * @dev Withdraw Main Token
+     */
+    function withdrawToken(address destination, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {        
+        // Send Token
+        require(
+            IERC20(mainToken).transfer(destination, amount), "Treasury: Fail Transfer Token"
+        );        
+        emit WithdrawToken(amount, destination);
+    }
       
     /**
      * @dev Swap FROCK to DEX to FTM
@@ -111,7 +108,7 @@ contract TreasuryV1 is
         address[] memory path = new address[](2);
         path[0] = address(mainToken);
         path[1] = uniswapV2Router.WETH();
-        IERC20Upgradeable(mainToken).approve(address(uniswapV2Router), tokenAmount);
+        IERC20(mainToken).approve(address(uniswapV2Router), tokenAmount);
         uniswapV2Router.swapExactTokensForETHSupportingFeeOnTransferTokens(
             tokenAmount,
             0,
@@ -126,7 +123,7 @@ contract TreasuryV1 is
      * @dev Get total amount of FROCK that owned by this contract
      */
     function getTokenBalance() public view returns(uint256 tokenAmount) {
-        return IERC20Upgradeable(mainToken).balanceOf(address(this));
+        return IERC20(mainToken).balanceOf(address(this));
     }
 
     /**
@@ -153,11 +150,28 @@ contract TreasuryV1 is
     }
 
     /**
-     * @dev Set Maximum Token of mainToken that able to swap at once
+     * @dev Set Minimum Token of mainToken that should owned to swap
      */
-    function setMaximumTokenToSwap(uint256 newMaximumTokenToSwap) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        maximumTokenToSwap = newMaximumTokenToSwap;
-        emit UpdateMaximumTokenToSwap(newMaximumTokenToSwap);
+    function setMinimumTokenToSwap(uint256 newMinimumTokenToSwap) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        minimumTokenToSwap = newMinimumTokenToSwap;
+        emit UpdateMinimumTokenToSwap(newMinimumTokenToSwap);
+    }
+
+     /**
+     * @dev Set Fixed Token of mainToken that able to swap at once
+     */
+    function setFixedTokenToSwap(uint256 newFixedTokenToSwap) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        fixedLimitTokenToSwap = newFixedTokenToSwap;
+        emit UpdateFixedTokenToSwap(newFixedTokenToSwap);
+    }
+
+
+     /**
+     * @dev Set Percentage of Token to Swap
+     */
+    function setPercentageTokenToSwap(uint256 newPercentageTokenToSwap) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        percentageToSwap = newPercentageTokenToSwap;
+        emit UpdatePercentageTokenToSwap(newPercentageTokenToSwap);
     }
 
     /**
