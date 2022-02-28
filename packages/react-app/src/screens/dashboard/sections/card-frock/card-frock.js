@@ -11,7 +11,7 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { FROCK_SUPPLY } from '../../../../constants';
-import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants/treasuryStatus';
+import { supabase } from '../../../../supabaseClient';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
@@ -25,6 +25,7 @@ export default function CardFrock({
   const [frockMarketCap, setFrockMarketCap] = useState(0);
   const [fantomPrice, setFantomPrice] = useState(0);
   const [strongPrice, setStrongPrice] = useState(0);
+  const [nodesGenerated, setNodesGenerated] = useState(0);
 
   useEffect(() => {
     Promise.all([
@@ -45,7 +46,28 @@ export default function CardFrock({
       })
       // eslint-disable-next-line no-console
       .catch(console.error);
+
+    (async () => {
+      await handleGetNodesGenerated();
+    })();
   }, []);
+
+  const handleGetNodesGenerated = async () => {
+    const { data, error } = await supabase
+      .from('treasury_status')
+      .select('key, value')
+      .eq('key', 'NODES_GENERATED')
+      .limit(1);
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error.message);
+      return;
+    }
+
+    const nodes = data[0]?.value ?? 0;
+
+    setNodesGenerated(Number(nodes));
+  };
 
   return (
     <>
@@ -97,20 +119,16 @@ export default function CardFrock({
         </Row>
         <Row className="mt-2">
           <Col xl={6} lg={12} xs={6}>
-            <h6 className="mb-0">
-              Total treasury value
-            </h6>
+            <h6 className="mb-0">Total treasury value</h6>
           </Col>
           <Col xl={6} lg={12} xs={6} className="my-xl-0 my-lg-2">
-            <p className="mb-1">
-              {TOTAL_TREASURY_VALUE_IN_STRONG / 10} $STRONG NODES
-            </p>
+            <p className="mb-1">{nodesGenerated} $STRONG NODES</p>
             <p className="mb-3">
               ${' '}
               {new Intl.NumberFormat('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
-              }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
+              }).format(strongPrice * nodesGenerated * 10)}
             </p>
           </Col>
         </Row>
@@ -127,7 +145,8 @@ export default function CardFrock({
             <h6>
               Your building trade dividends{' '}
               <Tooltip>
-                Your share of the trade dividends which are not yet made claimable.
+                Your share of the trade dividends which are not yet made
+                claimable.
               </Tooltip>
             </h6>
             <Row>

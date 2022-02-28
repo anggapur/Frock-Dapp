@@ -1,1 +1,0 @@
-export const TOTAL_TREASURY_VALUE_IN_STRONG = 330;
