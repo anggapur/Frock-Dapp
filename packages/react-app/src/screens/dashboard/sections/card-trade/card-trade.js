@@ -31,6 +31,8 @@ export default function CardTrade({
   totalClaimed,
   handleClaim,
   isClaimButtonLoading,
+  lastRewardShare,
+  rewardAmountTrade,
 }) {
   const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -47,23 +49,31 @@ export default function CardTrade({
       <Card.Header>Trade dividends</Card.Header>
       <Row>
         <Column isDescription>
-          <h6>
-            Your building trade dividends{' '}
-            <Tooltip>
-              Your share of the trade dividends which are not yet claimable. All
-              $FTM and $ prices are based on current rates, not historical
-              earnings.
-            </Tooltip>
-          </h6>
+          <h6>Last trade dividend distribution</h6>
         </Column>
         <Column className="ps-xl-2 px-lg-0">
           <p className={styles.strong}>
-            FTM {renderNumberFormatter(buildTradeDividend)}
+            {new Intl.DateTimeFormat(undefined, {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            }).format(lastRewardShare)}
+          </p>
+        </Column>
+      </Row>
+      <hr />
+      <Row>
+        <Column isDescription>
+          <h6>Total trade dividend distribution</h6>
+        </Column>
+        <Column className="ps-xl-2 px-lg-0">
+          <p className={styles.strong}>
+            FTM {renderNumberFormatter(rewardAmountTrade)}
           </p>
           <p>
             ${' '}
             {renderNumberFormatter(
-              (fantomPrice * Number(buildTradeDividend)).toString(),
+              (fantomPrice * Number(rewardAmountTrade)).toString(),
             )}
           </p>
         </Column>
@@ -74,8 +84,7 @@ export default function CardTrade({
           <h6>
             Your claimable trade dividends{' '}
             <Tooltip>
-              Your share of the trade dividends, ready to claim! The $ price is
-              based on current rate.
+              Your share of the trade dividends, ready to claim!
             </Tooltip>
           </h6>
         </Column>
@@ -123,8 +132,7 @@ export default function CardTrade({
             <h6>
               Your total claimed trade dividends{' '}
               <Tooltip>
-                Your historical amount of trade dividends claimed. The $ price
-                is based on current rate.
+                Your historical amount of trade dividends claimed.
               </Tooltip>
             </h6>
           </Column>

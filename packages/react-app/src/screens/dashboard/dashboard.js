@@ -23,6 +23,7 @@ import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useContract } from '../../hooks/ethers/contracts';
 import { useProvider } from '../../hooks/ethers/provider';
 import { useStore } from '../../hooks/useStore';
+import { supabase } from '../../supabaseClient';
 import Balance from './sections/balance/balance';
 import CardFrock from './sections/card-frock/card-frock';
 import CardTrade from './sections/card-trade/card-trade';
@@ -45,12 +46,17 @@ function Dashboard() {
     trade: '0',
     treasury: '0',
   });
+  const [tokenBalanceInFrock, setTokenBalanceInFrock] = useState('0');
   const [tokenBalance, setTokenBalance] = useState('0');
   const [rewards, setRewards] = useState({
     trade: [],
     treasury: [],
   });
   const [claimButtonIsLoading, setClaimButtonIsLoading] = useState(null);
+  const [lastRewardShare, setLastRewardShare] = useState(0);
+  const [rewardAmountTrade, setRewardAmountTrade] = useState(0);
+  const [rewardAmountTreasury, setRewardAmountTreasury] = useState(0);
+  const [totalExcludedDistri, setTotalExcludedDistri] = useState(0);
 
   const [setAFrockBalance, setBFrockBalance, setFrockBalance] = useStore(
     state => [
@@ -111,6 +117,8 @@ function Dashboard() {
         await handleGetTokenBalance();
 
         await handleGetRewards();
+        await handleGetLastRewardShare();
+        await handleGetRewardDistribution();
 
         await handleRefetch(false);
       }
@@ -211,6 +219,7 @@ function Dashboard() {
       FROCK_ADDR,
       WFTM_ADDR,
     );
+    setTokenBalanceInFrock(formatUnits(tokenBalanceResult, FROCK_DECIMALS));
     setTokenBalance(formatUnits(resultConverted[1], 18));
   };
 
@@ -276,9 +285,43 @@ function Dashboard() {
     });
   };
 
+  const handleGetLastRewardShare = async () => {
+    const _lastRewardShare = await dividenDistributor.lastRewardShare();
+    setLastRewardShare(Number(formatUnits(_lastRewardShare, 0)) * 1000);
+  };
+
+  const handleGetRewardDistribution = async () => {
+    const { data, error } = await supabase
+      .from('reward_distributions')
+      .select('reward_amount, reward_source, total_excluded_from_distribution')
+      .order('id', { ascending: false });
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return;
+    }
+
+    const totalExcluded = data[0]?.total_excluded_from_distribution ?? 0;
+    setTotalExcludedDistri(Number(totalExcluded));
+
+    let _rewardAmountTrade = 0;
+    let _rewardAmountTreasury = 0;
+
+    data.forEach(row => {
+      if (row.reward_source === 0) {
+        _rewardAmountTrade += Number(row.reward_amount);
+      } else {
+        _rewardAmountTreasury += Number(row.reward_amount);
+      }
+    });
+
+    setRewardAmountTrade(_rewardAmountTrade);
+    setRewardAmountTreasury(_rewardAmountTreasury);
+  };
+
   return (
     <Container>
-      <Balance />
+      <Balance totalExcludedDistri={totalExcludedDistri} />
       <Row>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTrade
@@ -287,10 +330,17 @@ function Dashboard() {
             totalClaimed={totalClaimed.trade}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'trade'}
+            lastRewardShare={lastRewardShare}
+            rewardAmountTrade={rewardAmountTrade}
           />
         </Col>
         <Col lg={4} className="mb-4">
-          <CardFrock frockPrice={frockPrice} tokenBalance={tokenBalance} />
+          <CardFrock
+            frockPrice={frockPrice}
+            tokenBalance={tokenBalance}
+            tokenBalanceInFrock={tokenBalanceInFrock}
+            buildTradeDividend={buildTradeDividend}
+          />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTreasury
@@ -298,6 +348,7 @@ function Dashboard() {
             totalClaimed={totalClaimed.treasury}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'treasury'}
+            rewardAmountTreasury={rewardAmountTreasury}
           />
         </Col>
       </Row>
