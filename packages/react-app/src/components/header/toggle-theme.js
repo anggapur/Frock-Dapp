@@ -6,20 +6,28 @@ import { useTheme } from '../../hooks/useTheme';
 import styles from './toggle-theme.module.scss';
 
 export default function ToggleTheme() {
-  const { isDark, isLight, setTheme } = useTheme();
+  const { isDark, isLight, theme, setTheme } = useTheme();
 
   useEffect(() => {
-    if (isDark) {
+    const themeInLocalStorage = window.localStorage.getItem('THEME') || 'light';
+    handleChangeTheme(themeInLocalStorage);
+  }, []);
+
+  const handleChangeTheme = _theme => {
+    if (_theme === 'dark') {
       document.body.classList.add('theme-dark');
     } else {
       document.body.classList.remove('theme-dark');
     }
-  }, [isDark]);
+
+    setTheme(_theme);
+    window.localStorage.setItem('THEME', _theme);
+  };
 
   return (
     <button
       className={styles.wrapper}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={() => handleChangeTheme(isDark ? 'light' : 'dark')}
     >
       <div>
         <svg
