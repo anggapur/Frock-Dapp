@@ -28,7 +28,9 @@ body.theme-dark {
 
     .navbar,
     .navbar-expand-lg .navbar-nav a.nav-link {
-      color: color.$white;
+      @media (max-width: 991px) {
+        color: color.$white;
+      }
     }
   }
 }
