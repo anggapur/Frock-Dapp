@@ -28,15 +28,21 @@
     }
 
     span,
-    p {
+    p,
+    a {
       font-weight: 600;
       font-size: 14px;
       color: #212925;
     }
 
-    p {
+    p,
+    a {
       margin-top: -5px;
       margin-bottom: 0;
+    }
+
+    a {
+      display: block;
     }
   }
 }
@@ -46,7 +52,8 @@
     color: #fff;
   }
 
-  p {
+  p,
+  a {
     color: #ffffff60;
   }
 }

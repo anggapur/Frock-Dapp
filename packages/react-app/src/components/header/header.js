@@ -287,16 +287,6 @@ export default function Header() {
                       Public Sale
                     </NavDropdown.Item>
                     <NavDropdown.Item
-                      onClick={() => handleAddToken(AFROCK_TOKEN_DATA)}
-                    >
-                      Add $aFROCK to wallet
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => handleAddToken(BFROCK_TOKEN_DATA)}
-                    >
-                      Add $bFROCK to wallet
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
                       onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
                     >
                       Add $FROCK to wallet
