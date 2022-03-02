@@ -1,19 +1,8 @@
 import React from 'react';
 
-function Ellipse({ position }) {
-  const styles = {
-    topLeft: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-    },
-    topRight: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-    },
-  };
+import styles from './ellipse.module.scss';
 
+function Ellipse({ position }) {
   if (position === 'top-left') {
     return (
       <svg
@@ -22,7 +11,7 @@ function Ellipse({ position }) {
         viewBox="0 0 112 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={styles.topLeft}
+        className={styles.topLeft}
       >
         <path
           opacity="0.05"
@@ -41,7 +30,7 @@ function Ellipse({ position }) {
         viewBox="0 0 61 68"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={styles.topRight}
+        className={styles.topRight}
       >
         <circle
           opacity="0.05"

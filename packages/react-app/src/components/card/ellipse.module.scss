@@ -1,0 +1,39 @@
+.topLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.topRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.topLeft {
+  path {
+    stroke: #ff5e49;
+  }
+}
+
+.topRight {
+  circle {
+    stroke: #ff5e49;
+  }
+}
+
+:global(body.theme-dark) {
+  .topLeft {
+    path {
+      stroke: #cb2d3e;
+      opacity: 0.3;
+    }
+  }
+
+  .topRight {
+    circle {
+      stroke: #cb2d3e;
+      opacity: 0.3;
+    }
+  }
+}

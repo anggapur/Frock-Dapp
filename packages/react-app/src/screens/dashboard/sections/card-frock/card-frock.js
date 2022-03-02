@@ -54,7 +54,7 @@ export default function CardFrock({
 
   const handleGetNodesGenerated = async () => {
     const { data, error } = await supabase
-      .from('treasury_status')
+      .from('frock_ecosystem_data')
       .select('key, value')
       .eq('key', 'NODES_GENERATED')
       .limit(1);

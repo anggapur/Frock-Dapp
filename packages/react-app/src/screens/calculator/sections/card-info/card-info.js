@@ -298,7 +298,7 @@ export default function CardInfo({
             Your treasury returns:
           </Col>
           <Col xs={4} lg={5}>
-            <h1 className="text-red-dark">
+            <h1 className={styles.h1}>
               ${' '}
               {yourReturns.toLocaleString('en-US', {
                 maximumFractionDigits: 0,

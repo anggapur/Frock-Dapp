@@ -110,3 +110,7 @@
   display: block;
   text-align: center;
 }
+
+:global(body.theme-dark) .body {
+  background: color.$cardDark;
+}
