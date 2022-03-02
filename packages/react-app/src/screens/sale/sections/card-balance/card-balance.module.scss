@@ -41,6 +41,16 @@
   }
 }
 
+:global(body.theme-dark) .wrapper {
+  h2 {
+    color: #fff;
+  }
+
+  p {
+    color: #ffffff60;
+  }
+}
+
 .col-xxs-12 {
   margin-top: 10px;
 

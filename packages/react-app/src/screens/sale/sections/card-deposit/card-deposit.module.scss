@@ -68,6 +68,18 @@ $paddingXMobile: 24px;
   }
 }
 
+:global(body.theme-dark) .header {
+  > div {
+    &.selected {
+      background: color.$cardDark;
+    }
+
+    &:not(.selected) {
+      background: #141414;
+    }
+  }
+}
+
 .main {
   padding: $paddingYMobile $paddingXMobile;
 
@@ -141,5 +153,11 @@ $paddingXMobile: 24px;
     padding-bottom: 14px;
     margin-top: 15px;
     margin-bottom: 15px;
+  }
+}
+
+:global(body.theme-dark) .main {
+  h2 {
+    color: #fff;
   }
 }

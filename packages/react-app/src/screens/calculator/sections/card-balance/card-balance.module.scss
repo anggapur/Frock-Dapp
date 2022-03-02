@@ -34,10 +34,22 @@
   }
 }
 
+:global(body.theme-dark) .p {
+  color: #ffffff60;
+
+  strong {
+    color: #fff;
+  }
+}
+
 .hr {
   margin-right: -24px;
   margin-left: -24px;
   border: 1px solid #e3d6d64d;
+}
+
+:global(body.theme-dark) .hr {
+  border-color: #171616;
 }
 
 .textGray {
@@ -48,6 +60,10 @@
   color: color.$redDark;
   font-size: 24px;
   margin-bottom: 0;
+}
+
+:global(body.theme-dark) .h1 {
+  color: #fff;
 }
 
 .mb7 {
@@ -82,7 +98,11 @@
   }
 
   .hr {
-    margin-right: -30px;
-    margin-left: -30px;
+    margin-right: -24px;
+    margin-left: -24px;
   }
+}
+
+:global(body.theme-dark) .h6 {
+  color: #ffffff60 !important;
 }

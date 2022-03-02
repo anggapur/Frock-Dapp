@@ -16,11 +16,20 @@ $paddingXMobile: 24px;
   padding: $paddingYMobile $paddingXMobile;
 }
 
+:global(body.theme-dark) .card {
+  background-color: color.$cardDark;
+  border: 1px solid #ffffff0d;
+}
+
 .header {
   color: color.$redDark;
   font-size: 28px;
   margin-bottom: 25px;
   font-weight: 600;
+}
+
+:global(body.theme-dark) .header {
+  color: color.$white;
 }
 
 .line-bottom-primary,
@@ -47,11 +56,21 @@ $paddingXMobile: 24px;
   width: 100%;
 }
 
+:global(body.theme-dark) .line-bottom-primary {
+  background: #171717;
+}
+
 .footer {
   // margin: $paddingYMobile (-$paddingXMobile) (-$paddingYMobile);
   padding: 19px $paddingXMobile;
   background: #f9f4f4;
   border-top: 5px solid #f1ebeb;
+  color: #afafaf !important;
+}
+
+:global(body.theme-dark) .footer {
+  border-top-color: #131212;
+  background: #171717;
   color: #afafaf !important;
 }
 

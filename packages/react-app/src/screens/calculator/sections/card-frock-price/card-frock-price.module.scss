@@ -7,10 +7,18 @@
   margin-bottom: 10px;
 }
 
+:global(body.theme-dark) .h3 {
+  color: #ffffff60;
+}
+
 .h1 {
   color: color.$redDark;
   font-size: 30px;
   margin-bottom: 20px;
+}
+
+:global(body.theme-dark) .h1 {
+  color: #fff;
 }
 
 .h1,
@@ -30,10 +38,18 @@ h5 + p + small {
   line-height: 20px;
 }
 
+:global(body.theme-dark) .h5 {
+  color: #ffffff60;
+}
+
 .h5 + p {
   font-size: 16px;
   font-weight: 700;
   color: #000;
+}
+
+:global(body.theme-dark) .h5 + p {
+  color: #fff;
 }
 
 .h5 + p + small {
@@ -43,6 +59,10 @@ h5 + p + small {
 
 .mb20 {
   margin-bottom: 20px !important;
+}
+
+:global(body.theme-dark) .h6 {
+  color: #ffffff60 !important;
 }
 
 @media (max-width: 768px) {

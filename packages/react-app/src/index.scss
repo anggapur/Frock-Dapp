@@ -24,6 +24,11 @@ body {
   font-family: inter, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  &.theme-dark {
+    background: color.$bodyDark;
+    color: #fff;
+  }
 }
 
 code {

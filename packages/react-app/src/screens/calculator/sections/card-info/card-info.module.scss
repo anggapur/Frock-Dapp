@@ -19,10 +19,19 @@
   line-height: 20px;
 }
 
+:global(body.theme-dark) .h5 {
+  color: #ffffff60;
+}
+
 .h5 + p,
 .h6 + p {
   font-weight: 700;
   color: #000;
+}
+
+:global(body.theme-dark) .h5 + p,
+:global(body.theme-dark) .h6 + p {
+  color: #fff;
 }
 
 .h6 + p {
@@ -36,9 +45,19 @@
   margin-bottom: 10px;
 }
 
+:global(body.theme-dark) .h6 {
+  color: #ffffff60;
+}
+
 .h1 {
-  font-size: 48px;
+  // font-size: 48px;
   margin-bottom: 0;
+  color: color.$redDark;
+  font-weight: 500;
+}
+
+:global(body.theme-dark) .h1 {
+  color: #fff;
 }
 
 .mb14 {

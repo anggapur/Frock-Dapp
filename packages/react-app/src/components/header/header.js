@@ -14,6 +14,7 @@ import {
 } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useStore } from '../../hooks/useStore';
+import { useTheme } from '../../hooks/useTheme';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
 import RoundButton from '../button/button';
@@ -86,6 +87,16 @@ export default function Header() {
 
   //   return () => clearInterval(id);
   // }, []);
+
+  const { theme, isDark } = useTheme();
+
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add('theme-dark');
+    } else {
+      document.body.classList.remove('theme-dark');
+    }
+  }, [isDark]);
 
   const logoButtonRef = createRef();
   const logoButtonModalRef = createRef();
@@ -214,7 +225,7 @@ export default function Header() {
               href="https://fractionalrocket.money/"
               target="_blank"
             >
-              <CompanyLogo />
+              <CompanyLogo variant={theme} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
