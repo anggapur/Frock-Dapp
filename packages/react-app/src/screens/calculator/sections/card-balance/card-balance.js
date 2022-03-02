@@ -133,7 +133,7 @@ export default function CardBalance({
             Your {`${days} day`} reflections:
           </Col>
           <Col xs={6} lg={12}>
-            <h1 className="mt-lg-3">
+            <h1 className={clsx(styles.h1, 'mt-lg-3')}>
               ${' '}
               {Number(reflections).toLocaleString('en-US', {
                 minimumFractionDigits: 0,
