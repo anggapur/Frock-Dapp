@@ -22,6 +22,7 @@ import CompanyLogo from '../logo/company-logo';
 import Modal from '../modal/modal';
 import { ToastError } from '../toast/toast';
 import './header.scss';
+import ToggleTheme from './toggle-theme';
 
 function NotificationBar({ text }) {
   return (
@@ -88,15 +89,7 @@ export default function Header() {
   //   return () => clearInterval(id);
   // }, []);
 
-  const { theme, isDark } = useTheme();
-
-  useEffect(() => {
-    if (isDark) {
-      document.body.classList.add('theme-dark');
-    } else {
-      document.body.classList.remove('theme-dark');
-    }
-  }, [isDark]);
+  const { theme } = useTheme();
 
   const logoButtonRef = createRef();
   const logoButtonModalRef = createRef();
@@ -239,6 +232,7 @@ export default function Header() {
                 <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
+                <ToggleTheme />
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
