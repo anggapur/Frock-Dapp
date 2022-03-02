@@ -239,12 +239,6 @@ export default function Header() {
                 <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
-                <Link to="/community-sale" className="nav-link">
-                  Community Sale
-                </Link>
-                <Link to="/public-sale" className="nav-link">
-                  Public Sale
-                </Link>
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
@@ -285,6 +279,12 @@ export default function Header() {
                   >
                     <NavDropdown.Item onClick={e => handleDisconnectWallet(e)}>
                       Disconnect
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/community-sale">
+                      Community Sale
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/public-sale">
+                      Public Sale
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => handleAddToken(AFROCK_TOKEN_DATA)}
