@@ -183,7 +183,7 @@ export default function CardFrock({
             <h6>
               Total building trade dividends{' '}
               <Tooltip>
-                Trade dividends which are not yet made claimable.
+                Trade dividends build up to 1,000 FROCK, until they are made claimable.
               </Tooltip>
             </h6>
             <Row>
