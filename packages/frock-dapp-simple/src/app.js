@@ -53,8 +53,10 @@ function App() {
       resultClaim.wait();
       alert("Batch claim reward is successfully");
     } catch (err) {
-      alert("Claim reward is failed!");
+      alert(`Claim reward is failed!. Error: ${err.message}`);
       console.error(err);
+    } finally {
+      setRewardIds("");
     }
   };
 
@@ -75,8 +77,10 @@ function App() {
       resultClaim.wait();
       alert("Claim reward is successfully");
     } catch (err) {
-      alert("Claim reward is failed!");
+      alert(`Claim reward is failed!. Error: ${err.message}`);
       console.error(err);
+    } finally {
+      setRewardId("");
     }
   };
 
