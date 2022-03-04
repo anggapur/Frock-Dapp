@@ -29,10 +29,20 @@ async function getRewards(payload, signer, SUPABASE_API_KEY_WRITE, SUPABASE_URL)
     return false;
   }
 
-  let currentRewardId = 1;
+  if (!Array.isArray(data)) {
+    console.error('Data from Supabase is not an array');
+    return false;
+  }
+
+  let currentRewardId = 0;
+  if (data[0] && data[0].current_reward_id) {
+    currentRewardId = Number(data[0].current_reward_id);
+  }
+  console.log("The last ID in the Supabase: "+currentRewardId);
 
   // get latest reward
-  const reward = await dividenDistributor.connect(signer).rewards(++currentRewardId);
+  const newRewardId = currentRewardId + 1;
+  const reward = await dividenDistributor.connect(signer).rewards(newRewardId);
   const rewardAmount = ethers.utils.formatUnits(reward[0]);
   const totalClaimed = ethers.utils.formatUnits(reward[1]);
   const issuedAt = ethers.utils.formatUnits(reward[2], 0);
@@ -40,10 +50,11 @@ async function getRewards(payload, signer, SUPABASE_API_KEY_WRITE, SUPABASE_URL)
   const totalExcludedFromDistribution = ethers.utils.formatUnits(reward[4], 9);
   const rewardSource = reward[5];
 
+
   if (rewardAmount == "0.0" && totalClaimed == "0.0") {
-    console.log("Rewards not yet available");
+    console.log("No new Rewards Distribution available in contract");
   } else {
-    console.log("Insert Rewards Distribution to Supabase");
+    console.log("New Rewards Distribution found, inserting in Supabase");
     const { data, error } = await Supabase.from("reward_distributions").insert([
       {
         reward_amount: rewardAmount,
@@ -52,7 +63,7 @@ async function getRewards(payload, signer, SUPABASE_API_KEY_WRITE, SUPABASE_URL)
         snapshot_id: snapshotId,
         total_excluded_from_distribution: totalExcludedFromDistribution,
         reward_source: rewardSource,
-        current_reward_id: currentRewardId,
+        current_reward_id: newRewardId,
       },
     ]);
     if (error) {
