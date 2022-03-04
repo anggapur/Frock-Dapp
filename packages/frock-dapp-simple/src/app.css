@@ -1,0 +1,15 @@
+.connector__button {
+  text-decoration: none;
+}
+
+.connector__logo {
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  background-color: red;
+  display: inline-block;
+}
+
+.connector__logo--active {
+  background-color: green;
+}
