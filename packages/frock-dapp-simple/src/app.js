@@ -51,9 +51,9 @@ function App() {
         .map((_rewardId) => BigNumber.from(_rewardId));
       const resultClaim = await dividenDistributor.batchClaimReward(_rewardIds);
       resultClaim.wait();
-      alert("Batch claim reward is successfully");
+      alert("Batch claim reward was successful, pending transaction processing.");
     } catch (err) {
-      alert(`Claim reward is failed!. Error: ${err.message}`);
+      alert(`Batch claim reward failed!\nError: `+err['data']['message']+`\n ${err.message}`);
       console.error(err);
     } finally {
       setRewardIds("");
@@ -75,9 +75,9 @@ function App() {
       const _rewardId = BigNumber.from(rewardId);
       const resultClaim = await dividenDistributor.claimReward(_rewardId);
       resultClaim.wait();
-      alert("Claim reward is successfully");
+      alert("Claim single reward was successful, pending transaction processing.");
     } catch (err) {
-      alert(`Claim reward is failed!. Error: ${err.message}`);
+      alert(`Claim single reward failed!\nError: `+err['data']['message']+`\n ${err.message}`);
       console.error(err);
     } finally {
       setRewardId("");
@@ -104,17 +104,17 @@ function App() {
         <Card.Header>1. batchClaimReward</Card.Header>
         <Card.Body>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="rewardIds">rewardIds (uint256[])</Form.Label>
+            <Form.Label htmlFor="rewardIds">Claim multiple reward IDs</Form.Label>
             <Form.Control
               type="text"
               id="rewardIds"
               aria-describedby="rewardIds"
-              placeholder="rewardIds (uint256[])"
+              placeholder=""
               onChange={(e) => setRewardIds(e.target.value)}
               value={rewardIds}
             />
             <Form.Text className="text-muted">
-              Separate value using comma (<code>,</code>) example:{" "}
+              Separate values using a comma (<code>,</code>) example:{" "}
               <code>1,2,3</code>
             </Form.Text>
           </Form.Group>
@@ -132,12 +132,12 @@ function App() {
         <Card.Header>2. claimReward</Card.Header>
         <Card.Body>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="rewardIds">rewardId (uint256)</Form.Label>
+            <Form.Label htmlFor="rewardIds">Claim a single reward ID</Form.Label>
             <Form.Control
               type="text"
               id="rewardId"
               aria-describedby="rewardId"
-              placeholder="rewardId (uint256)"
+              placeholder=""
               onChange={(e) => setRewardId(e.target.value)}
               value={rewardId}
             />
