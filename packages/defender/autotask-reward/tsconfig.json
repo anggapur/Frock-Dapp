@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "noImplicitAny": true,
+      "target": "es2017",
+      "allowJs": true,
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "resolveJsonModule": true
+    }
+  }
