@@ -54,7 +54,7 @@ export default function CardFrock({
 
   const handleGetNodesGenerated = async () => {
     const { data, error } = await supabase
-      .from('treasury_status')
+      .from('frock_ecosystem_data')
       .select('key, value')
       .eq('key', 'NODES_GENERATED')
       .limit(1);
@@ -183,7 +183,7 @@ export default function CardFrock({
             <h6>
               Total building trade dividends{' '}
               <Tooltip>
-                Trade dividends which are not yet made claimable.
+                Trade dividends build up to 1,000 FROCK, until they are made claimable.
               </Tooltip>
             </h6>
             <Row>

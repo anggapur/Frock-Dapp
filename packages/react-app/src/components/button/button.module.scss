@@ -54,6 +54,12 @@
   }
 }
 
+:global(body.theme-dark) .primary.outline {
+  background-color: #121212;
+  color: #fff;
+  border-color: #fff;
+}
+
 .light {
   background: color.$white;
   color: color.$redDark;
@@ -68,6 +74,19 @@
 
   &.disabled {
     background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+:global(body.theme-dark) .light {
+  background-color: #121212;
+  color: #fff;
+
+  &:hover {
+    background: darken(#121212, 5%);
+  }
+
+  &.active {
+    background: #121212;
   }
 }
 

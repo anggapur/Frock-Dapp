@@ -52,3 +52,18 @@
     }
   }
 }
+
+:global(body.theme-dark) .wrapper {
+  h6,
+  p {
+    color: #ffffff60;
+  }
+
+  p.strong {
+    color: #fff;
+  }
+
+  hr {
+    border-color: #171616;
+  }
+}

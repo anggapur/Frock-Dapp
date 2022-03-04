@@ -37,6 +37,18 @@
   }
 }
 
+:global(body.theme-dark) .card-wrapper {
+  h3,
+  h6 {
+    color: #ffffff60;
+  }
+
+  h1,
+  p {
+    color: #fff;
+  }
+}
+
 .card-on-bottom {
   > div > div {
     width: 100%;
@@ -62,6 +74,20 @@
       color: #3d3d3d;
       font-size: 18px;
       font-weight: 700;
+    }
+  }
+}
+
+:global(body.theme-dark) .card-on-bottom {
+  h6 {
+    color: #ffffff60;
+  }
+
+  p {
+    color: #ffffff30;
+
+    &.bigger {
+      color: #fff;
     }
   }
 }

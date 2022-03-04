@@ -14,6 +14,7 @@ import {
 } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useStore } from '../../hooks/useStore';
+import { useTheme } from '../../hooks/useTheme';
 import { useWeb3Modal } from '../../hooks/useWeb3Modal';
 import { handleShortenAddress } from '../../utils';
 import RoundButton from '../button/button';
@@ -21,6 +22,7 @@ import CompanyLogo from '../logo/company-logo';
 import Modal from '../modal/modal';
 import { ToastError } from '../toast/toast';
 import './header.scss';
+import ToggleTheme from './toggle-theme';
 
 function NotificationBar({ text }) {
   return (
@@ -86,6 +88,8 @@ export default function Header() {
 
   //   return () => clearInterval(id);
   // }, []);
+
+  const { theme } = useTheme();
 
   const logoButtonRef = createRef();
   const logoButtonModalRef = createRef();
@@ -214,7 +218,7 @@ export default function Header() {
               href="https://fractionalrocket.money/"
               target="_blank"
             >
-              <CompanyLogo />
+              <CompanyLogo variant={theme} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
@@ -228,12 +232,7 @@ export default function Header() {
                 <Link to="/calculator" className="nav-link">
                   Calculator
                 </Link>
-                <Link to="/community-sale" className="nav-link">
-                  Community Sale
-                </Link>
-                <Link to="/public-sale" className="nav-link">
-                  Public Sale
-                </Link>
+                <ToggleTheme />
                 {!provider ? (
                   <RoundButton
                     onClick={handleConnectWallet}
@@ -275,15 +274,11 @@ export default function Header() {
                     <NavDropdown.Item onClick={e => handleDisconnectWallet(e)}>
                       Disconnect
                     </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => handleAddToken(AFROCK_TOKEN_DATA)}
-                    >
-                      Add $aFROCK to wallet
+                    <NavDropdown.Item href="/community-sale">
+                      Community Sale
                     </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => handleAddToken(BFROCK_TOKEN_DATA)}
-                    >
-                      Add $bFROCK to wallet
+                    <NavDropdown.Item href="/public-sale">
+                      Public Sale
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => handleAddToken(FROCK_TOKEN_DATA)}
