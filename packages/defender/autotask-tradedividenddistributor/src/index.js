@@ -15,21 +15,20 @@ async function swapAndShareReward(payload, signer) {
   const dividenDistributor = new ethers.Contract(dividenDistributorAddress, dividenDistributorAbi, signer);
   // Check Balance & Minimum Balance  
   const balanceOfDividenDistributor = await frock.connect(signer).balanceOf("0x3e3C787744449fbe4fC275d48d8adDd642c482ae");
-  const minimumFrockToSwap = await dividenDistributor.connect(signer).minimumFrockToSwap();  
+  const minimumFrockToSwap = await dividenDistributor.connect(signer).minimumFrockToSwap();
+
+  console.log("Balance Of Dividend Distributor: "+balanceOfDividenDistributor);
+  console.log("Minimum FROCK to start the swap: "+minimumFrockToSwap);
 
   if(balanceOfDividenDistributor >= minimumFrockToSwap) {
-    console.log("Reach Minimum Requirement")
+    console.log("Reached the Minimum Requirement");
     const tx = await dividenDistributor.connect(signer).swapAndShareReward();
     return {
       hash: tx.hash,
       transactionId: tx.transactionId,
     }
   } else {
-    console.log("Not Reaching Minimum Requirement")
-    return {
-      hash: 0,
-      transactionId:0,
-    }
+    console.log("Not yet reached the Minimum Requirement")
   }
       
   
