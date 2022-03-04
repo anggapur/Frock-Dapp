@@ -17,10 +17,13 @@ async function swapAndShareReward(payload, signer) {
   const balanceOfDividenDistributor = await frock.connect(signer).balanceOf("0x3e3C787744449fbe4fC275d48d8adDd642c482ae");
   const minimumFrockToSwap = await dividenDistributor.connect(signer).minimumFrockToSwap();
 
-  console.log("Balance Of Dividend Distributor: "+balanceOfDividenDistributor);
-  console.log("Minimum FROCK to start the swap: "+minimumFrockToSwap);
+  const balanceOfDividenDistributorHumanReadable = balanceOfDividenDistributor /1000000000;
+  const minimumFrockToSwapHumanReadable = minimumFrockToSwap /1000000000;
 
-  if(balanceOfDividenDistributor >= minimumFrockToSwap) {
+  console.log("Balance Of Dividend Distributor: "+balanceOfDividenDistributorHumanReadable);
+  console.log("Minimum FROCK to start the swap: "+minimumFrockToSwapHumanReadable);
+
+  if(balanceOfDividenDistributorHumanReadable >= minimumFrockToSwapHumanReadable) {
     console.log("Reached the Minimum Requirement");
     const tx = await dividenDistributor.connect(signer).swapAndShareReward();
     return {
