@@ -28,7 +28,6 @@ import {
         deployer: deployerAddress,    
         developer: developerAddress,    
         marketing: marketingAddress,    
-        snapshoter
     } = await getNamedAccounts();
     // Contract Name
     const LOGIC_NAME = 'FrockTokenV1';
@@ -117,11 +116,11 @@ import {
     await frockToken.connect(deployer).setReflection(dividenDistributor.address);
     await frockToken.connect(deployer).setTreasury(treasury.address);
     await frockToken.connect(deployer).setMarketing(marketing.address);
-    await frockToken.connect(deployer).setPercentage(0,2100,100); // 7% reflection, 14% treasury, 1% Marketing
+    await frockToken.connect(deployer).setPercentage(7,1400,100); // 7% reflection, 14% treasury, 1% Marketing
     
     // Set snapshooter    
-    const snapshoterRole = await frockToken.SNAPSHOTER();
-    await frockToken.connect(deployer).grantRole(snapshoterRole, dividenDistributor.address)
+    // const snapshoterRole = await frockToken.SNAPSHOTER();
+    // await frockToken.connect(deployer).grantRole(snapshoterRole, dividenDistributor.address)
     // await frockToken.connect(deployer).grantRole(snapshoterRole, snapshoter)
 
     // Set Main Token on DividenDistributor

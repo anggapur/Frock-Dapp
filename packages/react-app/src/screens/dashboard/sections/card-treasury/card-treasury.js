@@ -6,7 +6,6 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
-import { LAST_TREASURY_DIVIDEND_DISTRIBUTION } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 
@@ -28,6 +27,8 @@ export default function CardTreasury({
   totalClaimed,
   handleClaim,
   isClaimButtonLoading,
+  rewardAmountTreasury,
+  lastTreasuryDividendDistribution,
 }) {
   const [fantomPrice, setFantomPrice] = useState(0);
 
@@ -43,7 +44,7 @@ export default function CardTreasury({
       <Card.Header>Treasury dividends</Card.Header>
       <Row>
         <Column isDescription>
-          <h6>Last dividend distribution</h6>
+          <h6>Last treasury dividend distribution</h6>
         </Column>
         <Column className="px-xl-2 px-lg-0">
           <p className={styles.strong}>
@@ -51,7 +52,24 @@ export default function CardTreasury({
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-            }).format(LAST_TREASURY_DIVIDEND_DISTRIBUTION)}
+            }).format(lastTreasuryDividendDistribution * 1000)}
+          </p>
+        </Column>
+      </Row>
+      <hr />
+      <Row>
+        <Column isDescription>
+          <h6>Total treasury dividend distribution</h6>
+        </Column>
+        <Column className="px-xl-2 px-lg-0">
+          <p className={styles.strong}>
+            FTM {renderNumberFormatter(rewardAmountTreasury)}
+          </p>
+          <p>
+            ${' '}
+            {renderNumberFormatter(
+              (fantomPrice * Number(rewardAmountTreasury)).toString(),
+            )}
           </p>
         </Column>
       </Row>
@@ -62,7 +80,6 @@ export default function CardTreasury({
             Your claimable treasury dividends{' '}
             <Tooltip>
               Your share of the treasury dividends, ready to claim.
-              The $ price is based on current rate.
             </Tooltip>
           </h6>
         </Column>
@@ -106,7 +123,6 @@ export default function CardTreasury({
               Your total claimed treasury dividends{' '}
               <Tooltip>
                 Your historical amount of treasury dividends claimed.
-                The $ price is based on current rate.
               </Tooltip>
             </h6>
           </Column>

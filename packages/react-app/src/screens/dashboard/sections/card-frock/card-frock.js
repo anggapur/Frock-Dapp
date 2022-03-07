@@ -11,11 +11,16 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { FROCK_SUPPLY } from '../../../../constants';
-import { TOTAL_TREASURY_VALUE_IN_STRONG } from '../../../../constants/treasuryStatus';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
-export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
+export default function CardFrock({
+  frockPrice: frockPriceDex,
+  tokenBalance,
+  tokenBalanceInFrock,
+  buildTradeDividend,
+  nodesGenerated,
+}) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -90,6 +95,21 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
             </p>
           </Col>
         </Row>
+        <Row className="mt-2">
+          <Col xl={6} lg={12} xs={6}>
+            <h6 className="mb-0">Total treasury value</h6>
+          </Col>
+          <Col xl={6} lg={12} xs={6} className="my-xl-0 my-lg-2">
+            <p className="mb-1">{nodesGenerated} $STRONG NODES</p>
+            <p className="mb-3">
+              ${' '}
+              {new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(strongPrice * nodesGenerated * 10)}
+            </p>
+          </Col>
+        </Row>
       </Card>
 
       <Row className={styles['card-on-bottom']}>
@@ -101,10 +121,10 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
         >
           <Card ellipse="top-right">
             <h6>
-              Total building trade dividends{' '}
+              Your building trade dividends{' '}
               <Tooltip>
-                Trade dividends which are not yet claimable. All $FTM and $
-                prices are based on current rates, not historical earnings.
+                Your share of the trade dividends which are not yet made
+                claimable.
               </Tooltip>
             </h6>
             <Row>
@@ -116,20 +136,20 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {renderNumberFormatter(Number(tokenBalance))} FTM
+                  FTM {renderNumberFormatter(buildTradeDividend)}
                 </p>
               </Col>
               <Col
-                xxl={12}
+                xxl={{ order: 'last', span: 12 }}
                 xl={6}
                 lg={5}
-                xs={12}
+                xs={{ order: 'last', span: 12 }}
                 className="d-flex align-items-stretch"
               >
                 <p>
                   ${' '}
                   {renderNumberFormatter(
-                    (Number(tokenBalance) * fantomPrice).toString(),
+                    (fantomPrice * Number(buildTradeDividend)).toString(),
                   )}
                 </p>
               </Col>
@@ -139,8 +159,11 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
         <Col xxl={6} lg={12} xs={6} className="d-flex align-items-stretch">
           <Card ellipse="top-right">
             <h6>
-              Total treasury value{' '}
-              <Tooltip>$ price is based on current rate.</Tooltip>
+              Total building trade dividends{' '}
+              <Tooltip>
+                Trade dividends build up to 1,000 FROCK, until they are made
+                claimable.
+              </Tooltip>
             </h6>
             <Row>
               <Col
@@ -151,22 +174,32 @@ export default function CardFrock({ frockPrice: frockPriceDex, tokenBalance }) {
                 className="d-flex align-items-stretch"
               >
                 <p className={styles.bigger}>
-                  {TOTAL_TREASURY_VALUE_IN_STRONG / 10} $STRONG NODES
+                  FROCK {renderNumberFormatter(Number(tokenBalanceInFrock))}
+                </p>
+              </Col>
+              <Col
+                xxl={{ order: 'last', span: 12 }}
+                xl={6}
+                lg={5}
+                xs={{ order: 'last', span: 12 }}
+                className="d-flex align-items-stretch"
+              >
+                <p>
+                  ${' '}
+                  {renderNumberFormatter(
+                    (Number(tokenBalance) * fantomPrice).toString(),
+                  )}
                 </p>
               </Col>
               <Col
                 xxl={12}
                 xl={6}
-                lg={5}
+                lg={7}
                 xs={12}
                 className="d-flex align-items-stretch"
               >
-                <p>
-                  ${' '}
-                  {new Intl.NumberFormat('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(strongPrice * TOTAL_TREASURY_VALUE_IN_STRONG)}
+                <p className={styles.bigger}>
+                  FTM {renderNumberFormatter(Number(tokenBalance))}
                 </p>
               </Col>
             </Row>
