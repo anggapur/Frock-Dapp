@@ -31,8 +31,8 @@ export default function CardTrade({
   totalClaimed,
   handleClaim,
   isClaimButtonLoading,
-  lastRewardShare,
   rewardAmountTrade,
+  lastTradeDividendDistribution,
 }) {
   const accounts = useWeb3Accounts();
   const [fantomPrice, setFantomPrice] = useState(0);
@@ -57,7 +57,7 @@ export default function CardTrade({
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-            }).format(lastRewardShare)}
+            }).format(lastTradeDividendDistribution * 1000)}
           </p>
         </Column>
       </Row>

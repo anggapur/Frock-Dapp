@@ -18,12 +18,12 @@ import {
 import { isEmpty } from 'lodash';
 import shallow from 'zustand/shallow';
 
+import { GetRewardDistributions } from '../../api';
 import { FROCK_DECIMALS } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useContract } from '../../hooks/ethers/contracts';
 import { useProvider } from '../../hooks/ethers/provider';
 import { useStore } from '../../hooks/useStore';
-import { supabase } from '../../supabaseClient';
 import Balance from './sections/balance/balance';
 import CardFrock from './sections/card-frock/card-frock';
 import CardTrade from './sections/card-trade/card-trade';
@@ -53,10 +53,16 @@ function Dashboard() {
     treasury: [],
   });
   const [claimButtonIsLoading, setClaimButtonIsLoading] = useState(null);
-  const [lastRewardShare, setLastRewardShare] = useState(0);
   const [rewardAmountTrade, setRewardAmountTrade] = useState(0);
   const [rewardAmountTreasury, setRewardAmountTreasury] = useState(0);
   const [totalExcludedDistri, setTotalExcludedDistri] = useState(0);
+  const [nodesGenerated, setNodesGenerated] = useState(0);
+  const [
+    lastTreasuryDividendDistribution,
+    setLastTreasuryDividendDistribution,
+  ] = useState(0);
+  const [lastTradeDividendDistribution, setLastTradeDividendDistribution] =
+    useState(0);
 
   const [setAFrockBalance, setBFrockBalance, setFrockBalance] = useStore(
     state => [
@@ -117,8 +123,6 @@ function Dashboard() {
         await handleGetTokenBalance();
 
         await handleGetRewards();
-        await handleGetLastRewardShare();
-        await handleGetRewardDistribution();
 
         await handleRefetch(false);
       }
@@ -131,6 +135,37 @@ function Dashboard() {
     tokenBalance,
     buildTradeDividend,
   ]);
+
+  useEffect(() => {
+    (async () => {
+      const data = await GetRewardDistributions();
+
+      setNodesGenerated(data.nodes_generated);
+      setTotalExcludedDistri(
+        data.detailed_dividend_distributions[0]
+          ?.total_excluded_from_distribution ?? 0,
+      );
+      setRewardAmountTrade(
+        data.summed_reward_amount_trade_dividends?.amount ?? 0,
+      );
+      setRewardAmountTreasury(
+        data.summed_reward_amount_treasury_dividends?.amount ?? 0,
+      );
+
+      handleGetLastTradeDividend(data.detailed_dividend_distributions);
+      handleGetLastTreasuryDividend(data.detailed_dividend_distributions);
+    })();
+  }, []);
+
+  const handleGetLastTradeDividend = data => {
+    const latest = data.find(row => row.reward_source === 'trade dividends');
+    setLastTradeDividendDistribution(latest.issued_at);
+  };
+
+  const handleGetLastTreasuryDividend = data => {
+    const latest = data.find(row => row.reward_source === 'treasury dividends');
+    setLastTreasuryDividendDistribution(latest.issued_at);
+  };
 
   const handleRefetch = async value => {
     setRefetch(value);
@@ -285,40 +320,6 @@ function Dashboard() {
     });
   };
 
-  const handleGetLastRewardShare = async () => {
-    const _lastRewardShare = await dividenDistributor.lastRewardShare();
-    setLastRewardShare(Number(formatUnits(_lastRewardShare, 0)) * 1000);
-  };
-
-  const handleGetRewardDistribution = async () => {
-    const { data, error } = await supabase
-      .from('reward_distributions')
-      .select('reward_amount, reward_source, total_excluded_from_distribution')
-      .order('id', { ascending: false });
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return;
-    }
-
-    const totalExcluded = data[0]?.total_excluded_from_distribution ?? 0;
-    setTotalExcludedDistri(Number(totalExcluded));
-
-    let _rewardAmountTrade = 0;
-    let _rewardAmountTreasury = 0;
-
-    data.forEach(row => {
-      if (row.reward_source === 0) {
-        _rewardAmountTrade += Number(row.reward_amount);
-      } else {
-        _rewardAmountTreasury += Number(row.reward_amount);
-      }
-    });
-
-    setRewardAmountTrade(_rewardAmountTrade);
-    setRewardAmountTreasury(_rewardAmountTreasury);
-  };
-
   return (
     <Container>
       <Balance totalExcludedDistri={totalExcludedDistri} />
@@ -330,8 +331,8 @@ function Dashboard() {
             totalClaimed={totalClaimed.trade}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'trade'}
-            lastRewardShare={lastRewardShare}
             rewardAmountTrade={rewardAmountTrade}
+            lastTradeDividendDistribution={lastTradeDividendDistribution}
           />
         </Col>
         <Col lg={4} className="mb-4">
@@ -340,6 +341,7 @@ function Dashboard() {
             tokenBalance={tokenBalance}
             tokenBalanceInFrock={tokenBalanceInFrock}
             buildTradeDividend={buildTradeDividend}
+            nodesGenerated={nodesGenerated}
           />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
@@ -349,6 +351,7 @@ function Dashboard() {
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'treasury'}
             rewardAmountTreasury={rewardAmountTreasury}
+            lastTreasuryDividendDistribution={lastTreasuryDividendDistribution}
           />
         </Col>
       </Row>

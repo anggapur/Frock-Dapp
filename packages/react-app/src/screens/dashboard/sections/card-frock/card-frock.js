@@ -11,7 +11,6 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { FROCK_SUPPLY } from '../../../../constants';
-import { supabase } from '../../../../supabaseClient';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-frock.module.scss';
 
@@ -20,12 +19,12 @@ export default function CardFrock({
   tokenBalance,
   tokenBalanceInFrock,
   buildTradeDividend,
+  nodesGenerated,
 }) {
   const [frockPrice, setFrockPrice] = useState(0);
   const [frockMarketCap, setFrockMarketCap] = useState(0);
   const [fantomPrice, setFantomPrice] = useState(0);
   const [strongPrice, setStrongPrice] = useState(0);
-  const [nodesGenerated, setNodesGenerated] = useState(0);
 
   useEffect(() => {
     Promise.all([
@@ -46,28 +45,7 @@ export default function CardFrock({
       })
       // eslint-disable-next-line no-console
       .catch(console.error);
-
-    (async () => {
-      await handleGetNodesGenerated();
-    })();
   }, []);
-
-  const handleGetNodesGenerated = async () => {
-    const { data, error } = await supabase
-      .from('frock_ecosystem_data')
-      .select('key, value')
-      .eq('key', 'NODES_GENERATED')
-      .limit(1);
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error(error.message);
-      return;
-    }
-
-    const nodes = data[0]?.value ?? 0;
-
-    setNodesGenerated(Number(nodes));
-  };
 
   return (
     <>
@@ -183,7 +161,8 @@ export default function CardFrock({
             <h6>
               Total building trade dividends{' '}
               <Tooltip>
-                Trade dividends build up to 1,000 FROCK, until they are made claimable.
+                Trade dividends build up to 1,000 FROCK, until they are made
+                claimable.
               </Tooltip>
             </h6>
             <Row>
