@@ -182,12 +182,12 @@ function Dashboard() {
 
   const handleGetRewards = async () => {
     if (!accounts) return;
-    const tradeRewardsResult = await dividenDistributor.getRewardIdsUnclaimed(
+    const tradeRewardsResult = await dividenDistributor.getUnclaimedRewardIds(
       accounts[0],
       0,
     );
     const treasuryRewardsResult =
-      await dividenDistributor.getRewardIdsUnclaimed(accounts[0], 1);
+      await dividenDistributor.getUnclaimedRewardIds(accounts[0], 1);
     setRewards({
       trade: tradeRewardsResult,
       treasury: treasuryRewardsResult,
