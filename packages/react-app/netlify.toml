@@ -1,5 +1,6 @@
 [build]
   environment = { CI = "false" }
+  functions = "build-lambda"
 
 # The following redirect is intended for use with most SPAs 
 # that handle routing internally.

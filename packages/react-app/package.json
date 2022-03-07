@@ -41,12 +41,16 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "start:lambda": "netlify-lambda serve src/lambda",
+    "build": "run-p build:**",
+    "build:app": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build:lambda": "netlify-lambda build src/lambda",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write .",
     "eslint": "eslint --fix --ext .js,.jsx ."
   },
+  "proxy": "http://localhost:9000",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -68,6 +72,7 @@
   "devDependencies": {
     "@babel/core": "^7.16.12",
     "@babel/eslint-parser": "^7.16.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@trivago/prettier-plugin-sort-imports": "^3.1.1",
@@ -78,7 +83,9 @@
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-jest": "^26.0.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "mini-css-extract-plugin": "2.4.5"
+    "mini-css-extract-plugin": "2.4.5",
+    "netlify-lambda": "^2.0.15",
+    "npm-run-all": "^4.1.5"
   },
   "resolutions": {
     "mini-css-extract-plugin": "2.4.5"
