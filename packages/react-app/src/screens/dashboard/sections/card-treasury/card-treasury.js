@@ -6,7 +6,6 @@ import RoundButton from '../../../../components/button/button';
 import Card from '../../../../components/card/card';
 import Loading from '../../../../components/loading/loading';
 import Tooltip from '../../../../components/tooltip/tooltip';
-import { supabase } from '../../../../supabaseClient';
 import { renderNumberFormatter } from '../../../../utils';
 import styles from './card-treasury.module.scss';
 
@@ -29,37 +28,16 @@ export default function CardTreasury({
   handleClaim,
   isClaimButtonLoading,
   rewardAmountTreasury,
+  lastTreasuryDividendDistribution,
 }) {
   const [fantomPrice, setFantomPrice] = useState(0);
-  const [lastDistribution, setLastDistribution] = useState(0);
 
   useEffect(() => {
     GetFantomPrice()
       .then(price => setFantomPrice(price))
       // eslint-disable-next-line no-console
       .catch(console.error);
-
-    (async () => {
-      await handleGetLastDistribution();
-    })();
   }, []);
-
-  const handleGetLastDistribution = async () => {
-    const { data, error } = await supabase
-      .from('reward_distributions')
-      .select('issued_at')
-      .eq('reward_source', 1)
-      .order('id', { ascending: false })
-      .limit(1);
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return;
-    }
-
-    const timestamp = data[0]?.issued_at ?? 0;
-    setLastDistribution(timestamp);
-  };
 
   return (
     <Card ellipse="top-left" className={styles.wrapper}>
@@ -74,7 +52,7 @@ export default function CardTreasury({
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-            }).format(lastDistribution * 1000)}
+            }).format(lastTreasuryDividendDistribution * 1000)}
           </p>
         </Column>
       </Row>
