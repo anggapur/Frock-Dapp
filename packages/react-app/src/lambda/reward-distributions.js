@@ -18,6 +18,9 @@ export async function handler(event, _) {
 
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': 'https://fractionalrocket.money',
+      },
       body: JSON.stringify({
         nodes_generated: nodesGenerated,
         summed_reward_amount_trade_dividends: {
