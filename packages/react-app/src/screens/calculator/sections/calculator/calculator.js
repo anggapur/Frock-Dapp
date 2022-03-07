@@ -71,7 +71,7 @@ export default function Calculator({
       days: 365,
       strongPrice: strongPriceFromApi,
       strongReturn: 0.085,
-      nodesCount: 4,
+      nodesCount: 7,
     });
     setAmountInvested(400);
   };
@@ -125,7 +125,7 @@ export default function Calculator({
                 type="text"
                 symbol={{ label: '$', position: 'start' }}
                 minValue={100}
-                maxValue={2500}
+                maxValue={10000}
                 step={100}
                 value={amountInvested}
                 setValue={value => setAmountInvested(value)}
@@ -243,7 +243,7 @@ export default function Calculator({
                 type="text"
                 symbol={{ label: '$', position: 'start' }}
                 minValue={100}
-                maxValue={2500}
+                maxValue={10000}
                 step={100}
                 value={amountInvested}
                 setValue={value => setAmountInvested(value)}
@@ -267,7 +267,7 @@ export default function Calculator({
                 }}
                 type="number"
                 minValue={1}
-                maxValue={10}
+                maxValue={50}
                 value={calc.nodesCount}
                 setValue={value => handleOnChange('nodesCount', value)}
               />
