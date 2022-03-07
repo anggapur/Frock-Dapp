@@ -56,7 +56,9 @@ async function getNodesGenerated() {
 async function getRewardDistributions() {
   const { data, error } = await supabase
     .from('reward_distributions')
-    .select('reward_amount, reward_source, issued_at, current_reward_id')
+    .select(
+      'reward_amount, reward_source, issued_at, current_reward_id, total_excluded_from_distribution',
+    )
     .order('id', { ascending: false });
   if (error) {
     throw new Error(error.message);
@@ -79,6 +81,9 @@ async function getRewardDistributions() {
       reward_source:
         row.reward_source === 1 ? 'treasury dividends' : 'trade dividends',
       current_reward_id: row.current_reward_id,
+      total_excluded_from_distribution: Number(
+        row.total_excluded_from_distribution,
+      ),
     };
   });
 
