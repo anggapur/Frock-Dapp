@@ -18,7 +18,7 @@ async function main() {
     const dividenDistributor = (await ethers.getContract<DividenDistributorV2>('DividenDistributorV2')).attach(dividenDistributorProxy.address);
 
     // Get Implemtntation
-    console.log(`Implementation : ${await dividenDistributorProxy.getImplementation()}`) //0x672B45E3b7ADD9421b49FCDfB7143cDf03C75417
+    console.log(`Implementation : ${await dividenDistributorProxy.getImplementation()}`) //0x12567EEC29fa41aB9540c2b9daad790f25295763
 
     // Get Frock Holder Balance
     const frockHolder1Balance = await frock.balanceOf(frockHolder1.address);

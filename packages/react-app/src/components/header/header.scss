@@ -1,5 +1,40 @@
 @use '../../styles/color';
 
+body.theme-dark {
+  header {
+    .navbar {
+      background-color: color.$bodyDark !important;
+    }
+
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+      background-color: color.$cardDark !important;
+
+      &.show {
+        @media (max-width: 991px) {
+          background: none !important;
+        }
+      }
+
+      .dropdown-item {
+        color: #ffffff60;
+
+        &:hover,
+        &:focus {
+          background-color: color.$cardDark !important;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .navbar,
+    .navbar-expand-lg .navbar-nav a.nav-link {
+      @media (max-width: 991px) {
+        color: color.$white;
+      }
+    }
+  }
+}
+
 header {
   box-shadow: 0px 4px 4px 0px #00000026;
 
@@ -110,6 +145,12 @@ header {
         margin-left: 20px;
         > img {
           margin-right: 13px;
+        }
+      }
+
+      .nav-item.dropdown a#nav-dropdown {
+        @media (min-width: 992px) {
+          margin-left: 20px;
         }
       }
     }

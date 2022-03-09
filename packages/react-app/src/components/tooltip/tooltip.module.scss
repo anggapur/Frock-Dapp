@@ -1,5 +1,20 @@
 @use '../../styles/color';
 
+:global(body.theme-dark) :global(.popover-arrow) {
+  &::after {
+    border-bottom-color: color.$cardDark;
+  }
+}
+
+:global(body.theme-dark) :global(.popover) {
+  border: none;
+}
+
+:global(body.theme-dark) .wrapper {
+  background-color: color.$cardDark;
+  color: color.$white;
+}
+
 .p,
 .a {
   font-size: 14px;

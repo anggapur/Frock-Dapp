@@ -18,3 +18,7 @@
     border-color: color.$redDark;
   }
 }
+
+:global(body.theme-dark) .checkboxSimplified input:not(:checked) {
+  background-color: #1f1f1f;
+}

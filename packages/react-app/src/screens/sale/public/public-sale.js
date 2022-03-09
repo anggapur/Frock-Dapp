@@ -89,19 +89,19 @@ export default function PublicSale() {
     accounts ? accounts[0] : 0,
   );
 
-  // const frockContract = useContract(
-  //   FrockABI,
-  //   provider,
-  //   FROCK_ADDR,
-  //   accounts ? accounts[0] : 0,
-  // );
+  const frockContract = useContract(
+    FrockABI,
+    provider,
+    FROCK_ADDR,
+    accounts ? accounts[0] : 0,
+  );
 
   useEffect(() => {
     (async () => {
       if (provider && accounts) {
         await handleGetUSDC();
         await handleGetNRT();
-        // await handleGetFrock();
+        await handleGetFrock();
 
         await handleGetGlobalMaxInvest();
         await handleGetTotalInvested();
@@ -146,12 +146,12 @@ export default function PublicSale() {
     });
   };
 
-  // const handleGetFrock = async () => {
-  //   const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
-  //   setFrockBalance({
-  //     frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
-  //   });
-  // };
+  const handleGetFrock = async () => {
+    const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
+    setFrockBalance({
+      frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
+    });
+  };
 
   const handleGetIsRedeemEnabled = async () => {
     const isRedeemEnabledResult = await fairLaunch.redeemEnabled();
@@ -411,6 +411,7 @@ export default function PublicSale() {
               totalInvestors={totalInvestors}
               prices={prices}
               investedPerPerson={investedPerPerson}
+              isSaleFinished
             />
           </Col>
           <Col lg={5}>

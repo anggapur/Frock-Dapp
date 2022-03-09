@@ -3,20 +3,28 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import {
+  COMMUNITY_OFFERING_NRT_ADDR,
+  CommunityOfferingNRTABI,
   DIVIDEN_ADDR,
   DividenABI,
+  FAIR_PRICE_NRT_ADDR,
   FROCK_ADDR,
+  FairPriceLaunchNRTABI,
   FrockABI,
   SPOOKY_ADDR,
   SpookyABI,
   WFTM_ADDR,
 } from '@project/contracts/src/address';
 import { isEmpty } from 'lodash';
+import shallow from 'zustand/shallow';
 
+import { GetRewardDistributions } from '../../api';
 import { FROCK_DECIMALS } from '../../constants';
 import { useWeb3Accounts } from '../../hooks/ethers/account';
 import { useContract } from '../../hooks/ethers/contracts';
 import { useProvider } from '../../hooks/ethers/provider';
+import { useStore } from '../../hooks/useStore';
+import Balance from './sections/balance/balance';
 import CardFrock from './sections/card-frock/card-frock';
 import CardTrade from './sections/card-trade/card-trade';
 import CardTreasury from './sections/card-treasury/card-treasury';
@@ -38,12 +46,46 @@ function Dashboard() {
     trade: '0',
     treasury: '0',
   });
+  const [tokenBalanceInFrock, setTokenBalanceInFrock] = useState('0');
   const [tokenBalance, setTokenBalance] = useState('0');
   const [rewards, setRewards] = useState({
     trade: [],
     treasury: [],
   });
   const [claimButtonIsLoading, setClaimButtonIsLoading] = useState(null);
+  const [rewardAmountTrade, setRewardAmountTrade] = useState(0);
+  const [rewardAmountTreasury, setRewardAmountTreasury] = useState(0);
+  const [totalExcludedDistri, setTotalExcludedDistri] = useState(0);
+  const [nodesGenerated, setNodesGenerated] = useState(0);
+  const [
+    lastTreasuryDividendDistribution,
+    setLastTreasuryDividendDistribution,
+  ] = useState(0);
+  const [lastTradeDividendDistribution, setLastTradeDividendDistribution] =
+    useState(0);
+
+  const [setAFrockBalance, setBFrockBalance, setFrockBalance] = useStore(
+    state => [
+      state.setAFrockBalance,
+      state.setBFrockBalance,
+      state.setFrockBalance,
+    ],
+    shallow,
+  );
+
+  const communityOfferingNRT = useContract(
+    CommunityOfferingNRTABI,
+    provider,
+    COMMUNITY_OFFERING_NRT_ADDR,
+    accounts ? accounts[0] : 0,
+  );
+
+  const fairLaunchNRT = useContract(
+    FairPriceLaunchNRTABI,
+    provider,
+    FAIR_PRICE_NRT_ADDR,
+    accounts ? accounts[0] : 0,
+  );
 
   const frockContract = useContract(
     FrockABI,
@@ -69,6 +111,10 @@ function Dashboard() {
   useEffect(() => {
     (async () => {
       if (provider && accounts) {
+        await handleGetFrock();
+        await handleGetBFrock();
+        await handleGetAFrock();
+
         await handleGetLastSnapshot();
         await handleGetFrockPrice();
         await handleBuildTradeDividend();
@@ -89,6 +135,37 @@ function Dashboard() {
     tokenBalance,
     buildTradeDividend,
   ]);
+
+  useEffect(() => {
+    (async () => {
+      const data = await GetRewardDistributions();
+
+      setNodesGenerated(data.nodes_generated);
+      setTotalExcludedDistri(
+        data.detailed_dividend_distributions[0]
+          ?.total_excluded_from_distribution ?? 0,
+      );
+      setRewardAmountTrade(
+        data.summed_reward_amount_trade_dividends?.amount ?? 0,
+      );
+      setRewardAmountTreasury(
+        data.summed_reward_amount_treasury_dividends?.amount ?? 0,
+      );
+
+      handleGetLastTradeDividend(data.detailed_dividend_distributions);
+      handleGetLastTreasuryDividend(data.detailed_dividend_distributions);
+    })();
+  }, []);
+
+  const handleGetLastTradeDividend = data => {
+    const latest = data.find(row => row.reward_source === 'trade dividends');
+    setLastTradeDividendDistribution(latest.issued_at);
+  };
+
+  const handleGetLastTreasuryDividend = data => {
+    const latest = data.find(row => row.reward_source === 'treasury dividends');
+    setLastTreasuryDividendDistribution(latest.issued_at);
+  };
 
   const handleRefetch = async value => {
     setRefetch(value);
@@ -177,17 +254,18 @@ function Dashboard() {
       FROCK_ADDR,
       WFTM_ADDR,
     );
+    setTokenBalanceInFrock(formatUnits(tokenBalanceResult, FROCK_DECIMALS));
     setTokenBalance(formatUnits(resultConverted[1], 18));
   };
 
   const handleGetRewards = async () => {
     if (!accounts) return;
-    const tradeRewardsResult = await dividenDistributor.getRewardIdsUnclaimed(
+    const tradeRewardsResult = await dividenDistributor.getUnclaimedRewardIds(
       accounts[0],
       0,
     );
     const treasuryRewardsResult =
-      await dividenDistributor.getRewardIdsUnclaimed(accounts[0], 1);
+      await dividenDistributor.getUnclaimedRewardIds(accounts[0], 1);
     setRewards({
       trade: tradeRewardsResult,
       treasury: treasuryRewardsResult,
@@ -221,8 +299,30 @@ function Dashboard() {
     }
   };
 
+  const handleGetAFrock = async () => {
+    const nrtBalanceResult = await communityOfferingNRT.balanceOf(accounts[0]);
+    setAFrockBalance({
+      aFrockBalance: formatUnits(nrtBalanceResult, FROCK_DECIMALS),
+    });
+  };
+
+  const handleGetBFrock = async () => {
+    const nrtBalanceResult = await fairLaunchNRT.balanceOf(accounts[0]);
+    setBFrockBalance({
+      bFrockBalance: formatUnits(nrtBalanceResult, FROCK_DECIMALS),
+    });
+  };
+
+  const handleGetFrock = async () => {
+    const frockBalanceResult = await frockContract.balanceOf(accounts[0]);
+    setFrockBalance({
+      frockBalance: formatUnits(frockBalanceResult, FROCK_DECIMALS),
+    });
+  };
+
   return (
     <Container>
+      <Balance totalExcludedDistri={totalExcludedDistri} />
       <Row>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTrade
@@ -231,10 +331,18 @@ function Dashboard() {
             totalClaimed={totalClaimed.trade}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'trade'}
+            rewardAmountTrade={rewardAmountTrade}
+            lastTradeDividendDistribution={lastTradeDividendDistribution}
           />
         </Col>
         <Col lg={4} className="mb-4">
-          <CardFrock frockPrice={frockPrice} tokenBalance={tokenBalance} />
+          <CardFrock
+            frockPrice={frockPrice}
+            tokenBalance={tokenBalance}
+            tokenBalanceInFrock={tokenBalanceInFrock}
+            buildTradeDividend={buildTradeDividend}
+            nodesGenerated={nodesGenerated}
+          />
         </Col>
         <Col lg={4} className="d-flex align-items-stretch mb-4">
           <CardTreasury
@@ -242,6 +350,8 @@ function Dashboard() {
             totalClaimed={totalClaimed.treasury}
             handleClaim={handleClaim}
             isClaimButtonLoading={claimButtonIsLoading === 'treasury'}
+            rewardAmountTreasury={rewardAmountTreasury}
+            lastTreasuryDividendDistribution={lastTreasuryDividendDistribution}
           />
         </Col>
       </Row>

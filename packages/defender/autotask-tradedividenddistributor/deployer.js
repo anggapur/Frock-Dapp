@@ -10,6 +10,8 @@ const handler = async function () {
     AUTOTASK_ID: faucetAutotaskId,
   } = process.env;
 
+  console.log(apiKey);
+
   const client = new AutotaskClient({
     apiKey,
     apiSecret,

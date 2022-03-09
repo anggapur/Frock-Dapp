@@ -1,0 +1,44 @@
+@use '../../styles/color';
+
+.wrapper {
+  align-items: center;
+  border: none;
+  display: inline-flex;
+  font-size: 14px;
+  justify-content: center;
+  transition: all 0.15s ease 0s;
+  user-select: none;
+  height: 28px;
+  background-color: transparent;
+  color: color.$redDark;
+  padding: 0px;
+  font-weight: bold;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  .divider {
+    font-size: 16px;
+    color: transparentize(color.$redDark, 0.44);
+    margin: 0 5px;
+  }
+
+  .sun,
+  .moon {
+    fill: transparentize(color.$redDark, 0.67);
+    flex-shrink: 0;
+
+    &.active {
+      fill: color.$redDark;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .wrapper {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+  }
+}

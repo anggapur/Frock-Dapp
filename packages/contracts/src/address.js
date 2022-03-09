@@ -1,13 +1,13 @@
-import USDC from "../deployments/fantom/USDC.json";
 import CommunityOffering from "../deployments/fantom/CommunityOffering.json";
 import CommunityOfferingNRT from "../deployments/fantom/CommunityOfferingNRT.json";
 import DividenProxy from "../deployments/fantom/DividenDistributorProxy.json";
-import DividenDistributor from "../deployments/fantom/DividenDistributorV1.json";
+import DividenDistributor from "../deployments/fantom/DividenDistributorV2.json";
 import FairPriceLaunchNRT from "../deployments/fantom/FairLaunchNRT.json";
 import FairPriceLaunch from "../deployments/fantom/FairPriceLaunch.json";
 import FrockProxy from "../deployments/fantom/FrockProxy.json";
 import FrockTokenV1 from "../deployments/fantom/FrockTokenV1.json";
 import SpookyRouter from "../deployments/fantom/SpookyRouter.json";
+import USDC from "../deployments/fantom/USDC.json";
 import WFTM from "../deployments/fantom/WFTM.json";
 
 export const COMMUNITY_OFFERING_ADDR = CommunityOffering.address;

@@ -28,3 +28,5 @@ yarn-error.log*
 
 /packages/contracts/deployments/localhost/*.json
 /packages/contracts/deployments/localhost/solcInputs/*.json
+# Local Netlify folder
+.netlify
