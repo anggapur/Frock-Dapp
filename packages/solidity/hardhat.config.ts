@@ -16,7 +16,15 @@ import './hardhat-tasks';
 dotEnvConfig({ path: '../../.env' });
 
 const {
-  PRIVATE_KEY_0 = "6f5728f01c5cc52436d7001584ec24f43db35c843acb470aff88d10dacd99f51",
+  PRIVATE_KEY_DEPLOYER  = "",
+} = process.env;
+
+const {
+  PRIVATE_KEY_TREASURY  = "",
+} = process.env;
+
+const {
+  PRIVATE_KEY_TEAM   = "",
 } = process.env;
 
 
@@ -62,7 +70,7 @@ const config: HardhatUserConfig = {
       tags: ['test'],      
       url : 'https://speedy-nodes-nyc.moralis.io/40036aec0d5bfd15ac6417d6/fantom/mainnet',
       accounts: [
-        PRIVATE_KEY_0
+        PRIVATE_KEY_DEPLOYER
       ],
     },
     coverage: {
@@ -86,7 +94,9 @@ const config: HardhatUserConfig = {
   },
   namedAccounts: {
     deployer: {
-      default: '0x8B43eb774baE835b20Ac8A222C5A91dCD339F376'
+      //default: 0
+      default: '0x4b2F59151d4bb1692439226f872ae7D8B93A9B11'
+      // default: '0x8B43eb774baE835b20Ac8A222C5A91dCD339F376'
     },
     wrongAdmin: {
       default : '0x976EA74026E726554dB657fA54763abd0C3a0aa9'
@@ -99,7 +109,7 @@ const config: HardhatUserConfig = {
       default : '0x627306090abaB3A6e1400e9345bC60c78a8BEf57'
     },
     treasury: {
-      default : '0x0b7b7AE45bC137Ea0A36422eaC5Bc52e7657A225'
+      default : '0x8Eaedb026f0c6A0174Ca5Eb9C4eCFeD28237a176'
     },
     marketing: {
       default : '0x995CdE3d74C099e6716D228B27B7C1cFf3a1E5d7' // PK : 466dda59135afdfc1604cee576db04d5e4331844e88bba939f475cbdca00d9a9
@@ -107,11 +117,11 @@ const config: HardhatUserConfig = {
     wftmHolder: {
       default : '0x93c08a3168fc469f3fc165cd3a471d19a37ca19e'
     },
-    snapshoter: {
-      default: 19
+    treasuryContract: {
+      default: '0x6A3083F47d56dB7BdB2783698407Cc95A0DC7a1c'
     },
     team: {
-      default: 19
+      default: '0xE0ce2548771cecdd5e071ACBa7B61Fe9A7E8786c'
     },
     user1: {
       default: 1,
