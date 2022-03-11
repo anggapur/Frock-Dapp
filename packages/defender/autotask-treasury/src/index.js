@@ -15,13 +15,24 @@ async function swapAndSend(payload, signer) {
   const fixedLimitTokenToSwap = parseInt(ethers.utils.parseUnits("500", 9))
   const getTokenBalance = parseInt(await treasury.getTokenBalance())
 
-  console.log(`minimumTokenToSwap : ${minimumTokenToSwap}`)
-  console.log(`fixedLimitTokenToSwap : ${fixedLimitTokenToSwap}`)
-  console.log(`getTokenBalance : ${getTokenBalance}`)
 
-  if(getTokenBalance > minimumTokenToSwap && getTokenBalance >= fixedLimitTokenToSwap) {
+  const minimumTokenToSwapHumanReadable = minimumTokenToSwap /1000000000;
+  const fixedLimitTokenToSwapHumanReadable = fixedLimitTokenToSwap /1000000000;
+  const getTokenBalanceHumanReadable = getTokenBalance /1000000000;
+
+  console.log(`minimumTokenToSwap : ${minimumTokenToSwapHumanReadable}`)
+  console.log(`fixedLimitTokenToSwap : ${fixedLimitTokenToSwapHumanReadable}`)
+  console.log(`getTokenBalance : ${getTokenBalanceHumanReadable}`)
+
+  if(getTokenBalanceHumanReadable > minimumTokenToSwapHumanReadable && getTokenBalanceHumanReadable >= fixedLimitTokenToSwapHumanReadable) {
     console.log("Calling swapAndSend")
-    await treasury.connect(signer).swapAndSend()
+    const tx = await treasury.connect(signer).swapAndSend()
+
+    return {
+      hash: tx.hash,
+      transactionId: tx.transactionId,
+    }
+
   } else {
     console.log("Not Calling swapAndSend")    
   }
