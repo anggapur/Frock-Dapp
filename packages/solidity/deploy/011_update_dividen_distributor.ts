@@ -26,7 +26,7 @@ const func: DeployFunction = async function ({
   const NAME = 'DividenDistributorProxy';
   const dividenDistributorProxy = (await deployments.get(NAME));
 
-  if(!true)
+  if(true) //this is not executed/deployed for/the local testnet
     return;
 
   // Deploy logic
