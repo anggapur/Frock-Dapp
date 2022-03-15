@@ -59,7 +59,7 @@ const config: HardhatUserConfig = {
       chainId: 250,
       forking: {        
         url: 'https://nd-248-371-542.p2pify.com/cbfc247834023d478a85c3565f4ffc06',
-        blockNumber: 32676151,
+        blockNumber: 33412045,
       },
     },
     localhost: {
@@ -179,6 +179,12 @@ const config: HardhatUserConfig = {
     },        
     frockHolder1: {
       default: '0xd7f1d4c931ebb9f9d150097065f59b1bff2529d9'
+    },
+    frockHolder3: {
+      default: '0x1379b48ac9f3ede062644c5d4ff293947fce58d5' // holding 40,012.035741079 FROCK on block number 33412045
+    },
+    frockHolder4: {
+      default: '0x02a43cb00794bb696f01e95494f3782d207f32a7' // holding 17,896.272127274 FROCK on block number 33412045
     }
   },
   react: {
